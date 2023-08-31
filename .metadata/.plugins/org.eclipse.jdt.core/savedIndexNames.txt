@@ -1,1 +1,0 @@
-INDEX VERSION 1.131+C:\Users\yoann\Java_YF\Projects_Isika\Projet_1_Annuaire\.metadata\.plugins\org.eclipse.jdt.core
