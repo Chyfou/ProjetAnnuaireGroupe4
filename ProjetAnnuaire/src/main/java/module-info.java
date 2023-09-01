@@ -1,4 +1,4 @@
-module CDA26Grp4.ProjetAnnuaire {
+module fr.isika.cda26.grp4.projetAnnuaire {
     requires javafx.controls;
-    exports CDA26Grp4.ProjetAnnuaire;
+    exports fr.isika.cda26.grp4.projetAnnuaire;
 }

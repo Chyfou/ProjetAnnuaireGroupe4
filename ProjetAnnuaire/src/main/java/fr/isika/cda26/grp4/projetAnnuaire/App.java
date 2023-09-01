@@ -1,4 +1,4 @@
-package CDA26Grp4.ProjetAnnuaire;
+package fr.isika.cda26.grp4.projetAnnuaire;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
