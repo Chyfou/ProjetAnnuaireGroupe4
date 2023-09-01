@@ -2,29 +2,35 @@ package fr.isika.cda26.grp4.projetAnnuaire;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-
-/**
- * JavaFX App
- */
 public class App extends Application {
+	
+	//**************Attributs**************
+	public InternDirectory internsToTest;
+	
+	public void init () {
+		internsToTest = new InternDirectory("isika");
+		internsToTest.isikaInterns.add(new Intern("LACROIX", "Pascale", "91", "BOBI 5", "2008"));
+		internsToTest.isikaInterns.add(new Intern("CHAVENAU", "Kim Anh", "92", "ATOD 22", "2014"));
+		internsToTest.isikaInterns.add(new Intern("GARIJO", "Rosie", "75", "AI 79", "2011"));
+		internsToTest.isikaInterns.add(new Intern("POTIN", "Thomas", "75", "ATOD 21", "2014"));
+	}
 
+	//**************Stage launching**************
     @Override
-    public void start(Stage stage) {
-        var javaVersion = SystemInfo.javaVersion();
-        var javafxVersion = SystemInfo.javafxVersion();
-
-        var label = new Label("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
-        var scene = new Scene(new StackPane(label), 640, 480);
+    public void start(Stage stage) throws Exception{
+    	
+    	UserTableView UserInternTableStackPane = new UserTableView(internsToTest);
+    	
+        Scene scene = new Scene(UserInternTableStackPane, 1900, 900);
+        stage.setTitle("About interns");
         stage.setScene(scene);
         stage.show();
     }
 
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
 
 }
