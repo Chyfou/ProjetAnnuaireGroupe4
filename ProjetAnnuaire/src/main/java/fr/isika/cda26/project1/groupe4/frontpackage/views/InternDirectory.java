@@ -1,6 +1,8 @@
-package fr.isika.cda26.grp4.projetAnnuaire;
+package fr.isika.cda26.project1.groupe4.frontpackage.views;
 
 import java.util.ArrayList;
+
+import fr.isika.cda26.project1.groupe4.backpackage.person.Intern;
 
 public class InternDirectory {
 

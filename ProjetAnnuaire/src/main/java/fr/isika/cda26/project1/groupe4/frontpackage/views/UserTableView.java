@@ -1,5 +1,6 @@
-package fr.isika.cda26.grp4.projetAnnuaire;
+package fr.isika.cda26.project1.groupe4.frontpackage.views;
 
+import fr.isika.cda26.project1.groupe4.backpackage.person.Intern;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
