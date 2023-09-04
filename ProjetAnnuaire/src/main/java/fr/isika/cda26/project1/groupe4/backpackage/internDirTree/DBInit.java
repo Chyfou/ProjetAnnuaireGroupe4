@@ -4,11 +4,19 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import fr.isika.cda26.project1.groupe4.backpackage.constants.BackConstants;
 import fr.isika.cda26.project1.groupe4.backpackage.person.Intern;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+/**
+ * Initializer of the DB files of the application.
+ * 
+ * @author  Yoann Frnçois / Thibault SALGUES
+ *
+ */
 public class DBInit implements BackConstants {
 
 	/**
@@ -20,9 +28,11 @@ public class DBInit implements BackConstants {
 		System.out.println("Directories created.");
 		System.out.println("Initializing DB files.");
 		createFiles();
+		eraseFilesContents();
 		System.out.println("Files created.");
 		System.out.println("Ask Admin for DON files.");
-		File donFile = getDonFile(stage);//new File("C:/Users/yoann/Java_YF/Projects_Isika/Projet_1_Annuaire/stagiaires.DON");
+		File donFile = getDonFile(stage);// new
+											// File("C:/Users/yoann/Java_YF/Projects_Isika/Projet_1_Annuaire/stagiaires.DON");
 		System.out.println("DON files caught.");
 		System.out.println("Reading DON File in progress");
 		writeInternsInDBFrom(donFile);
@@ -72,9 +82,12 @@ public class DBInit implements BackConstants {
 		return donFile;
 	}
 
-	private String internInfo;
-
-	public void writeInternsInDBFrom(File donFile) {
+	/**
+	 * Get all values in DON file to create Interns Object in Binary DB file.
+	 * 
+	 * @param donFile (:File)
+	 */
+	private void writeInternsInDBFrom(File donFile) {
 		FileReader fr;
 		try {
 			fr = new FileReader(donFile);
@@ -105,6 +118,23 @@ public class DBInit implements BackConstants {
 			fr.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Erase content of all Db Files.
+	 */
+	public void eraseFilesContents() {
+		for (String file : FILES_LIST) {
+			String pathToFile = DB_URL.concat(file);
+			try {
+				PrintWriter pw = new PrintWriter(pathToFile);
+				pw.close();
+				System.out.println("File " + pathToFile + " has been erased.");
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.out.println("Error. File " + pathToFile + " hasn't been erased.");
+			}
 		}
 	}
 

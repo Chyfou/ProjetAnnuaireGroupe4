@@ -5,6 +5,12 @@ package fr.isika.cda26.project1.groupe4.backpackage.person;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 /**
  * Intern of the intern's directory.
@@ -63,21 +69,28 @@ public class Intern extends Person {
 		this.promotionYear = promotionYear;
 	}
 	
-	//*************************  PUBLIC METHODES  ************************************
+//*************************  PUBLIC METHODES  ************************************
+	/**
+	 * Add Intern in the binary DB file.
+	 */
 	public void addInternToDB() {
 			this.setName(prepareAttributeToBeWrite(NAME_SIZE, this.getName()));
 			this.setForename(prepareAttributeToBeWrite(FORENAME_SIZE, this.getForename()));
 			this.setPromotion(prepareAttributeToBeWrite(PROMOTION_SIZE, this.getPromotion()));
 			String fileToWrite = DB_URL + DIRECTORY_DB_FILE;
 			try {
-				RandomAccessFile raf = new RandomAccessFile(fileToWrite, "rw");
-				raf.seek(raf.length());
-				raf.writeChars(this.getName());
-				raf.writeChars(this.getForename());
-				raf.writeChars(this.getLocation());
-				raf.writeChars(this.getPromotion());
-				raf.writeInt(this.getPromotionYear());
-				raf.close();
+				Path path = Paths.get(fileToWrite);
+		        byte[] name = this.getName().getBytes(StandardCharsets.UTF_8);
+		        Files.write(path, name, StandardOpenOption.APPEND);
+		        byte[] forename = this.getForename().getBytes(StandardCharsets.UTF_8);
+		        Files.write(path, forename, StandardOpenOption.APPEND);
+		        byte[] location = this.getLocation().getBytes(StandardCharsets.UTF_8);
+		        Files.write(path, location, StandardOpenOption.APPEND);
+		        byte[] promotion = this.getPromotion().getBytes(StandardCharsets.UTF_8);
+		        Files.write(path, promotion, StandardOpenOption.APPEND);
+		        byte[] promotionYear = ByteBuffer.allocate(4).putInt(this.getPromotionYear()).array();
+		        Files.write(path, promotionYear, StandardOpenOption.APPEND);
+				
 				System.out.println("New intern " + this.getName() + " added in the DB.");
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -86,14 +99,14 @@ public class Intern extends Person {
 		}
 
 	
-	//*************************  PRIVATE METHODES  ************************************	
+//*************************  PRIVATE METHODES  ************************************	
 	/**
 	 * Resize attribute for binary writing.
 	 * @param size
 	 * @param attribute
 	 * @return
 	 */
-	public String prepareAttributeToBeWrite(int size, String attribute) {
+	private String prepareAttributeToBeWrite(int size, String attribute) {
 		String attributePrepared = "";
 		attribute = attribute.trim();
 		if(attribute.length() <= size) {
@@ -105,5 +118,10 @@ public class Intern extends Person {
 			attributePrepared = attribute.substring(0, size);
 		}
 		return attributePrepared;
+	}
+
+	public int compareTo(Intern intern) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
