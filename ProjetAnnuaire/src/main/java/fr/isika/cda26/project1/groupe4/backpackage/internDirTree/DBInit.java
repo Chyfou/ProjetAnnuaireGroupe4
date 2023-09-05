@@ -31,8 +31,7 @@ public class DBInit implements BackConstants {
 		eraseFilesContents();
 		System.out.println("Files created.");
 		System.out.println("Ask Admin for DON files.");
-		File donFile = getDonFile(stage);// new
-											// File("C:/Users/yoann/Java_YF/Projects_Isika/Projet_1_Annuaire/stagiaires.DON");
+		File donFile = getDonFile(stage);
 		System.out.println("DON files caught.");
 		System.out.println("Reading DON File in progress");
 		writeInternsInDBFrom(donFile);
@@ -95,6 +94,7 @@ public class DBInit implements BackConstants {
 			String content = "";
 			while (br.ready()) {
 				int iterator = START_VALUE;
+
 				while (iterator != STOP_VALUE) {
 					Intern internToAdd = new Intern();
 					content = br.readLine();
@@ -109,7 +109,7 @@ public class DBInit implements BackConstants {
 					internToAdd.setPromotionYear(Integer.valueOf(content));
 					content = br.readLine();
 					iterator = STOP_VALUE;
-					internToAdd.addInternToDB();
+					internToAdd.addInternInDB();
 				}
 			}
 			File db = new File(DB_URL + DIRECTORY_DB_FILE);
@@ -122,7 +122,7 @@ public class DBInit implements BackConstants {
 	}
 
 	/**
-	 * Erase content of all Db Files.
+	 * Erase content of all DB Files.
 	 */
 	public void eraseFilesContents() {
 		for (String file : FILES_LIST) {

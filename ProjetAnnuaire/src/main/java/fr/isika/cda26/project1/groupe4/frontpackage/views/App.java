@@ -1,7 +1,6 @@
 package fr.isika.cda26.project1.groupe4.frontpackage.views;
 
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.DBInit;
-import fr.isika.cda26.project1.groupe4.backpackage.person.Intern;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
@@ -20,6 +19,10 @@ public class App extends Application {
 //		internsToTest.isikaInterns.add(new Intern("POTIN", "Thomas", "75", "ATOD 21", 2014));
 	}
 
+	public static void main(String[] args) {
+        launch(args);
+    }
+
 	//**************Stage launching**************
     @Override
     public void start(Stage stage) throws Exception{
@@ -33,8 +36,5 @@ public class App extends Application {
         stage.show();
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
+    
 }

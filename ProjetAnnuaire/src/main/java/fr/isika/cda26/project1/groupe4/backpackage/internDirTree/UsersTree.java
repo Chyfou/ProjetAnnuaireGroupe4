@@ -3,11 +3,6 @@
  */
 package fr.isika.cda26.project1.groupe4.backpackage.internDirTree;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import fr.isika.cda26.project1.groupe4.backpackage.person.User;
 
 /**
@@ -16,7 +11,7 @@ import fr.isika.cda26.project1.groupe4.backpackage.person.User;
  * @author Thibault SALGUES
  *
  */
-public class UsersTree extends BinaryFileHandler {
+public class UsersTree {
 //*************************  ATTRIBUTES  *****************************************
 	private User usersTreeRoot;
 
@@ -26,17 +21,28 @@ public class UsersTree extends BinaryFileHandler {
 	 * 
 	 * @param dBFileUrl (:String)
 	 */
-	public UsersTree(String dBFileUrl) {
-		super(dBFileUrl);
+	public UsersTree() {
+		super();
+		usersTreeRoot = null;
 	}
-
+	
+//*************************  CONSTRUCTORS  ***************************************
 	/**
 	 * Full constructor.
 	 * 
 	 * @param usersTree (:User)
 	 */
-	public UsersTree(String dBFileUrl, User usersTreeRoot) {
-		super(dBFileUrl);
+	public UsersTree(User usersTreeRoot) {
+		super();
+		this.usersTreeRoot = usersTreeRoot;
+	}
+	
+//*************************  GETTERS/SETTERS  ************************************
+	public User getUsersTreeRoot() {
+		return usersTreeRoot;
+	}
+
+	public void setUsersTreeRoot(User usersTreeRoot) {
 		this.usersTreeRoot = usersTreeRoot;
 	}
 

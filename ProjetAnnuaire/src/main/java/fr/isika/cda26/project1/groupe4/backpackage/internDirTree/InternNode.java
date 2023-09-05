@@ -345,7 +345,7 @@ public class InternNode implements BackConstants {
 			if (this.leftNode == null) {
 				this.leftNode = new InternNode(internToAdd);
 				System.out.println("Intern " + internToAdd.getName() + " has been added to the InternDirectory.");
-				// Case with one left subtree. Go on searching right place to add the intern.
+			// Case with one left subtree. Go on searching right place to add the intern.
 			} else {
 				this.leftNode.addInternToSubTree(internToAdd);
 			}
@@ -388,111 +388,8 @@ public class InternNode implements BackConstants {
 		this.searchInternToDelete(intern);
 	}
 
-	/**
-	 * Fulfill empty branches in all the subtrees.
-	 * 
-	 * @return (:int)
-	 */
-	public int compactSubTree() {
-
-		// Terminate case. No subtree at this node.
-		if (this.getLeftNode() == null && this.getRightNode() == null) {
-			return 0;
-			// Node has one right subtree.
-		} else if (this.getLeftNode() == null) {
-			return this.compactRightSubTree();
-
-			// Node has one left subtree.
-		} else if (this.getRightNode() == null) {
-			return this.compactLeftSubTree();
-
-			// Node has two subtrees.
-		} else {
-			return this.compactRightSubTree() + this.compactLeftSubTree();
-
-		}
-
-	}
-
-	/**
-	 * Balance the interns directory subtree for having less than two lengths of
-	 * difference between the two children subtrees.
-	 */
-	public int equilibrateSubTree() {
-
-		if (this.rightNode != null && this.leftNode != null) {
-			this.leftNode.equilibrateSubTree();
-			this.rightNode.equilibrateSubTree();
-
-			int equilibriumLeft = this.leftNode.heightBalanceOfSubtrees();
-			while (equilibriumLeft > 1) {
-				InternNode nodeToMove = new InternNode(this.leftNode.getIntern());
-
-				if (equilibriumLeft < 0) {
-					nodeToMove.setRightNode(this.getLeftNode().getRightNode());
-					nodeToMove.setLeftNode(this.getLeftNode().getLeftNode().getRightNode());
-					this.getLeftNode().getLeftNode().setRightNode(nodeToMove);
-					this.setLeftNode(this.getLeftNode().getLeftNode());
-					equilibriumLeft = this.getLeftNode().heightBalanceOfSubtrees();
-
-				} else {
-					nodeToMove.setLeftNode(this.getLeftNode().getLeftNode());
-					nodeToMove.setRightNode(this.getLeftNode().getRightNode().getLeftNode());
-					this.getLeftNode().getRightNode().setLeftNode(nodeToMove);
-					this.setLeftNode(this.getLeftNode().getRightNode());
-					equilibriumLeft = this.getLeftNode().heightBalanceOfSubtrees();
-
-				}
-			}
-
-			int equilibriumRight = this.rightNode.heightBalanceOfSubtrees();
-			while (equilibriumRight > 1) {
-				InternNode nodeToMove = new InternNode(this.rightNode.getIntern());
-
-				if (equilibriumRight < 0) {
-					nodeToMove.setRightNode(this.getLeftNode().getRightNode());
-					nodeToMove.setLeftNode(this.getLeftNode().getLeftNode().getRightNode());
-					this.getLeftNode().getLeftNode().setRightNode(nodeToMove);
-					this.setLeftNode(this.getLeftNode().getLeftNode());
-					equilibriumLeft = this.getLeftNode().heightBalanceOfSubtrees();
-
-				} else {
-					nodeToMove.setLeftNode(this.getLeftNode().getLeftNode());
-					nodeToMove.setRightNode(this.getLeftNode().getRightNode().getLeftNode());
-					this.getLeftNode().getRightNode().setLeftNode(nodeToMove);
-					this.setLeftNode(this.getLeftNode().getRightNode());
-					equilibriumRight = this.getLeftNode().heightBalanceOfSubtrees();
-
-				}
-			}
-			return Math.max(this.rightNode.heightOfSubTree(), this.leftNode.heightOfSubTree());
-
-		} else {
-			return 0;
-		}
-
-	}
-
+	 
 // ************************* PRIVATES METHODES *********************************************	
-
-//*********** METRICS OF TREE	
-	/**
-	 * Calculate the difference of heigth between the two subtrees of a node.
-	 * 
-	 * @return (:int)
-	 */
-	private int heightBalanceOfSubtrees() {
-		if (this.getRightNode() != null && this.getLeftNode() == null) {
-			return this.getRightNode().heightOfSubTree();
-		} else if (this.getRightNode() == null && this.getLeftNode() != null) {
-			return -this.getLeftNode().heightOfSubTree();
-		} else if (this.getRightNode() != null && this.getLeftNode() != null) {
-			return (this.getRightNode().heightOfSubTree() - this.getLeftNode().heightOfSubTree());
-		} else {
-			return 0;
-		}
-
-	}
 
 //*********** GETTERS OF TREE		
 	/**
@@ -532,83 +429,4 @@ public class InternNode implements BackConstants {
 		}
 	}
 
-//*********** C.U.D THE TREE	
-	/**
-	 * Fulfill empty branches in the right subtree.
-	 * 
-	 * @return (:int)
-	 */
-	private int compactRightSubTree() {
-		if (this.getRightNode().getLeftNode() == null && this.getRightNode().getRightNode() != null) {
-			if (this.getRightNode().getRightNode().getLeftNode() == null) {
-				InternNode cloneNode = this.getRightNode().getRightNode();
-				this.getRightNode().setRightNode(null);
-				cloneNode.setLeftNode(this.getRightNode());
-				this.setRightNode(cloneNode);
-			} else if (this.getRightNode().getRightNode().getLeftNode() != null) {
-				InternNode cloneNode = this.getRightNode().getRightNode();
-				this.getRightNode().setRightNode(cloneNode.getLeftNode());
-				cloneNode.setLeftNode(this.getRightNode());
-				this.setRightNode(cloneNode);
-			}
-			return 1 + this.getRightNode().compactSubTree();
-
-		} else if (this.getRightNode().getLeftNode() != null && this.getRightNode().getRightNode() == null) {
-			if (this.getRightNode().getLeftNode().getLeftNode() == null) {
-				InternNode cloneNode = this.getRightNode().getLeftNode();
-				this.getRightNode().setLeftNode(null);
-				cloneNode.setRightNode(this.getRightNode());
-				this.setRightNode(cloneNode);
-			} else if (this.getRightNode().getLeftNode().getLeftNode() != null) {
-				InternNode cloneNode = this.getRightNode().getLeftNode();
-				this.getRightNode().setLeftNode(cloneNode.getRightNode());
-				cloneNode.setRightNode(this.getRightNode());
-				this.setRightNode(cloneNode);
-			}
-			return 1 + this.getRightNode().compactSubTree();
-
-		} else {
-			return this.getRightNode().compactSubTree();
-		}
-
-	}
-
-	/**
-	 * Fulfill empty branches in the left subtree.
-	 * 
-	 * @return (:int)
-	 */
-	private int compactLeftSubTree() {
-		if (this.getLeftNode().getLeftNode() == null && this.getLeftNode().getRightNode() != null) {
-			if (this.getLeftNode().getRightNode().getLeftNode() == null) {
-				InternNode cloneNode = this.getRightNode().getRightNode();
-				this.getLeftNode().setRightNode(null);
-				cloneNode.setLeftNode(this.getRightNode());
-				this.setLeftNode(cloneNode);
-			} else if (this.getLeftNode().getRightNode().getLeftNode() != null) {
-				InternNode cloneNode = this.getLeftNode().getRightNode();
-				this.getLeftNode().setRightNode(cloneNode.getLeftNode());
-				cloneNode.setLeftNode(this.getLeftNode());
-				this.setLeftNode(cloneNode);
-			}
-			return 1 + this.getLeftNode().compactSubTree();
-
-		} else if (this.getLeftNode().getLeftNode() != null && this.getLeftNode().getRightNode() == null) {
-			if (this.getLeftNode().getLeftNode().getLeftNode() == null) {
-				InternNode cloneNode = this.getLeftNode().getLeftNode();
-				this.getLeftNode().setLeftNode(null);
-				cloneNode.setRightNode(this.getLeftNode());
-				this.setLeftNode(cloneNode);
-			} else if (this.getLeftNode().getLeftNode().getLeftNode() != null) {
-				InternNode cloneNode = this.getLeftNode().getLeftNode();
-				this.getLeftNode().setLeftNode(cloneNode.getRightNode());
-				cloneNode.setRightNode(this.getLeftNode());
-				this.setLeftNode(cloneNode);
-			}
-			return 1 + this.getLeftNode().compactSubTree();
-
-		} else {
-			return this.getLeftNode().compactSubTree();
-		}
-	}
 }

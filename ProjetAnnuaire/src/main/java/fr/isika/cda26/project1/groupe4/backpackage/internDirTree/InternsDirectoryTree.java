@@ -3,9 +3,12 @@
  */
 package fr.isika.cda26.project1.groupe4.backpackage.internDirTree;
 
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.isika.cda26.project1.groupe4.backpackage.constants.BackConstants;
 import fr.isika.cda26.project1.groupe4.backpackage.person.Intern;
 
 /**
@@ -14,7 +17,7 @@ import fr.isika.cda26.project1.groupe4.backpackage.person.Intern;
  * @author Yoann François / Thibault SALGUES
  *
  */
-public class InternsDirectoryTree extends BinaryFileHandler {
+public class InternsDirectoryTree implements BackConstants {
 //*************************  ATTRIBUTES  *****************************************
 	private InternNode root;
 
@@ -25,7 +28,7 @@ public class InternsDirectoryTree extends BinaryFileHandler {
 	 * @param dBFileUrl (:String)
 	 */
 	public InternsDirectoryTree(String dBFileUrl) {
-		super(dBFileUrl);
+		super();
 	}
 
 	/**
@@ -33,8 +36,8 @@ public class InternsDirectoryTree extends BinaryFileHandler {
 	 * 
 	 * @param internsDirectoryRoot (:Intern)
 	 */
-	public InternsDirectoryTree(String dBFileUrl, Intern internsDirectoryRoot) {
-		super(dBFileUrl);
+	public InternsDirectoryTree(Intern internsDirectoryRoot) {
+		super();
 		this.root = new InternNode(internsDirectoryRoot);
 	}
 
@@ -47,11 +50,11 @@ public class InternsDirectoryTree extends BinaryFileHandler {
 		this.root = internNode;
 	}
 
-//********************************** PUBLICS METHODS ********************	
+//********************************** PUBLICS METHODS *****************************
 
 //*********** METRICS OF TREE
 	/**
-	 * Calculate the length of the heightest branch of the interns directory tree.
+	 * Calculate the length of the highest branch of the interns directory tree.
 	 * 
 	 * @return (:int)
 	 */
@@ -80,6 +83,7 @@ public class InternsDirectoryTree extends BinaryFileHandler {
 //*********** GETTERS OF TREE
 	/**
 	 * Return all interns in the tree with a specific name.
+	 * 
 	 * @param value (String)
 	 * @return (:List<Intern>)
 	 */
@@ -88,12 +92,13 @@ public class InternsDirectoryTree extends BinaryFileHandler {
 		if (root == null) {
 			return null;
 		} else {
-			return root. getAllInternsWithName(value, internsList);
+			return root.getAllInternsWithName(value, internsList);
 		}
 	}
-	
+
 	/**
 	 * Return all interns in the tree with a specific name.
+	 * 
 	 * @param value (:String)
 	 * @return (:List<Intern>)
 	 */
@@ -102,12 +107,13 @@ public class InternsDirectoryTree extends BinaryFileHandler {
 		if (root == null) {
 			return null;
 		} else {
-			return root. getAllInternsWithName(value, internsList);
+			return root.getAllInternsWithName(value, internsList);
 		}
 	}
-	
+
 	/**
 	 * Return all interns in the tree with a specific forename.
+	 * 
 	 * @param value (:String)
 	 * @return (:List<Intern>)
 	 */
@@ -116,12 +122,13 @@ public class InternsDirectoryTree extends BinaryFileHandler {
 		if (root == null) {
 			return null;
 		} else {
-			return root. getAllInternsWithForename(value, internsList);
+			return root.getAllInternsWithForename(value, internsList);
 		}
 	}
-	
+
 	/**
 	 * Return all interns in the tree with a specific promotion.
+	 * 
 	 * @param value (:String)
 	 * @return (:List<Intern>)
 	 */
@@ -130,12 +137,13 @@ public class InternsDirectoryTree extends BinaryFileHandler {
 		if (root == null) {
 			return null;
 		} else {
-			return root. getAllInternsWithPromotion(value, internsList);
+			return root.getAllInternsWithPromotion(value, internsList);
 		}
 	}
-	
+
 	/**
 	 * Return all interns in the tree with a specific location.
+	 * 
 	 * @param value (:String)
 	 * @return (:List<Intern>)
 	 */
@@ -144,12 +152,13 @@ public class InternsDirectoryTree extends BinaryFileHandler {
 		if (root == null) {
 			return null;
 		} else {
-			return root. getAllInternsWithLocation(value, internsList);
+			return root.getAllInternsWithLocation(value, internsList);
 		}
 	}
-	
+
 	/**
 	 * Return all interns in the tree with a specific PromotionYear.
+	 * 
 	 * @param value (:int)
 	 * @return (:List<Intern>)
 	 */
@@ -158,39 +167,110 @@ public class InternsDirectoryTree extends BinaryFileHandler {
 		if (root == null) {
 			return null;
 		} else {
-			return root. getAllInternsWithPromotionYear(value, internsList);
+			return root.getAllInternsWithPromotionYear(value, internsList);
 		}
 	}
 
-	/**
-	 * Research a the first corresponding Intern in the interns directory and return it if it's found.
-	 * tree.
-	 * 
-	 * @param internToSearch (:Intern)
-	 * @return (:Node)
-	 */
-	public Intern searchInternInTree(Intern internToSearch) {
-		if (root == null) {
-			return null;
-		} else {
-			return root.searchInternInNode(internToSearch);
+	public List<Intern> getAllInternInDB(List<Intern> internsList, int index) {
+		String fileName = DB_URL + DIRECTORY_DB_FILE;
+		try {
+			RandomAccessFile rf = new RandomAccessFile(fileName, "rw");
+			if (rf.length() != 0) {
+				Intern internOfTheNode = this.getInternInDBAtIndex(index);
+				// Case Intern has no child.
+				if (internOfTheNode.getLeftNodeIndex() == EMPTY_VALUE && internOfTheNode.getRightNodeIndex() == EMPTY_VALUE) {
+					internsList.add(internOfTheNode);
+				// Case Intern has only one right child.
+				} else if (internOfTheNode.getLeftNodeIndex() == EMPTY_VALUE && internOfTheNode.getRightNodeIndex() != EMPTY_VALUE){
+					internsList.add(internOfTheNode);
+					internsList.addAll(this.getAllInternInDB(internsList, internOfTheNode.getRightNodeIndex()));
+				// Case Intern has only one left child.
+				} else if (internOfTheNode.getLeftNodeIndex() != EMPTY_VALUE && internOfTheNode.getRightNodeIndex() == EMPTY_VALUE){
+					internsList.addAll(this.getAllInternInDB(internsList, internOfTheNode.getLeftNodeIndex()));
+					internsList.add(internOfTheNode);
+				// Case Intern has two children.	
+				} else {
+					internsList.addAll(this.getAllInternInDB(internsList, internOfTheNode.getLeftNodeIndex()));
+					internsList.add(internOfTheNode);
+					internsList.addAll(this.getAllInternInDB(internsList, internOfTheNode.getRightNodeIndex()));
+				}
+				}
+
+			rf.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		return internsList;
+	}
+	
+	/**
+	 * Extract one intern from the interns directory file at the required position.
+	 * 
+	 * @param internPosition (:int)
+	 */
+	public Intern getInternInDBAtIndex(int internIndex) {
+		Intern internToReturn = new Intern();
+		String fileName = DB_URL + DIRECTORY_DB_FILE;
+		try {
+			RandomAccessFile rf = new RandomAccessFile(fileName, "r");
+			rf.seek(internIndex * INTERN_SIZE);
+			String internName = "";
+			for (int j = 0; j < NAME_SIZE; j++) {
+				String charRead = "";
+				charRead += rf.readChar();
+				if (!charRead.equals(FILLING_CHAR)) {
+					internName += charRead;
+				}
+			}
+			internToReturn.setName(internName);
+
+			String internForename = "";
+			for (int j = 0; j < FORENAME_SIZE; j++) {
+				String charRead = "";
+				charRead += rf.readChar();
+				if (!charRead.equals(FILLING_CHAR)) {
+					internForename += charRead;
+				}
+			}
+			internToReturn.setForename(internForename);
+
+			String internLocation = "";
+			for (int j = 0; j < FORENAME_SIZE; j++) {
+				String charRead = "";
+				charRead += rf.readChar();
+				if (!charRead.equals(FILLING_CHAR)) {
+					internLocation += charRead;
+				}
+			}
+			internToReturn.setLocation(internLocation);
+
+			String internPromotion = "";
+			for (int j = 0; j < FORENAME_SIZE; j++) {
+				String charRead = "";
+				charRead += rf.readChar();
+				if (!charRead.equals(FILLING_CHAR)) {
+					internPromotion += charRead;
+				}
+			}
+			internToReturn.setPromotion(internPromotion);
+
+			int internPromotionYear = rf.readInt();
+			internToReturn.setPromotionYear(internPromotionYear);
+
+			int internRightNodeIndex = rf.readInt();
+			internToReturn.setRightNodeIndex(internRightNodeIndex);
+
+			int internLeftNodeIndex = rf.readInt();
+			internToReturn.setLeftNodeIndex(internLeftNodeIndex);
+			rf.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return internToReturn;
 	}
 
 //*********** C.U.D OF THE TREE	
-	/**
-	 * Add a new InternNode in the interns directory tree with an infix order.
-	 * 
-	 * @param key (:String)
-	 */
-	public void addInternToInternTree(Intern internToAdd) {
-		if (root == null) {
-			this.root = new InternNode(internToAdd);
-		} else {
-			root.addInternToSubTree(internToAdd);
-		}
-	}
-
 	/**
 	 * Delete an InternNode of the interns directory tree.
 	 * 
@@ -225,86 +305,6 @@ public class InternsDirectoryTree extends BinaryFileHandler {
 			// Case with one root that may contains the node to delete.
 		} else {
 			return root.searchInternToDelete(internToDelete);
-		}
-	}
-
-	/**
-	 * Balance the interns directory tree for having less than two lengths of
-	 * difference between the two root subtrees.
-	 */
-	public void equilibrateTree() {
-
-		System.out.println("Root with heigth of " + this.root.heightOfSubTree());
-		this.compactTree();
-		System.out.println("Root heigth compact to " + this.root.heightOfSubTree());
-		if (this.root != null) {
-			System.out
-					.println("The difference between the two heigths of subtress is now at " + this.equilibrateRoot());
-			System.out.println("Balanced root heigth reduce to " + this.root.heightOfSubTree());
-			System.out.println("Balance of subtrees in progress. ");
-			System.out.println("Balanced root heigth reduce to " + this.root.equilibrateSubTree());
-
-		}
-
-	}
-
-	// ********************************** PRIVATES METHODS **********************
-
-	/**
-	 * Reorganize branches of the interns directory tree for having no InternNode
-	 * without less than two branches.
-	 * 
-	 */
-	private int compactTree() {
-		if (this.root != null) {
-			return this.root.compactSubTree();
-		} else {
-			return 0;
-		}
-	}
-
-	/**
-	 * Drag the root on the left or right subtree to balance the interns directory
-	 * tree .
-	 * 
-	 * @return (:int)
-	 */
-	private int equilibrateRoot() {
-		// define the unbalanced level of the tree.
-		int equilibrium = this.heightBalanceOfSubtrees();
-		// balance the root tree.
-		while (Math.abs(equilibrium) > 1) {
-			InternNode nodeToMove = new InternNode(this.root.getIntern());
-
-			if (equilibrium < 0) {
-				nodeToMove.setRightNode(this.root.getRightNode());
-				nodeToMove.setLeftNode(this.root.getLeftNode().getRightNode());
-				this.root.getLeftNode().setRightNode(nodeToMove);
-				this.setRoot(this.root.getLeftNode());
-				equilibrium = this.heightBalanceOfSubtrees();
-			} else {
-				nodeToMove.setLeftNode(this.root.getLeftNode());
-				nodeToMove.setRightNode(this.root.getRightNode().getLeftNode());
-				this.root.getRightNode().setLeftNode(nodeToMove);
-				this.setRoot(this.root.getRightNode());
-				equilibrium = this.heightBalanceOfSubtrees();
-			}
-		}
-		return equilibrium;
-	}
-
-	/**
-	 * Calculate the difference of heigth between the two subtrees of a InternNode.
-	 * 
-	 * @return (:int)
-	 */
-	private int heightBalanceOfSubtrees() {
-		if (this.root.getRightNode() != null && this.root.getLeftNode() == null) {
-			return this.root.getRightNode().heightOfSubTree();
-		} else if (this.root.getRightNode() == null && this.root.getLeftNode() != null) {
-			return -this.root.getLeftNode().heightOfSubTree();
-		} else {
-			return (this.root.getRightNode().heightOfSubTree() - this.root.getLeftNode().heightOfSubTree());
 		}
 	}
 
