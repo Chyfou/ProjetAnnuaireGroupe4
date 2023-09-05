@@ -128,7 +128,23 @@ public class InternNode implements BackConstants {
 		}
 	}
 
-//*********** GETTERS OF TREE		
+//*********** GETTERS OF TREE
+	
+//	/**
+//	 * get intern with name in the binary file.
+//	 * 
+//	 * @param internToGetWithName (: String)
+//	 * @return (:Intern)
+//	 */
+//	public Intern getInternWithNameInDB(String nameOfInternToGet) {
+//		if (intern.getName().equals(nameOfInternToGet)) {
+//			int indexOfInternToGetWithName = this.intern.searchInternIndexInDB();
+//			return intern.getInternInDBAtIndex(indexOfInternToGetWithName);
+//		} else {
+//			return this.getInternWithNameInDB(nameOfInternToGet);
+//		}
+//	}
+	
 	/**
 	 * Return a List of interns who's names match the required value.
 	 * 

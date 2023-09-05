@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 /**
  * Initializer of the DB files of the application.
  * 
- * @author  Yoann Frnçois / Thibault SALGUES
+ * @author  Yoann François / Thibault SALGUES
  *
  */
 public class DBInit implements BackConstants {
@@ -110,6 +110,7 @@ public class DBInit implements BackConstants {
 					content = br.readLine();
 					iterator = STOP_VALUE;
 					internToAdd.addInternInDB();
+					//internToAdd.writeInternInDB();
 				}
 			}
 			File db = new File(DB_URL + DIRECTORY_DB_FILE);

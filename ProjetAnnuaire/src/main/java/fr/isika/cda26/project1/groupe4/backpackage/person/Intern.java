@@ -2,12 +2,6 @@ package fr.isika.cda26.project1.groupe4.backpackage.person;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 
 /**
  * Intern of the intern's directory.
@@ -139,6 +133,13 @@ public class Intern extends Person implements Comparable<Intern> {
 		return i;
 	}
 
+	@Override
+	public String toString() {
+		return "Intern [promotion=" + promotion + ", location=" + location + ", promotionYear=" + promotionYear
+				+ ", rightNodeIndex=" + rightNodeIndex + ", leftNodeIndex=" + leftNodeIndex + ", name=" + name
+				+ ", forename=" + forename + "]";
+	}
+
 //*************************  PUBLIC METHODES  *************************************
 
 //*********** C.U.D METHODS	
@@ -147,8 +148,21 @@ public class Intern extends Person implements Comparable<Intern> {
 	 * node.
 	 */
 	public void addInternInDB() {
-		this.writeInternInDB();
-		this.linkInternInDB(START_VALUE);
+		String fileName = DB_URL + DIRECTORY_DB_FILE;
+		int fileLenght = 0;
+		try {
+			RandomAccessFile rf = new RandomAccessFile(fileName, "r");
+			fileLenght = (int) rf.length();
+			rf.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if (fileLenght < INTERN_SIZE) {
+			this.writeInternInDB();
+		} else {
+			Intern.this.writeInternInDB();
+			this.linkInternInDB(START_VALUE);
+		}
 	}
 
 	/**
@@ -158,25 +172,18 @@ public class Intern extends Person implements Comparable<Intern> {
 		this.setName(prepareAttributeToBeWrite(NAME_SIZE, this.getName()));
 		this.setForename(prepareAttributeToBeWrite(FORENAME_SIZE, this.getForename()));
 		this.setPromotion(prepareAttributeToBeWrite(PROMOTION_SIZE, this.getPromotion()));
-		String fileToWrite = DB_URL + DIRECTORY_DB_FILE;
 		try {
-			Path path = Paths.get(fileToWrite);
-			byte[] name = this.getName().getBytes(StandardCharsets.UTF_8);
-			Files.write(path, name, StandardOpenOption.APPEND);
-			byte[] forename = this.getForename().getBytes(StandardCharsets.UTF_8);
-			Files.write(path, forename, StandardOpenOption.APPEND);
-			byte[] location = this.getLocation().getBytes(StandardCharsets.UTF_8);
-			Files.write(path, location, StandardOpenOption.APPEND);
-			byte[] promotion = this.getPromotion().getBytes(StandardCharsets.UTF_8);
-			Files.write(path, promotion, StandardOpenOption.APPEND);
-			byte[] promotionYear = ByteBuffer.allocate(4).putInt(this.getPromotionYear()).array();
-			Files.write(path, promotionYear, StandardOpenOption.APPEND);
-			byte[] rightNodeIndex = ByteBuffer.allocate(4).putInt(this.getRightNodeIndex()).array();
-			Files.write(path, rightNodeIndex, StandardOpenOption.APPEND);
-			byte[] leftNodeIndex = ByteBuffer.allocate(4).putInt(this.getLeftNodeIndex()).array();
-			Files.write(path, leftNodeIndex, StandardOpenOption.APPEND);
-
+			RandomAccessFile raf = new RandomAccessFile(DB_URL + DIRECTORY_DB_FILE, "rw");
+			raf.seek(raf.length());
+			raf.writeChars(this.getName());
+			raf.writeChars(this.getForename());
+			raf.writeChars(this.getLocation());
+			raf.writeChars(this.getPromotion());
+			raf.writeInt((int) this.getPromotionYear());
+			raf.writeInt((int) this.getRightNodeIndex());
+			raf.writeInt((int) this.getLeftNodeIndex());
 			System.out.println("New intern " + this.getName() + " added in interns directory file.");
+			raf.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Error while adding intern " + this.getName() + " in interns directory file.");
@@ -185,46 +192,48 @@ public class Intern extends Person implements Comparable<Intern> {
 
 	/**
 	 * Add a new InternNode in the interns directory tree with an infix order.
-	 * 
+	 *
 	 * @param key (:String)
 	 */
 	public void linkInternInDB(int index) {
 		String fileName = DB_URL + DIRECTORY_DB_FILE;
 		try {
-			RandomAccessFile rf = new RandomAccessFile(fileName, "rw");
-			if (rf.length() != 0) {
-				Intern internOfTheNode = this.getInternInDBAtIndex(index);
-				// Case intern to add in the left subtree.
-				if (this.compareTo(internOfTheNode) < 0) {
-					// Case with no left subtree. Add intern in a new node.
-					if (internOfTheNode.getLeftNodeIndex() == EMPTY_VALUE) {
-						internOfTheNode.setLeftNodeIndex((int) ((rf.length() / INTERN_SIZE) - 1));
-						System.out.println("Intern " + this.getName() + " has been added to the InternDirectory.");
-					// Case with one left subtree. Go on searching right place to add the intern.
-					} else {
-						this.linkInternInDB(internOfTheNode.getLeftNodeIndex());
-					}
-					// Case intern to add in the right subtree.
-				} else {
-					// Case with no right subtree. Add intern in a new node.
-					if (internOfTheNode.getRightNodeIndex() == EMPTY_VALUE) {
-						internOfTheNode.setRightNodeIndex((int) ((rf.length() / INTERN_SIZE) - 1));
-						System.out.println("Intern " + this.getName() + " has been added to the InternDirectory.");
-						// Case with one right subtree. Go on searching right place to add the intern.
-					} else {
-						this.linkInternInDB(internOfTheNode.getRightNodeIndex());
-					}
-				}
-				// Case empty DB file.
-			} else {
-				System.out.println("Empty DB file. No parent found for intern " + this.getName() + ".");
-			}
 
-			rf.close();
+			Intern internOfTheNode = this.getInternInDBAtIndex(index);
+			// Open DB file.
+			RandomAccessFile rf = new RandomAccessFile(fileName, "rw");
+			int indexOfNewIntern = (int) ((rf.length() / INTERN_SIZE) - 1);
+			// Case intern to add in the left subtree.
+			if (this.compareTo(internOfTheNode) < 0) {
+				System.out.println("******HELLO******");
+				// Case with no left subtree. Add intern in a new node.
+				if (internOfTheNode.getLeftNodeIndex() == EMPTY_VALUE) {
+					internOfTheNode.setLeftNodeIndex(indexOfNewIntern);
+					rf.close();
+					internOfTheNode.modifyInternLinksInDB(index, INTERN_DB_MASK[6], indexOfNewIntern);
+					System.out.println("Intern " + this.getName() + " has been left linked in the InternDirectory.");
+					// Case with one left subtree. Go on searching right place to add the intern.
+				} else {
+					rf.close();
+					this.linkInternInDB(internOfTheNode.getLeftNodeIndex());
+				}
+				// Case intern to add in the right subtree.
+			} else {
+				System.out.println("******HELLO2******");
+				// Case with no right subtree. Add intern in a new node.
+				if (internOfTheNode.getRightNodeIndex() == EMPTY_VALUE) {
+					internOfTheNode.setRightNodeIndex(indexOfNewIntern);
+					rf.close();
+					internOfTheNode.modifyInternLinksInDB(index, INTERN_DB_MASK[5], indexOfNewIntern);
+					System.out.println("Intern " + this.getName() + " at index " + index + " has been right linked in the InternDirectory.");
+					// Case with one right subtree. Go on searching right place to add the intern.
+				} else {
+					this.linkInternInDB(internOfTheNode.getRightNodeIndex());
+				}
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 //*********** GETTERS IN DB METHODS	
@@ -260,7 +269,7 @@ public class Intern extends Person implements Comparable<Intern> {
 			internToReturn.setForename(internForename);
 
 			String internLocation = "";
-			for (int j = 0; j < FORENAME_SIZE; j++) {
+			for (int j = 0; j < LOCATION_SIZE; j++) {
 				String charRead = "";
 				charRead += rf.readChar();
 				if (!charRead.equals(FILLING_CHAR)) {
@@ -270,7 +279,7 @@ public class Intern extends Person implements Comparable<Intern> {
 			internToReturn.setLocation(internLocation);
 
 			String internPromotion = "";
-			for (int j = 0; j < FORENAME_SIZE; j++) {
+			for (int j = 0; j < PROMOTION_SIZE; j++) {
 				String charRead = "";
 				charRead += rf.readChar();
 				if (!charRead.equals(FILLING_CHAR)) {
@@ -298,7 +307,7 @@ public class Intern extends Person implements Comparable<Intern> {
 	/**
 	 * Get from the interns directory file, the index of the wanted intern.
 	 * 
-	 * @return
+	 * @return (:int)
 	 */
 	public int searchInternIndexInDB() {
 		String fileName = DB_URL + DIRECTORY_DB_FILE;
@@ -327,7 +336,8 @@ public class Intern extends Person implements Comparable<Intern> {
 //*************************  PRIVATE METHODES  ************************************	
 	/**
 	 * Define the index of the intern in the interns directory file.
-	 * @param index (:int)
+	 * 
+	 * @param index           (:int)
 	 * @param numberOfInterns (:int)
 	 * @return (:int)
 	 */
@@ -360,4 +370,32 @@ public class Intern extends Person implements Comparable<Intern> {
 		}
 		return attributePrepared;
 	}
+
+	/**
+	 * Modify right and left index of intern in DB file.
+	 * 
+	 * @param indexOfAttribute (:int)
+	 * @param indexOfChild (:int)
+	 * @param myIndex (:int)
+	 */
+	private void modifyInternLinksInDB(int myIndex, int indexOfAttribute, int indexOfChild) {
+		try {
+			RandomAccessFile raf = new RandomAccessFile(DB_URL + DIRECTORY_DB_FILE, "rw");
+			raf.seek(indexOfAttribute + myIndex * INTERN_SIZE);
+			System.out.println(indexOfAttribute + myIndex * INTERN_SIZE);
+			if (indexOfAttribute == INTERN_DB_MASK[6]) {
+				raf.writeInt((int) this.getLeftNodeIndex());
+				System.out.println("Left Node index modify for intern " + this.getName() +".");
+			} else {
+				raf.writeInt((int) this.getRightNodeIndex());
+				System.out.println("Right Node index modify for intern " + this.getName() +".");
+			}
+			System.out.println("New intern " + this.getName() + " added in interns directory file.");
+			raf.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Error while modifyaing intern " + this.getName() + " in interns directory file.");
+		}
+	}
+
 }
