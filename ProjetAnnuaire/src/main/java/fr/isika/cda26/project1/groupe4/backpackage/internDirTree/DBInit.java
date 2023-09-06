@@ -23,7 +23,7 @@ public class DBInit extends DBFileManager implements BackConstants {
 	public DBInit(Stage stage) {
 		super();
 		int lengthDBfile = lengthOfDBFile();
-		if (lengthDBfile == 0) {
+		//if (lengthDBfile == 0) {
 			System.out.println("Initializing DB.");
 			createDirectories();
 			System.out.println("Directories created.");
@@ -37,7 +37,7 @@ public class DBInit extends DBFileManager implements BackConstants {
 			System.out.println("Reading DON File in progress");
 			writeInternsInDBFrom(donFile);
 			System.out.println("Reading Don file done.");
-		}
+		//}
 	}
 
 //********************************** PRIVATES METHODS ************************************

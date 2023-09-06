@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 
 import fr.isika.cda26.project1.groupe4.backpackage.constants.BackConstants;
+import fr.isika.cda26.project1.groupe4.backpackage.person.Intern;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -92,4 +93,95 @@ public class DBFileManager implements BackConstants {
 			return 0;
 		}
 	}
+
+	/**
+	 * Resize attribute for binary writing.
+	 * 
+	 * @param size
+	 * @param attribute
+	 * @return
+	 */
+	public String prepareAttributeToBeWrite(int size, String attribute) {
+		String attributePrepared = "";
+		attribute = attribute.trim();
+		if (attribute.length() <= size) {
+			attributePrepared = attribute;
+			for (int i = attribute.length(); i < size; i++) {
+				attributePrepared += FILLING_CHAR;
+			}
+		} else {
+			attributePrepared = attribute.substring(0, size);
+		}
+		return attributePrepared;
+	}
+
+	/**
+	 * Rewrite intern nodes index to EMPTY_VALUE in the intern directory DB file.
+	 * @param internToWrite (:Intern)
+	 * @return
+	 */
+	public boolean setInternDeletedInDB(Intern internToWrite) {
+		int currentInternIndex = internToWrite.searchInternIndexInDB();
+		internToWrite.modifyInternLinksInDB(currentInternIndex, INTERN_DB_MASK[6], EMPTY_VALUE);
+		internToWrite.modifyInternLinksInDB(currentInternIndex, INTERN_DB_MASK[5], EMPTY_VALUE);
+		return true;
+	}
+
+	/**
+	 * Rewrite the attributes of an intern in place in the intern directory 
+	 * @param newInternIndex (:int)
+	 * @param internToWrite (:Intern)
+	 * @return
+	 */
+	public boolean rewriteInternInPlaceInDB(int newInternIndex, Intern internToWrite) {
+		internToWrite.setName(prepareAttributeToBeWrite(NAME_SIZE, internToWrite.getName()));
+		internToWrite.setForename(prepareAttributeToBeWrite(FORENAME_SIZE, internToWrite.getForename()));
+		internToWrite.setPromotion(prepareAttributeToBeWrite(PROMOTION_SIZE, internToWrite.getPromotion()));
+		try {
+			RandomAccessFile raf = new RandomAccessFile(DB_URL + DIRECTORY_DB_FILE, "rw");
+			raf.seek(newInternIndex*INTERN_SIZE);
+			raf.writeChars(internToWrite.getName());
+			raf.writeChars(internToWrite.getForename());
+			raf.writeChars(internToWrite.getLocation());
+			raf.writeChars(internToWrite.getPromotion());
+			raf.writeInt(internToWrite.getPromotionYear());
+			raf.writeInt(internToWrite.getRightNodeIndex());
+			raf.writeInt(internToWrite.getLeftNodeIndex());
+			System.out.println("New intern " + internToWrite.getName() + " rewrite in interns directory file at index " + newInternIndex);
+			raf.close();
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Error while adding intern " + internToWrite.getName() + " in interns directory file.");
+			return false;
+		}
+	}
+
+	/** Rewrite the attributes of an intern in place in the intern directory, except nodes index. 
+	 * @param newInternIndex (:int)
+	 * @param internToWrite (:Intern)
+	 * @return
+	 */
+	public boolean rewriteInPlaceInDBPartOfIntern(int newInternIndex, Intern internToWrite) {
+		internToWrite.setName(prepareAttributeToBeWrite(NAME_SIZE, internToWrite.getName()));
+		internToWrite.setForename(prepareAttributeToBeWrite(FORENAME_SIZE, internToWrite.getForename()));
+		internToWrite.setPromotion(prepareAttributeToBeWrite(PROMOTION_SIZE, internToWrite.getPromotion()));
+		try {
+			RandomAccessFile raf = new RandomAccessFile(DB_URL + DIRECTORY_DB_FILE, "rw");
+			raf.seek(newInternIndex*INTERN_SIZE);
+			raf.writeChars(internToWrite.getName());
+			raf.writeChars(internToWrite.getForename());
+			raf.writeChars(internToWrite.getLocation());
+			raf.writeChars(internToWrite.getPromotion());
+			raf.writeInt(internToWrite.getPromotionYear());
+			System.out.println("New intern " + internToWrite.getName() + " rewrite in interns directory file at index " + newInternIndex);
+			raf.close();
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Error while adding intern " + internToWrite.getName() + " in interns directory file.");
+			return false;
+		}
+	}
+
 }

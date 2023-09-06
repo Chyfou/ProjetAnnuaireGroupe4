@@ -4,6 +4,7 @@
 package fr.isika.cda26.project1.groupe4.backpackage.person;
 
 import fr.isika.cda26.project1.groupe4.backpackage.constants.BackConstants;
+import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.DBFileManager;
 
 /**
  * Person of the School.
@@ -11,7 +12,7 @@ import fr.isika.cda26.project1.groupe4.backpackage.constants.BackConstants;
  * @author Thibault SALGUES
  *
  */
-public abstract class Person implements BackConstants{
+public abstract class Person extends DBFileManager implements BackConstants{
 //*************************  ATTRIBUTES  *****************************************
 	protected String name;
 	protected String forename;
@@ -30,6 +31,8 @@ public abstract class Person implements BackConstants{
 	}
 	
 	public Person() {
+		this.name = "";
+		this.forename = "";
 	}
 
 //*************************  GETTERS/SETTERS  ************************************

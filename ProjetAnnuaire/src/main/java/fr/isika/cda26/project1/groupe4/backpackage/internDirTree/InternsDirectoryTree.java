@@ -5,7 +5,6 @@ package fr.isika.cda26.project1.groupe4.backpackage.internDirTree;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.ArrayList;
 import java.util.List;
 
 import fr.isika.cda26.project1.groupe4.backpackage.constants.BackConstants;
@@ -19,7 +18,7 @@ import fr.isika.cda26.project1.groupe4.backpackage.person.Intern;
  */
 public class InternsDirectoryTree extends DBFileManager implements BackConstants {
 //*************************  ATTRIBUTES  *****************************************
-	private InternNode rootIntern;
+
 
 //*************************  CONSTRUCTORS  ***************************************	
 	/**
@@ -31,54 +30,11 @@ public class InternsDirectoryTree extends DBFileManager implements BackConstants
 		super();
 	}
 
-	/**
-	 * Full constructor.
-	 * 
-	 * @param internsDirectoryRoot (:Intern)
-	 */
-	public InternsDirectoryTree(Intern internsDirectoryRoot) {
-		super();
-		this.rootIntern = new InternNode(internsDirectoryRoot);
-	}
 
 //*************************  GETTERS/SETTERS  ************************************
-	public InternNode getRoot() {
-		return this.rootIntern;
-	}
 
-	public void setRoot(InternNode internNode) {
-		this.rootIntern = internNode;
-	}
 
 //********************************** PUBLICS METHODS *****************************
-
-//*********** METRICS METHODS
-	/**
-	 * Calculate the length of the highest branch of the interns directory tree.
-	 * 
-	 * @return (:int)
-	 */
-	public int heightOfTree() {
-		if (rootIntern == null) {
-			return 0;
-		} else {
-			return rootIntern.heightOfSubTree();
-		}
-	}
-
-	/**
-	 * Calculate the number of intern's nodes in the interns directory tree.
-	 * 
-	 * @return (:int)
-	 */
-	public int sizeOfTree() {
-		if (rootIntern == null) {
-			return 0;
-		} else {
-			return rootIntern.sizeSubTree();
-		}
-
-	}
 
 //*********** GETTERS METHODS
 	/**
@@ -241,13 +197,13 @@ public class InternsDirectoryTree extends DBFileManager implements BackConstants
 				// Case Intern has only one left child.
 			} else if (internOfTheNode.getLeftNodeIndex() != EMPTY_VALUE
 					&& internOfTheNode.getRightNodeIndex() == EMPTY_VALUE) {
-				internsList = this.getAllInternInDB(internsList, internOfTheNode.getLeftNodeIndex());
+				internsList = this.getInTreegetAllInternsWithLocation(internsList, internOfTheNode.getLeftNodeIndex(), value);
 				if (internOfTheNode.getLocation().equals(value)) {
 					internsList.add(internOfTheNode);
 				}
 				// Case Intern has two children.
 			} else {
-				internsList = this.getAllInternInDB(internsList, internOfTheNode.getLeftNodeIndex());
+				internsList = this.getInTreegetAllInternsWithLocation(internsList, internOfTheNode.getLeftNodeIndex(), value);
 				if (internOfTheNode.getLocation().equals(value)) {
 					internsList.add(internOfTheNode);
 				}
@@ -411,10 +367,11 @@ public class InternsDirectoryTree extends DBFileManager implements BackConstants
 	public boolean deleteInternInDB(Intern internToDelete) {
 		Intern rootIntern = this.getInternInDBAtIndex(START_VALUE);
 		int fileLenght = lengthOfDBFile();
+		System.out.println(fileLenght);
 		// No root case. Nothing to delete.
 		if (fileLenght < INTERN_SIZE) {
 			return false;
-			// Root to delete.
+		// Root to delete.
 		} else if (rootIntern.compareTo(internToDelete) == 0) {
 			// Root has no children.
 			if (rootIntern.getLeftNodeIndex() == EMPTY_VALUE && rootIntern.getRightNodeIndex() == EMPTY_VALUE) {
@@ -422,23 +379,27 @@ public class InternsDirectoryTree extends DBFileManager implements BackConstants
 				// Root has only one right child.
 			} else if (rootIntern.getRightNodeIndex() != EMPTY_VALUE && rootIntern.getLeftNodeIndex() == EMPTY_VALUE) {
 				Intern rightChildIntern = this.getInternInDBAtIndex(rootIntern.getRightNodeIndex());
-				rightChildIntern.writeInternInDBAtIndex(START_VALUE);
-				this.setInternDeletedAtIndex(rootIntern.getRightNodeIndex());
+				setInternDeletedInDB(rightChildIntern);
+				rewriteInternInPlaceInDB(START_VALUE, rightChildIntern);
 				// Root has only one left child.
 			} else if (rootIntern.getRightNodeIndex() == EMPTY_VALUE && rootIntern.getLeftNodeIndex() != EMPTY_VALUE) {
 				Intern leftChildIntern = this.getInternInDBAtIndex(rootIntern.getLeftNodeIndex());
-				leftChildIntern.writeInternInDBAtIndex(START_VALUE);
-				this.setInternDeletedAtIndex(rootIntern.getLeftNodeIndex());
-				// Root has two children.
+				setInternDeletedInDB(leftChildIntern);
+				rewriteInternInPlaceInDB(START_VALUE, leftChildIntern);
+				
+			// Root has two children.
 			} else {
 				// Set as root a copy of the InternNode in the tree with the nearest higher
 				// Intern value.
-				Intern nearestChildIntern = rootIntern.getNearestChildIntern();
-				nearestChildIntern.replaceRootInDB();
+				Intern nearestChildIntern = rootIntern.getNearestInternChild();
+				rootIntern.searchInternToDelete(nearestChildIntern);
+				rewriteInPlaceInDBPartOfIntern(START_VALUE,  nearestChildIntern);
+				
 			}
 			return true;
-			// Case with one root that may contains the node to delete.
+		// Case with one root that may contains the node to delete.
 		} else {
+			
 			return rootIntern.searchInternToDelete(internToDelete);
 		}
 	}
@@ -452,4 +413,5 @@ public class InternsDirectoryTree extends DBFileManager implements BackConstants
 		deleteInternInDB(previousIntern);
 		modifiedIntern.addInternInDB();
 	}
+
 }

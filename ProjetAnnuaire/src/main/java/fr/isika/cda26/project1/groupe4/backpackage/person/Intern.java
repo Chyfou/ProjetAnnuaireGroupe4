@@ -16,6 +16,7 @@ public class Intern extends Person implements Comparable<Intern> {
 	private Integer promotionYear;
 	private Integer rightNodeIndex;
 	private Integer leftNodeIndex;
+	private Integer equalNodeIndex;
 
 //*************************  CONSTRUCTORS  ***************************************	
 	/**
@@ -30,13 +31,14 @@ public class Intern extends Person implements Comparable<Intern> {
 	 * @param leftNodeIndex  (:Integer)
 	 */
 	public Intern(String name, String forename, String promotion, String location, Integer promotionYear,
-			int rightNodeIndex, int leftNodeIndex) {
+			int rightNodeIndex, int leftNodeIndex, int equalNodeIndex) {
 		super(name, forename);
 		this.promotion = promotion;
 		this.location = location;
 		this.promotionYear = promotionYear;
 		this.rightNodeIndex = rightNodeIndex;
 		this.leftNodeIndex = leftNodeIndex;
+		this.equalNodeIndex = equalNodeIndex;
 	}
 
 	/**
@@ -63,9 +65,9 @@ public class Intern extends Person implements Comparable<Intern> {
 	 */
 	public Intern() {
 		super();
-		this.promotion = null;
-		this.location = null;
-		this.promotionYear = null;
+		this.promotion = "";
+		this.location = "";
+		this.promotionYear = EMPTY_VALUE;
 		this.rightNodeIndex = EMPTY_VALUE;
 		this.leftNodeIndex = EMPTY_VALUE;
 	}
@@ -111,7 +113,7 @@ public class Intern extends Person implements Comparable<Intern> {
 		this.leftNodeIndex = leftNodeIndex;
 	}
 
-// ************************* OVERRIDEN METHODES **********************************
+// ************************* OVERRIDEN METHODES ************************************
 	/**
 	 * Overridden method Compare two interns using all their attributes except their
 	 * nodes's index.
@@ -144,23 +146,123 @@ public class Intern extends Person implements Comparable<Intern> {
 				+ ", forename=" + forename + "]";
 	}
 
-//*************************  PUBLIC METHODES  *************************************
+//*************************  PUBLIC METHODES  ***************************************
 
 //*********** C.U.D METHODS	
+	/**
+	 * Add a new InternNode in the interns directory tree with an infix order.
+	 *
+	 * @param key (:String)
+	 */
+	public void linkInternInDB(int index) {
+		String fileName = DB_URL + DIRECTORY_DB_FILE;
+		try {
+
+			Intern internOfTheNode = this.getInternInDBAtIndex(index);
+			// Open DB file.
+			RandomAccessFile rf = new RandomAccessFile(fileName, "rw");
+			int indexOfNewIntern = (int) ((rf.length() / INTERN_SIZE) - 1);
+			// Case intern to add in the left subtree.
+			if (this.compareTo(internOfTheNode) < 0) {
+				// Case with no left subtree. Add intern in a new node.
+				if (internOfTheNode.getLeftNodeIndex() == EMPTY_VALUE) {
+					internOfTheNode.setLeftNodeIndex(indexOfNewIntern);
+					rf.close();
+					internOfTheNode.modifyInternLinksInDB(index, INTERN_DB_MASK[6], indexOfNewIntern);
+					System.out.println("Intern " + this.getName() + " has been left linked in the InternDirectory.");
+					// Case with one left subtree. Go on searching right place to add the intern.
+				} else {
+					rf.close();
+					this.linkInternInDB(internOfTheNode.getLeftNodeIndex());
+				}
+				// Case intern to add in the right subtree.
+			} else {
+				// Case with no right subtree. Add intern in a new node.
+				if (internOfTheNode.getRightNodeIndex() == EMPTY_VALUE) {
+					internOfTheNode.setRightNodeIndex(indexOfNewIntern);
+					rf.close();
+					internOfTheNode.modifyInternLinksInDB(index, INTERN_DB_MASK[5], indexOfNewIntern);
+					System.out.println("Intern " + this.getName() + " at index " + index
+							+ " has been right linked in the InternDirectory.");
+					// Case with one right subtree. Go on searching right place to add the intern.
+				} else {
+					this.linkInternInDB(internOfTheNode.getRightNodeIndex());
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Modify right and left index of intern in DB file.
+	 * 
+	 * @param indexOfAttribute (:int)
+	 * @param indexOfChild     (:int)
+	 * @param myIndex          (:int)
+	 */
+	public void modifyInternLinksInDB(int myIndex, int indexOfAttribute, int indexValue) {
+		try {
+			RandomAccessFile raf = new RandomAccessFile(DB_URL + DIRECTORY_DB_FILE, "rw");
+			raf.seek(indexOfAttribute + myIndex * INTERN_SIZE);
+			// Modify the left node index.
+			if (indexOfAttribute == INTERN_DB_MASK[6]) {
+				raf.writeInt(indexValue);
+				System.out.println("Left Node index modify for intern " + this.getName() + ".");
+				// modify the right node index.
+			} else {
+				raf.writeInt(indexValue);
+				System.out.println("Right Node index modify for intern " + this.getName() + ".");
+			}
+			raf.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Error while modifyaing intern " + this.getName() + " in interns directory file.");
+		}
+	}
+
+	/**
+	 * Search an intern to delete in the interns directory DB file and delete it, if
+	 * it's found.
+	 * 
+	 * @param internToDelete (:Intern)
+	 * @return (:boolean)
+	 */
+	public boolean searchInternToDelete(Intern internToDelete) {
+		// Case with intern not found in the tree
+		if (this.getRightNodeIndex() == EMPTY_VALUE && this.getLeftNodeIndex() == EMPTY_VALUE) {
+			return false;
+			// Case with intern may be found in the right subtree
+		} else if (this.compareTo(internToDelete) < 0) {
+			// Case with empty right subtree.
+			if (this.getRightNodeIndex() == EMPTY_VALUE) {
+				return false;
+				// Case with intern in a not empty right subtree .
+			} else {
+				Intern internChild = getInternInDBAtIndex(this.getRightNodeIndex());
+				return this.searchInternToDeleteInChild(internChild, INTERN_DB_MASK[5], internToDelete);
+			}
+		// Case with intern may be found in the left subtree
+		} else if (this.compareTo(internToDelete) > 0) {
+			// Case with empty left subtree.
+			if (this.getLeftNodeIndex() == EMPTY_VALUE) {
+				return false;
+			// Case with a not empty left subtree .
+			} else {
+				Intern internChild = this.getInternInDBAtIndex(this.getLeftNodeIndex());
+				return this.searchInternToDeleteInChild(internChild, INTERN_DB_MASK[6], internToDelete);
+			}
+		} else {
+			return false;
+		}
+	}
+
 	/**
 	 * Write a new intern in interns directory binary file and link it to its parent
 	 * node.
 	 */
 	public void addInternInDB() {
-		String fileName = DB_URL + DIRECTORY_DB_FILE;
-		int fileLenght = 0;
-		try {
-			RandomAccessFile rf = new RandomAccessFile(fileName, "r");
-			fileLenght = (int) rf.length();
-			rf.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		int fileLenght = lengthOfDBFile();
 		if (fileLenght < INTERN_SIZE) {
 			this.writeInternInDB();
 		} else {
@@ -191,53 +293,6 @@ public class Intern extends Person implements Comparable<Intern> {
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Error while adding intern " + this.getName() + " in interns directory file.");
-		}
-	}
-
-	/**
-	 * Add a new InternNode in the interns directory tree with an infix order.
-	 *
-	 * @param key (:String)
-	 */
-	public void linkInternInDB(int index) {
-		String fileName = DB_URL + DIRECTORY_DB_FILE;
-		try {
-
-			Intern internOfTheNode = this.getInternInDBAtIndex(index);
-			// Open DB file.
-			RandomAccessFile rf = new RandomAccessFile(fileName, "rw");
-			int indexOfNewIntern = (int) ((rf.length() / INTERN_SIZE) - 1);
-			// Case intern to add in the left subtree.
-			if (this.compareTo(internOfTheNode) < 0) {
-				System.out.println("******HELLO******");
-				// Case with no left subtree. Add intern in a new node.
-				if (internOfTheNode.getLeftNodeIndex() == EMPTY_VALUE) {
-					internOfTheNode.setLeftNodeIndex(indexOfNewIntern);
-					rf.close();
-					internOfTheNode.modifyInternLinksInDB(index, INTERN_DB_MASK[6], indexOfNewIntern);
-					System.out.println("Intern " + this.getName() + " has been left linked in the InternDirectory.");
-					// Case with one left subtree. Go on searching right place to add the intern.
-				} else {
-					rf.close();
-					this.linkInternInDB(internOfTheNode.getLeftNodeIndex());
-				}
-				// Case intern to add in the right subtree.
-			} else {
-				System.out.println("******HELLO2******");
-				// Case with no right subtree. Add intern in a new node.
-				if (internOfTheNode.getRightNodeIndex() == EMPTY_VALUE) {
-					internOfTheNode.setRightNodeIndex(indexOfNewIntern);
-					rf.close();
-					internOfTheNode.modifyInternLinksInDB(index, INTERN_DB_MASK[5], indexOfNewIntern);
-					System.out.println("Intern " + this.getName() + " at index " + index
-							+ " has been right linked in the InternDirectory.");
-					// Case with one right subtree. Go on searching right place to add the intern.
-				} else {
-					this.linkInternInDB(internOfTheNode.getRightNodeIndex());
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -315,30 +370,44 @@ public class Intern extends Person implements Comparable<Intern> {
 	 * @return (:int)
 	 */
 	public int searchInternIndexInDB() {
-		String fileName = DB_URL + DIRECTORY_DB_FILE;
+		// Define the size of the intern directory DB file.
+		int fileLenght = lengthOfDBFile();
 		Intern internAtThisNode = new Intern();
-		try {
-			RandomAccessFile rf = new RandomAccessFile(fileName, "rw");
-			int index = START_VALUE;
-			if (rf.length() != 0) {
-				while (this.compareTo(internAtThisNode) != 0 && index < rf.length() / INTERN_SIZE) {
-					internAtThisNode = this.getInternInDBAtIndex(index);
-					index += 1;
-				}
-				rf.close();
-				return defineInternIndex(index, (int) (rf.length() / INTERN_SIZE));
-			} else {
-				rf.close();
-				return EMPTY_VALUE;
+		int index = START_VALUE;
+		// Case intern directory DB file not empty
+		if (fileLenght > INTERN_SIZE) {
+			while ((this.compareTo(internAtThisNode) != 0) && (index < (int)(fileLenght / INTERN_SIZE))) {	
+				internAtThisNode = this.getInternInDBAtIndex(index);
+				index += 1;
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+			int internIndex = defineInternIndex(index-1, (int) (fileLenght / INTERN_SIZE));
+			return internIndex;
+		} else {
+			
 			return EMPTY_VALUE;
 		}
 
 	}
 
-//*************************  PRIVATE METHODES  ************************************	
+	/**
+	 * Search the leftest intern child of an intern in its right subtree.
+	 * 
+	 * @return (:Intern)
+	 */
+	public Intern getNearestInternChild() {
+		// Get the current intern frm intern directory DB file.
+		Intern currentNode = this.getInternInDBAtIndex(this.getRightNodeIndex());
+		// go the the first right child if exist.
+		if (currentNode.getRightNodeIndex() != EMPTY_VALUE) {
+			// go to the leftest child of the first right child.
+			while (currentNode.getRightNodeIndex() != EMPTY_VALUE) {
+				currentNode = this.getInternInDBAtIndex(currentNode.getLeftNodeIndex());
+			}
+		}
+		return currentNode;
+	}
+
+//*************************  PRIVATE METHODES  **************************************
 	/**
 	 * Define the index of the intern in the interns directory file.
 	 * 
@@ -356,51 +425,63 @@ public class Intern extends Person implements Comparable<Intern> {
 	}
 
 	/**
-	 * Resize attribute for binary writing.
+	 * Search an intern to delete in children of an intern and delete it in interns
+	 * directory DB file, if it's found.
 	 * 
-	 * @param size
-	 * @param attribute
+	 * @param internChild
+	 * @param placeOfChild
+	 * @param internToDelete
 	 * @return
 	 */
-	private String prepareAttributeToBeWrite(int size, String attribute) {
-		String attributePrepared = "";
-		attribute = attribute.trim();
-		if (attribute.length() <= size) {
-			attributePrepared = attribute;
-			for (int i = attribute.length(); i < size; i++) {
-				attributePrepared += FILLING_CHAR;
+	private boolean searchInternToDeleteInChild(Intern internChild, int placeOfChild, Intern internToDelete) {
+		// Intern's child matches to internToDelete.
+		if (internChild.compareTo(internToDelete) == 0) {
+			// Intern's child has no child
+			if (internChild.getRightNodeIndex() == EMPTY_VALUE && internChild.getLeftNodeIndex() == EMPTY_VALUE) {
+				this.modifyInternLinksInDB(this.searchInternIndexInDB(), placeOfChild, EMPTY_VALUE);
+				setInternDeletedInDB(internChild);
+				// Intern's child has only one left child.
+			} else if (internChild.getRightNodeIndex() == EMPTY_VALUE
+					&& internChild.getLeftNodeIndex() != EMPTY_VALUE) {
+				int childIndexOfLeftChild = internChild.getLeftNodeIndex();
+				setInternDeletedInDB(internChild);
+				this.modifyInternLinksInDB(this.searchInternIndexInDB(), placeOfChild, childIndexOfLeftChild);
+			// Intern's child has only one right child.
+			} else if (internChild.getRightNodeIndex() != EMPTY_VALUE
+					&& internChild.getLeftNodeIndex() == EMPTY_VALUE) {
+				int childIndexOfRightChild = internChild.getLeftNodeIndex();
+				setInternDeletedInDB(internChild);
+				this.modifyInternLinksInDB(this.searchInternIndexInDB(), placeOfChild, childIndexOfRightChild);
+			// Intern's child has two children.
+			} else {
+				this.deleteChildInternWithTwoChildren(internChild, placeOfChild);
+
 			}
+			return true;
+		// Intern's child doesn't match to internToDelete.
 		} else {
-			attributePrepared = attribute.substring(0, size);
+			return internChild.searchInternToDelete(internToDelete);
 		}
-		return attributePrepared;
+
 	}
 
 	/**
-	 * Modify right and left index of intern in DB file.
+	 * Delete the child of intern and rebase it's nearest child as new child.
 	 * 
-	 * @param indexOfAttribute (:int)
-	 * @param indexOfChild     (:int)
-	 * @param myIndex          (:int)
+	 * @param internToDelete (:Intern)
+	 * @return (: boolean)
 	 */
-	private void modifyInternLinksInDB(int myIndex, int indexOfAttribute, int indexOfChild) {
-		try {
-			RandomAccessFile raf = new RandomAccessFile(DB_URL + DIRECTORY_DB_FILE, "rw");
-			raf.seek(indexOfAttribute + myIndex * INTERN_SIZE);
-			System.out.println(indexOfAttribute + myIndex * INTERN_SIZE);
-			if (indexOfAttribute == INTERN_DB_MASK[6]) {
-				raf.writeInt((int) this.getLeftNodeIndex());
-				System.out.println("Left Node index modify for intern " + this.getName() + ".");
-			} else {
-				raf.writeInt((int) this.getRightNodeIndex());
-				System.out.println("Right Node index modify for intern " + this.getName() + ".");
-			}
-			System.out.println("New intern " + this.getName() + " added in interns directory file.");
-			raf.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Error while modifyaing intern " + this.getName() + " in interns directory file.");
+	private boolean deleteChildInternWithTwoChildren(Intern internToDelete, int placeOfChild) {
+		Intern nearestChildIntern = internToDelete.getNearestInternChild();
+		this.searchInternToDelete(nearestChildIntern);
+		System.out.println("*************** : " + this.getLeftNodeIndex());
+		int indexToWrite;
+		if (placeOfChild == INTERN_DB_MASK[5]) {
+			indexToWrite = this.getRightNodeIndex();
+		} else {
+			indexToWrite = this.getLeftNodeIndex();
 		}
+		rewriteInPlaceInDBPartOfIntern(indexToWrite , nearestChildIntern);
+		return true;
 	}
-
 }
