@@ -15,7 +15,7 @@ public interface BackConstants {
 // ********************************** PATHES *********************************************************
 	String USER_DB_FILE = "user_db_file.bin";
 	String DIRECTORY_DB_FILE = "internsDirectory_db_file.bin";
-	List<String> FILES_LIST = new ArrayList<>(Arrays.asList(USER_DB_FILE, DIRECTORY_DB_FILE));
+	List<String> FILES_LIST = new ArrayList<String>(Arrays.asList(USER_DB_FILE, DIRECTORY_DB_FILE));
 	String DB_URL = "src/main/java/db_files/";
 	String DON_DIR_URL = "C:/Users/";
 

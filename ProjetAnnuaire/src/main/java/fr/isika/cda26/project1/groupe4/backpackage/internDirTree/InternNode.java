@@ -79,7 +79,6 @@ public class InternNode implements BackConstants {
 	 * 
 	 * @return (:int)
 	 */
-
 	public int heightOfSubTree() {
 		if (this.leftNode == null && this.rightNode == null) {
 			return 0;
@@ -128,178 +127,7 @@ public class InternNode implements BackConstants {
 		}
 	}
 
-//*********** GETTERS OF TREE
-	
-//	/**
-//	 * get intern with name in the binary file.
-//	 * 
-//	 * @param internToGetWithName (: String)
-//	 * @return (:Intern)
-//	 */
-//	public Intern getInternWithNameInDB(String nameOfInternToGet) {
-//		if (intern.getName().equals(nameOfInternToGet)) {
-//			int indexOfInternToGetWithName = this.intern.searchInternIndexInDB();
-//			return intern.getInternInDBAtIndex(indexOfInternToGetWithName);
-//		} else {
-//			return this.getInternWithNameInDB(nameOfInternToGet);
-//		}
-//	}
-	
-	/**
-	 * Return a List of interns who's names match the required value.
-	 * 
-	 * @param value       (:String)
-	 * @param internsList (:List<Intern>)
-	 * @return
-	 */
-	public List<Intern> getAllInternsWithName(String value, List<Intern> internsList) {
-		// Intern with right value. Add it to the internList.
-		if (this.intern.getName().equals(value)) {
-			internsList.add(this.intern);
-			System.out.println("One intern found with the right name.");
-		}
-
-		// Search in the subtrees, other intern to add in the internsList.
-		if (this.leftNode == null && this.rightNode == null) {
-			return internsList;
-		} else if (this.leftNode != null && this.rightNode == null) {
-			internsList.addAll(this.leftNode.getAllInternsWithName(value, internsList));
-			return internsList;
-		} else if (this.leftNode == null && this.rightNode != null) {
-			internsList.addAll(this.rightNode.getAllInternsWithName(value, internsList));
-			return internsList;
-		} else {
-			internsList.addAll(this.leftNode.getAllInternsWithName(value, internsList));
-			internsList.addAll(this.rightNode.getAllInternsWithName(value, internsList));
-			return internsList;
-		}
-
-	}
-
-	/**
-	 * Return a List of interns who's forename match the required value.
-	 * 
-	 * @param value       (:String)
-	 * @param internsList (:List<Intern>)
-	 * @return
-	 */
-	public List<Intern> getAllInternsWithForename(String value, List<Intern> internsList) {
-		// Intern with right value. Add it to the internList.
-		if (this.intern.getForename().equals(value)) {
-			internsList.add(this.intern);
-			System.out.println("One intern found with the right forename.");
-		}
-
-		// Search in the subtrees, other intern to add in the internsList.
-		if (this.leftNode == null && this.rightNode == null) {
-			return internsList;
-		} else if (this.leftNode != null && this.rightNode == null) {
-			internsList.addAll(this.leftNode.getAllInternsWithForename(value, internsList));
-			return internsList;
-		} else if (this.leftNode == null && this.rightNode != null) {
-			internsList.addAll(this.rightNode.getAllInternsWithForename(value, internsList));
-			return internsList;
-		} else {
-			internsList.addAll(this.leftNode.getAllInternsWithForename(value, internsList));
-			internsList.addAll(this.rightNode.getAllInternsWithForename(value, internsList));
-			return internsList;
-		}
-
-	}
-
-	/**
-	 * Return a List of interns who's promotion match the required value.
-	 * 
-	 * @param value       (:String)
-	 * @param internsList (:List<Intern>)
-	 * @return
-	 */
-	public List<Intern> getAllInternsWithPromotion(String value, List<Intern> internsList) {
-		// Intern with right value. Add it to the internList.
-		if (this.intern.getPromotion().equals(value)) {
-			internsList.add(this.intern);
-			System.out.println("One intern found with the right promotion.");
-		}
-
-		// Search in the subtrees, other intern to add in the internsList.
-		if (this.leftNode == null && this.rightNode == null) {
-			return internsList;
-		} else if (this.leftNode != null && this.rightNode == null) {
-			internsList.addAll(this.leftNode.getAllInternsWithPromotion(value, internsList));
-			return internsList;
-		} else if (this.leftNode == null && this.rightNode != null) {
-			internsList.addAll(this.rightNode.getAllInternsWithPromotion(value, internsList));
-			return internsList;
-		} else {
-			internsList.addAll(this.leftNode.getAllInternsWithPromotion(value, internsList));
-			internsList.addAll(this.rightNode.getAllInternsWithPromotion(value, internsList));
-			return internsList;
-		}
-
-	}
-
-	/**
-	 * Return a List of interns who's location match the required value.
-	 * 
-	 * @param value       (:String)
-	 * @param internsList (:List<Intern>)
-	 * @return
-	 */
-	public List<Intern> getAllInternsWithLocation(String value, List<Intern> internsList) {
-		// Intern with right value. Add it to the internList.
-		if (this.intern.getLocation().equals(value)) {
-			internsList.add(this.intern);
-			System.out.println("One intern found with the right Location.");
-		}
-
-		// Search in the subtrees, other intern to add in the internsList.
-		if (this.leftNode == null && this.rightNode == null) {
-			return internsList;
-		} else if (this.leftNode != null && this.rightNode == null) {
-			internsList.addAll(this.leftNode.getAllInternsWithLocation(value, internsList));
-			return internsList;
-		} else if (this.leftNode == null && this.rightNode != null) {
-			internsList.addAll(this.rightNode.getAllInternsWithLocation(value, internsList));
-			return internsList;
-		} else {
-			internsList.addAll(this.leftNode.getAllInternsWithLocation(value, internsList));
-			internsList.addAll(this.rightNode.getAllInternsWithLocation(value, internsList));
-			return internsList;
-		}
-
-	}
-
-	/**
-	 * Return a List of interns who's promotion year match the required value.
-	 * 
-	 * @param value       (:String)
-	 * @param internsList (:List<Intern>)
-	 * @return
-	 */
-	public List<Intern> getAllInternsWithPromotionYear(int value, List<Intern> internsList) {
-		// Intern with right value. Add it to the internList.
-		if (this.intern.getPromotionYear() == value) {
-			internsList.add(this.intern);
-			System.out.println("One intern found with the right Location.");
-		}
-
-		// Search in the subtrees, other intern to add in the internsList.
-		if (this.leftNode == null && this.rightNode == null) {
-			return internsList;
-		} else if (this.leftNode != null && this.rightNode == null) {
-			internsList.addAll(this.leftNode.getAllInternsWithPromotionYear(value, internsList));
-			return internsList;
-		} else if (this.leftNode == null && this.rightNode != null) {
-			internsList.addAll(this.rightNode.getAllInternsWithPromotionYear(value, internsList));
-			return internsList;
-		} else {
-			internsList.addAll(this.leftNode.getAllInternsWithPromotionYear(value, internsList));
-			internsList.addAll(this.rightNode.getAllInternsWithPromotionYear(value, internsList));
-			return internsList;
-		}
-
-	}
-
+//*********** GETTERS OF TREE	
 	/**
 	 * Research a InternNode with the requested Intern in the interns directory
 	 * tree.
@@ -348,7 +176,6 @@ public class InternNode implements BackConstants {
 	}
 
 //*********** C.U.D THE TREE	
-
 	/**
 	 * Add a new InternNode in the interns directory tree with an infix order.
 	 * 

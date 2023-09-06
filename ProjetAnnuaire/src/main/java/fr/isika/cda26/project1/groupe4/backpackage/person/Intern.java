@@ -113,7 +113,8 @@ public class Intern extends Person implements Comparable<Intern> {
 
 // ************************* OVERRIDEN METHODES **********************************
 	/**
-	 * Compare two interns using all their attributes except their nodes's index.
+	 * Overridden method Compare two interns using all their attributes except their
+	 * nodes's index.
 	 */
 	@Override
 	public int compareTo(Intern internToCompare) {
@@ -133,6 +134,9 @@ public class Intern extends Person implements Comparable<Intern> {
 		return i;
 	}
 
+	/**
+	 * Overridden method Print all attributes of the intern object.
+	 */
 	@Override
 	public String toString() {
 		return "Intern [promotion=" + promotion + ", location=" + location + ", promotionYear=" + promotionYear
@@ -225,7 +229,8 @@ public class Intern extends Person implements Comparable<Intern> {
 					internOfTheNode.setRightNodeIndex(indexOfNewIntern);
 					rf.close();
 					internOfTheNode.modifyInternLinksInDB(index, INTERN_DB_MASK[5], indexOfNewIntern);
-					System.out.println("Intern " + this.getName() + " at index " + index + " has been right linked in the InternDirectory.");
+					System.out.println("Intern " + this.getName() + " at index " + index
+							+ " has been right linked in the InternDirectory.");
 					// Case with one right subtree. Go on searching right place to add the intern.
 				} else {
 					this.linkInternInDB(internOfTheNode.getRightNodeIndex());
@@ -375,8 +380,8 @@ public class Intern extends Person implements Comparable<Intern> {
 	 * Modify right and left index of intern in DB file.
 	 * 
 	 * @param indexOfAttribute (:int)
-	 * @param indexOfChild (:int)
-	 * @param myIndex (:int)
+	 * @param indexOfChild     (:int)
+	 * @param myIndex          (:int)
 	 */
 	private void modifyInternLinksInDB(int myIndex, int indexOfAttribute, int indexOfChild) {
 		try {
@@ -385,10 +390,10 @@ public class Intern extends Person implements Comparable<Intern> {
 			System.out.println(indexOfAttribute + myIndex * INTERN_SIZE);
 			if (indexOfAttribute == INTERN_DB_MASK[6]) {
 				raf.writeInt((int) this.getLeftNodeIndex());
-				System.out.println("Left Node index modify for intern " + this.getName() +".");
+				System.out.println("Left Node index modify for intern " + this.getName() + ".");
 			} else {
 				raf.writeInt((int) this.getRightNodeIndex());
-				System.out.println("Right Node index modify for intern " + this.getName() +".");
+				System.out.println("Right Node index modify for intern " + this.getName() + ".");
 			}
 			System.out.println("New intern " + this.getName() + " added in interns directory file.");
 			raf.close();
