@@ -1,4 +1,4 @@
-package fr.isika.cda26.project1.groupe4.frontpackage.views;
+package fr.isika.cda26.project1.groupe4.frontpackage.views.classes;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

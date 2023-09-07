@@ -58,6 +58,7 @@ public class Intern extends Person implements Comparable<Intern> {
 		this.promotionYear = promotionYear;
 		this.rightNodeIndex = EMPTY_VALUE;
 		this.leftNodeIndex = EMPTY_VALUE;
+		this.equalNodeIndex = EMPTY_VALUE;
 	}
 
 	/**
@@ -70,6 +71,20 @@ public class Intern extends Person implements Comparable<Intern> {
 		this.promotionYear = EMPTY_VALUE;
 		this.rightNodeIndex = EMPTY_VALUE;
 		this.leftNodeIndex = EMPTY_VALUE;
+		this.equalNodeIndex = EMPTY_VALUE;
+	}
+
+	/**
+	 * Copy constructor.
+	 */
+	public Intern(Intern internToCopie) {
+		super(internToCopie.getName(), internToCopie.getForename());
+		this.promotion = internToCopie.getPromotion();
+		this.location = internToCopie.getLocation();
+		this.promotionYear = internToCopie.getPromotionYear();
+		this.rightNodeIndex = internToCopie.getRightNodeIndex();
+		this.leftNodeIndex = internToCopie.getLeftNodeIndex();
+		this.equalNodeIndex = internToCopie.getEqualNodeIndex();
 	}
 
 //*************************  GETTERS/SETTERS  ************************************
@@ -113,6 +128,14 @@ public class Intern extends Person implements Comparable<Intern> {
 		this.leftNodeIndex = leftNodeIndex;
 	}
 
+	public Integer getEqualNodeIndex() {
+		return equalNodeIndex;
+	}
+
+	public void setEqualNodeIndex(Integer equalNodeIndex) {
+		this.equalNodeIndex = equalNodeIndex;
+	}
+
 // ************************* OVERRIDEN METHODES ************************************
 	/**
 	 * Overridden method Compare two interns using all their attributes except their
@@ -141,11 +164,22 @@ public class Intern extends Person implements Comparable<Intern> {
 	 */
 	@Override
 	public String toString() {
-		return "Intern [promotion=" + promotion + ", location=" + location + ", promotionYear=" + promotionYear
-				+ ", rightNodeIndex=" + rightNodeIndex + ", leftNodeIndex=" + leftNodeIndex + ", name=" + name
-				+ ", forename=" + forename + "]";
+		return "Intern [name=" + name + ", forename=" + forename + ", promotion=" + promotion 
+				+ ", location=" + location + ", promotionYear=" + promotionYear + ", equalNodeIndex=" + equalNodeIndex
+				+ ", rightNodeIndex=" + rightNodeIndex + ", leftNodeIndex=" + leftNodeIndex + "]";
 	}
 
+	/**
+	 * Compare two interns using only their names.
+	 * 
+	 * @param internToCompare (:Intern)
+	 * @return (:int)
+	 */
+	public int compareNameTo(Intern internToCompare) {
+		int i = this.name.compareTo(internToCompare.getName());
+		return i;
+
+	}
 //*************************  PUBLIC METHODES  ***************************************
 
 //*********** C.U.D METHODS	
@@ -242,12 +276,12 @@ public class Intern extends Person implements Comparable<Intern> {
 				Intern internChild = getInternInDBAtIndex(this.getRightNodeIndex());
 				return this.searchInternToDeleteInChild(internChild, INTERN_DB_MASK[5], internToDelete);
 			}
-		// Case with intern may be found in the left subtree
+			// Case with intern may be found in the left subtree
 		} else if (this.compareTo(internToDelete) > 0) {
 			// Case with empty left subtree.
 			if (this.getLeftNodeIndex() == EMPTY_VALUE) {
 				return false;
-			// Case with a not empty left subtree .
+				// Case with a not empty left subtree .
 			} else {
 				Intern internChild = this.getInternInDBAtIndex(this.getLeftNodeIndex());
 				return this.searchInternToDeleteInChild(internChild, INTERN_DB_MASK[6], internToDelete);
@@ -288,6 +322,7 @@ public class Intern extends Person implements Comparable<Intern> {
 			raf.writeInt((int) this.getPromotionYear());
 			raf.writeInt((int) this.getRightNodeIndex());
 			raf.writeInt((int) this.getLeftNodeIndex());
+			raf.writeInt((int) this.getEqualNodeIndex());
 			System.out.println("New intern " + this.getName() + " added in interns directory file.");
 			raf.close();
 		} catch (IOException e) {
@@ -376,14 +411,14 @@ public class Intern extends Person implements Comparable<Intern> {
 		int index = START_VALUE;
 		// Case intern directory DB file not empty
 		if (fileLenght > INTERN_SIZE) {
-			while ((this.compareTo(internAtThisNode) != 0) && (index < (int)(fileLenght / INTERN_SIZE))) {	
+			while ((this.compareTo(internAtThisNode) != 0) && (index < (int) (fileLenght / INTERN_SIZE))) {
 				internAtThisNode = this.getInternInDBAtIndex(index);
 				index += 1;
 			}
-			int internIndex = defineInternIndex(index-1, (int) (fileLenght / INTERN_SIZE));
+			int internIndex = defineInternIndex(index - 1, (int) (fileLenght / INTERN_SIZE));
 			return internIndex;
 		} else {
-			
+
 			return EMPTY_VALUE;
 		}
 
@@ -446,19 +481,19 @@ public class Intern extends Person implements Comparable<Intern> {
 				int childIndexOfLeftChild = internChild.getLeftNodeIndex();
 				setInternDeletedInDB(internChild);
 				this.modifyInternLinksInDB(this.searchInternIndexInDB(), placeOfChild, childIndexOfLeftChild);
-			// Intern's child has only one right child.
+				// Intern's child has only one right child.
 			} else if (internChild.getRightNodeIndex() != EMPTY_VALUE
 					&& internChild.getLeftNodeIndex() == EMPTY_VALUE) {
 				int childIndexOfRightChild = internChild.getLeftNodeIndex();
 				setInternDeletedInDB(internChild);
 				this.modifyInternLinksInDB(this.searchInternIndexInDB(), placeOfChild, childIndexOfRightChild);
-			// Intern's child has two children.
+				// Intern's child has two children.
 			} else {
 				this.deleteChildInternWithTwoChildren(internChild, placeOfChild);
 
 			}
 			return true;
-		// Intern's child doesn't match to internToDelete.
+			// Intern's child doesn't match to internToDelete.
 		} else {
 			return internChild.searchInternToDelete(internToDelete);
 		}
@@ -481,7 +516,7 @@ public class Intern extends Person implements Comparable<Intern> {
 		} else {
 			indexToWrite = this.getLeftNodeIndex();
 		}
-		rewriteInPlaceInDBPartOfIntern(indexToWrite , nearestChildIntern);
+		modifyInPlacePartOfIntern(indexToWrite, nearestChildIntern);
 		return true;
 	}
 }

@@ -65,13 +65,13 @@ public class InternsDirectoryTree extends DBFileManager implements BackConstants
 				// Case Intern has only one left child.
 			} else if (internOfTheNode.getLeftNodeIndex() != EMPTY_VALUE
 					&& internOfTheNode.getRightNodeIndex() == EMPTY_VALUE) {
-				internsList = this.getAllInternInDB(internsList, internOfTheNode.getLeftNodeIndex());
+				internsList = this.getInTreeAllInternsWithName(internsList, internOfTheNode.getLeftNodeIndex(), value);
 				if (internOfTheNode.getName().equals(value)) {
 					internsList.add(internOfTheNode);
 				}
 				// Case Intern has two children.
 			} else {
-				internsList = this.getAllInternInDB(internsList, internOfTheNode.getLeftNodeIndex());
+				internsList = this.getInTreeAllInternsWithName(internsList, internOfTheNode.getLeftNodeIndex(), value);
 				if (internOfTheNode.getName().equals(value)) {
 					internsList.add(internOfTheNode);
 				}
@@ -109,13 +109,13 @@ public class InternsDirectoryTree extends DBFileManager implements BackConstants
 				// Case Intern has only one left child.
 			} else if (internOfTheNode.getLeftNodeIndex() != EMPTY_VALUE
 					&& internOfTheNode.getRightNodeIndex() == EMPTY_VALUE) {
-				internsList = this.getAllInternInDB(internsList, internOfTheNode.getLeftNodeIndex());
+				internsList = this.getInTreegetAllInternsWithForename(internsList, internOfTheNode.getLeftNodeIndex(), value);
 				if (internOfTheNode.getForename().equals(value)) {
 					internsList.add(internOfTheNode);
 				}
 				// Case Intern has two children.
 			} else {
-				internsList = this.getAllInternInDB(internsList, internOfTheNode.getLeftNodeIndex());
+				internsList = this.getInTreegetAllInternsWithForename(internsList, internOfTheNode.getLeftNodeIndex(), value);
 				if (internOfTheNode.getForename().equals(value)) {
 					internsList.add(internOfTheNode);
 				}
@@ -153,13 +153,13 @@ public class InternsDirectoryTree extends DBFileManager implements BackConstants
 				// Case Intern has only one left child.
 			} else if (internOfTheNode.getLeftNodeIndex() != EMPTY_VALUE
 					&& internOfTheNode.getRightNodeIndex() == EMPTY_VALUE) {
-				internsList = this.getAllInternInDB(internsList, internOfTheNode.getLeftNodeIndex());
+				internsList = this.getInTreegetAllInternsWithPromotion(internsList, internOfTheNode.getLeftNodeIndex(), value);
 				if (internOfTheNode.getPromotion().equals(value)) {
 					internsList.add(internOfTheNode);
 				}
 				// Case Intern has two children.
 			} else {
-				internsList = this.getAllInternInDB(internsList, internOfTheNode.getLeftNodeIndex());
+				internsList = this.getInTreegetAllInternsWithPromotion(internsList, internOfTheNode.getLeftNodeIndex(), value);
 				if (internOfTheNode.getPromotion().equals(value)) {
 					internsList.add(internOfTheNode);
 				}
@@ -240,13 +240,13 @@ public class InternsDirectoryTree extends DBFileManager implements BackConstants
 				// Case Intern has only one left child.
 			} else if (internOfTheNode.getLeftNodeIndex() != EMPTY_VALUE
 					&& internOfTheNode.getRightNodeIndex() == EMPTY_VALUE) {
-				internsList = this.getAllInternInDB(internsList, internOfTheNode.getLeftNodeIndex());
+				internsList = this.getInTreegetAllInternsWithPromotionYear(internsList, internOfTheNode.getLeftNodeIndex(), value);
 				if (internOfTheNode.getPromotionYear() == value) {
 					internsList.add(internOfTheNode);
 				}
 				// Case Intern has two children.
 			} else {
-				internsList = this.getAllInternInDB(internsList, internOfTheNode.getLeftNodeIndex());
+				internsList = this.getInTreegetAllInternsWithPromotionYear(internsList, internOfTheNode.getLeftNodeIndex(), value);
 				if (internOfTheNode.getPromotionYear() == value) {
 					internsList.add(internOfTheNode);
 				}
@@ -380,12 +380,12 @@ public class InternsDirectoryTree extends DBFileManager implements BackConstants
 			} else if (rootIntern.getRightNodeIndex() != EMPTY_VALUE && rootIntern.getLeftNodeIndex() == EMPTY_VALUE) {
 				Intern rightChildIntern = this.getInternInDBAtIndex(rootIntern.getRightNodeIndex());
 				setInternDeletedInDB(rightChildIntern);
-				rewriteInternInPlaceInDB(START_VALUE, rightChildIntern);
+				modifyInPlaceAllIntern(START_VALUE, rightChildIntern);
 				// Root has only one left child.
 			} else if (rootIntern.getRightNodeIndex() == EMPTY_VALUE && rootIntern.getLeftNodeIndex() != EMPTY_VALUE) {
 				Intern leftChildIntern = this.getInternInDBAtIndex(rootIntern.getLeftNodeIndex());
 				setInternDeletedInDB(leftChildIntern);
-				rewriteInternInPlaceInDB(START_VALUE, leftChildIntern);
+				modifyInPlaceAllIntern(START_VALUE, leftChildIntern);
 				
 			// Root has two children.
 			} else {
@@ -393,7 +393,7 @@ public class InternsDirectoryTree extends DBFileManager implements BackConstants
 				// Intern value.
 				Intern nearestChildIntern = rootIntern.getNearestInternChild();
 				rootIntern.searchInternToDelete(nearestChildIntern);
-				rewriteInPlaceInDBPartOfIntern(START_VALUE,  nearestChildIntern);
+				modifyInPlacePartOfIntern(START_VALUE,  nearestChildIntern);
 				
 			}
 			return true;
@@ -409,8 +409,11 @@ public class InternsDirectoryTree extends DBFileManager implements BackConstants
 	 * @param previousIntern (:Intern)
 	 * @param modifiedIntern (:Intern)
 	 */
-	public void modyfyInternInDBFile(Intern previousIntern, Intern modifiedIntern) {
+	public void modifyHardInternInDBFile(Intern previousIntern, Intern modifiedIntern) {
 		deleteInternInDB(previousIntern);
+		modifiedIntern.setRightNodeIndex(EMPTY_VALUE);
+		modifiedIntern.setLeftNodeIndex(EMPTY_VALUE);
+		modifiedIntern.setEqualNodeIndex(EMPTY_VALUE);
 		modifiedIntern.addInternInDB();
 	}
 

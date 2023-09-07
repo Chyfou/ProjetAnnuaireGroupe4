@@ -133,7 +133,7 @@ public class DBFileManager implements BackConstants {
 	 * @param internToWrite (:Intern)
 	 * @return
 	 */
-	public boolean rewriteInternInPlaceInDB(int newInternIndex, Intern internToWrite) {
+	public boolean modifyInPlaceAllIntern(int newInternIndex, Intern internToWrite) {
 		internToWrite.setName(prepareAttributeToBeWrite(NAME_SIZE, internToWrite.getName()));
 		internToWrite.setForename(prepareAttributeToBeWrite(FORENAME_SIZE, internToWrite.getForename()));
 		internToWrite.setPromotion(prepareAttributeToBeWrite(PROMOTION_SIZE, internToWrite.getPromotion()));
@@ -147,6 +147,7 @@ public class DBFileManager implements BackConstants {
 			raf.writeInt(internToWrite.getPromotionYear());
 			raf.writeInt(internToWrite.getRightNodeIndex());
 			raf.writeInt(internToWrite.getLeftNodeIndex());
+			raf.writeInt(internToWrite.getEqualNodeIndex());
 			System.out.println("New intern " + internToWrite.getName() + " rewrite in interns directory file at index " + newInternIndex);
 			raf.close();
 			return true;
@@ -162,7 +163,7 @@ public class DBFileManager implements BackConstants {
 	 * @param internToWrite (:Intern)
 	 * @return
 	 */
-	public boolean rewriteInPlaceInDBPartOfIntern(int newInternIndex, Intern internToWrite) {
+	public boolean modifyInPlacePartOfIntern(int newInternIndex, Intern internToWrite) {
 		internToWrite.setName(prepareAttributeToBeWrite(NAME_SIZE, internToWrite.getName()));
 		internToWrite.setForename(prepareAttributeToBeWrite(FORENAME_SIZE, internToWrite.getForename()));
 		internToWrite.setPromotion(prepareAttributeToBeWrite(PROMOTION_SIZE, internToWrite.getPromotion()));
