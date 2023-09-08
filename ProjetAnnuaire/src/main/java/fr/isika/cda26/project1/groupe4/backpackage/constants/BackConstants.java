@@ -34,10 +34,11 @@ public interface BackConstants {
 	int RIGHTNODE_POSITION_SIZE = 1;
 	int LEFTNODE_POSITION_SIZE = 1;
 	int EQUAL_POSITION_SIZE = 1;
-	int PASSWORD = 12;
-	int EMAIL = 25;
-	int STATUS = 4;
-	int ID = 1;
+	
+	int PASSWORD_SIZE = 15;
+	int EMAIL_SIZE = 25;
+	int STATUS_SIZE = 5;
+	int ID_SIZE = 1;
 
 // ********************************** SIZES OF OBJECTS ***********************************************
 	int INTERN_SIZE = 2 * (NAME_SIZE + FORENAME_SIZE + LOCATION_SIZE + PROMOTION_SIZE)
@@ -50,4 +51,17 @@ public interface BackConstants {
 					+ 4 * (PROMOTION_YEAR_SIZE + RIGHTNODE_POSITION_SIZE),
 			2 * (NAME_SIZE + FORENAME_SIZE + LOCATION_SIZE + PROMOTION_SIZE)
 					+ 4 * (PROMOTION_YEAR_SIZE + RIGHTNODE_POSITION_SIZE + LEFTNODE_POSITION_SIZE), };
+	
+	int USER_SIZE = 2 * (NAME_SIZE + FORENAME_SIZE + PASSWORD_SIZE + EMAIL_SIZE + STATUS_SIZE) + 4 * (ID_SIZE);
+	int[] USER_DB_MASK = new int[] { 0, 2 * (NAME_SIZE), 2 * (NAME_SIZE + FORENAME_SIZE),
+			2 * (NAME_SIZE + FORENAME_SIZE + PASSWORD_SIZE),	
+			2 * (NAME_SIZE + FORENAME_SIZE + PASSWORD_SIZE + EMAIL_SIZE),
+			2 * (NAME_SIZE + FORENAME_SIZE + PASSWORD_SIZE + EMAIL_SIZE + STATUS_SIZE)
+	};
+	
+// ********************************** STATUS  *********************************************************
+	String ADMIN_STATUS = "admin";
+	String STAFF_STATUS = "staff";
+	String EMPTY_STATUS = "";
+	
 }

@@ -4,8 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import fr.isika.cda26.project1.groupe4.backpackage.constants.BackConstants;
-import fr.isika.cda26.project1.groupe4.backpackage.person.Intern;
+
 import javafx.stage.Stage;
 
 /**
@@ -14,7 +13,7 @@ import javafx.stage.Stage;
  * @author Yoann François / Thibault SALGUES
  *
  */
-public class DBInit extends DBFileManager implements BackConstants {
+public class DBInit extends DBFileManager {
 	
 //*************************  CONSTRUCTORS  **********************************************	
 	/**
@@ -23,13 +22,10 @@ public class DBInit extends DBFileManager implements BackConstants {
 	public DBInit(Stage stage) {
 		super();
 		int lengthDBfile = lengthOfDBFile();
-		//if (lengthDBfile == 0) {
+		if (lengthDBfile == 0) {
 			System.out.println("Initializing DB.");
-			createDirectories();
-			System.out.println("Directories created.");
 			System.out.println("Initializing DB files.");
-			createFiles();
-			eraseFilesContents();
+			createInternsDBFiles();
 			System.out.println("Files created.");
 			System.out.println("Ask Admin for DON files.");
 			File donFile = getDonFile(stage);
@@ -37,7 +33,7 @@ public class DBInit extends DBFileManager implements BackConstants {
 			System.out.println("Reading DON File in progress");
 			writeInternsInDBFrom(donFile);
 			System.out.println("Reading Don file done.");
-		//}
+		}
 	}
 
 //********************************** PRIVATES METHODS ************************************

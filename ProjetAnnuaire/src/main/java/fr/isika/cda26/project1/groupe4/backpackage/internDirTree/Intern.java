@@ -1,7 +1,8 @@
-package fr.isika.cda26.project1.groupe4.backpackage.person;
+package fr.isika.cda26.project1.groupe4.backpackage.internDirTree;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.List;
 
 /**
  * Intern of the intern's directory.
@@ -9,8 +10,10 @@ import java.io.RandomAccessFile;
  * @author Thibault SALGUES
  *
  */
-public class Intern extends Person implements Comparable<Intern> {
+public class Intern extends InternsDirectoryTree implements Comparable<Intern> {
 //*************************  ATTRIBUTES  *****************************************
+	private String name;
+	private String forename;
 	private String promotion;
 	private String location;
 	private Integer promotionYear;
@@ -32,7 +35,9 @@ public class Intern extends Person implements Comparable<Intern> {
 	 */
 	public Intern(String name, String forename, String promotion, String location, Integer promotionYear,
 			int rightNodeIndex, int leftNodeIndex, int equalNodeIndex) {
-		super(name, forename);
+		super();
+		this.forename = forename;
+		this.promotion = promotion;
 		this.promotion = promotion;
 		this.location = location;
 		this.promotionYear = promotionYear;
@@ -52,7 +57,9 @@ public class Intern extends Person implements Comparable<Intern> {
 	 * 
 	 */
 	public Intern(String name, String forename, String promotion, String location, Integer promotionYear) {
-		super(name, forename);
+		super();
+		this.name = name;
+		this.forename = forename;
 		this.promotion = promotion;
 		this.location = location;
 		this.promotionYear = promotionYear;
@@ -66,6 +73,8 @@ public class Intern extends Person implements Comparable<Intern> {
 	 */
 	public Intern() {
 		super();
+		this.name = "";
+		this.forename = "";
 		this.promotion = "";
 		this.location = "";
 		this.promotionYear = EMPTY_VALUE;
@@ -78,7 +87,9 @@ public class Intern extends Person implements Comparable<Intern> {
 	 * Copy constructor.
 	 */
 	public Intern(Intern internToCopie) {
-		super(internToCopie.getName(), internToCopie.getForename());
+		super();
+		this.name = internToCopie.getName();
+		this.forename = internToCopie.getForename();
 		this.promotion = internToCopie.getPromotion();
 		this.location = internToCopie.getLocation();
 		this.promotionYear = internToCopie.getPromotionYear();
@@ -88,6 +99,22 @@ public class Intern extends Person implements Comparable<Intern> {
 	}
 
 //*************************  GETTERS/SETTERS  ************************************
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getForename() {
+		return forename;
+	}
+
+	public void setForename(String forename) {
+		this.forename = forename;
+	}
+
 	public String getPromotion() {
 		return promotion;
 	}
@@ -164,9 +191,9 @@ public class Intern extends Person implements Comparable<Intern> {
 	 */
 	@Override
 	public String toString() {
-		return "Intern [name=" + name + ", forename=" + forename + ", promotion=" + promotion 
-				+ ", location=" + location + ", promotionYear=" + promotionYear + ", equalNodeIndex=" + equalNodeIndex
-				+ ", rightNodeIndex=" + rightNodeIndex + ", leftNodeIndex=" + leftNodeIndex + "]";
+		return "Intern [name=" + name + ", forename=" + forename + ", promotion=" + promotion + ", location=" + location
+				+ ", promotionYear=" + promotionYear + ", equalNodeIndex=" + equalNodeIndex + ", rightNodeIndex="
+				+ rightNodeIndex + ", leftNodeIndex=" + leftNodeIndex + "]";
 	}
 
 	/**
@@ -176,7 +203,7 @@ public class Intern extends Person implements Comparable<Intern> {
 	 * @return (:int)
 	 */
 	public int compareNameTo(Intern internToCompare) {
-		int i = this.name.compareTo(internToCompare.getName());
+		int i = (this.getName()).compareTo(internToCompare.getName());
 		return i;
 
 	}
@@ -192,36 +219,44 @@ public class Intern extends Person implements Comparable<Intern> {
 		String fileName = DB_URL + DIRECTORY_DB_FILE;
 		try {
 
-			Intern internOfTheNode = this.getInternInDBAtIndex(index);
+			Intern internOfTheNode = getInternInDBAtIndex(index);
+			internOfTheNode.setName(prepareAttributeToBeWrite(NAME_SIZE, internOfTheNode.getName()));
+			internOfTheNode.setForename(prepareAttributeToBeWrite(FORENAME_SIZE, internOfTheNode.getForename()));
+			internOfTheNode.setPromotion(prepareAttributeToBeWrite(PROMOTION_SIZE, internOfTheNode.getPromotion()));
+
 			// Open DB file.
-			RandomAccessFile rf = new RandomAccessFile(fileName, "rw");
-			int indexOfNewIntern = (int) ((rf.length() / INTERN_SIZE) - 1);
+			RandomAccessFile raf = new RandomAccessFile(fileName, "rw");
+			int indexOfNewIntern = ((int) (raf.length() / INTERN_SIZE) - 1);
 			// Case intern to add in the left subtree.
-			if (this.compareTo(internOfTheNode) < 0) {
+			if (this.compareNameTo(internOfTheNode) < 0) {
 				// Case with no left subtree. Add intern in a new node.
 				if (internOfTheNode.getLeftNodeIndex() == EMPTY_VALUE) {
 					internOfTheNode.setLeftNodeIndex(indexOfNewIntern);
-					rf.close();
+					raf.close();
 					internOfTheNode.modifyInternLinksInDB(index, INTERN_DB_MASK[6], indexOfNewIntern);
-					System.out.println("Intern " + this.getName() + " has been left linked in the InternDirectory.");
-					// Case with one left subtree. Go on searching right place to add the intern.
+					// Case with one left subtree. Go on searching in left place to add the intern.
 				} else {
-					rf.close();
+					raf.close();
 					this.linkInternInDB(internOfTheNode.getLeftNodeIndex());
 				}
 				// Case intern to add in the right subtree.
-			} else {
+			} else if (this.compareNameTo(internOfTheNode) > 0) {
 				// Case with no right subtree. Add intern in a new node.
 				if (internOfTheNode.getRightNodeIndex() == EMPTY_VALUE) {
+					raf.close();
 					internOfTheNode.setRightNodeIndex(indexOfNewIntern);
-					rf.close();
 					internOfTheNode.modifyInternLinksInDB(index, INTERN_DB_MASK[5], indexOfNewIntern);
-					System.out.println("Intern " + this.getName() + " at index " + index
-							+ " has been right linked in the InternDirectory.");
-					// Case with one right subtree. Go on searching right place to add the intern.
+					// Case with one right subtree. Go on searching in right place to add the
+					// intern.
 				} else {
+					raf.close();
 					this.linkInternInDB(internOfTheNode.getRightNodeIndex());
 				}
+				// Case intern to add in the equal subtree.
+			} else {
+				raf.close();
+				this.linkEqualInternsInDB(internOfTheNode, this, index);
+
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -238,15 +273,18 @@ public class Intern extends Person implements Comparable<Intern> {
 	public void modifyInternLinksInDB(int myIndex, int indexOfAttribute, int indexValue) {
 		try {
 			RandomAccessFile raf = new RandomAccessFile(DB_URL + DIRECTORY_DB_FILE, "rw");
-			raf.seek(indexOfAttribute + myIndex * INTERN_SIZE);
+			raf.seek(indexOfAttribute + (myIndex * INTERN_SIZE));
 			// Modify the left node index.
 			if (indexOfAttribute == INTERN_DB_MASK[6]) {
 				raf.writeInt(indexValue);
 				System.out.println("Left Node index modify for intern " + this.getName() + ".");
 				// modify the right node index.
-			} else {
+			} else if (indexOfAttribute == INTERN_DB_MASK[5]) {
 				raf.writeInt(indexValue);
 				System.out.println("Right Node index modify for intern " + this.getName() + ".");
+			} else {
+				raf.writeInt(indexValue);
+				System.out.println("Equal Node index modify for intern " + this.getName() + ".");
 			}
 			raf.close();
 		} catch (IOException e) {
@@ -262,31 +300,23 @@ public class Intern extends Person implements Comparable<Intern> {
 	 * @param internToDelete (:Intern)
 	 * @return (:boolean)
 	 */
-	public boolean searchInternToDelete(Intern internToDelete) {
+	public boolean searchInternToDeleteInSubTrees(Intern internToDelete) {
+		System.out.println("******************* " + this.getName() + "  " + this.getForename());
 		// Case with intern not found in the tree
 		if (this.getRightNodeIndex() == EMPTY_VALUE && this.getLeftNodeIndex() == EMPTY_VALUE) {
+			System.out.println("Intern to delete " + internToDelete.getName() + " not found");
 			return false;
 			// Case with intern may be found in the right subtree
-		} else if (this.compareTo(internToDelete) < 0) {
-			// Case with empty right subtree.
-			if (this.getRightNodeIndex() == EMPTY_VALUE) {
-				return false;
-				// Case with intern in a not empty right subtree .
-			} else {
-				Intern internChild = getInternInDBAtIndex(this.getRightNodeIndex());
-				return this.searchInternToDeleteInChild(internChild, INTERN_DB_MASK[5], internToDelete);
-			}
+		} else if (this.compareNameTo(internToDelete) < 0) {
+			System.out.println("************Go right********************");
+			return this.searchInternToDeleteInAllChildren(internToDelete, this.getRightNodeIndex(), INTERN_DB_MASK[5]);
 			// Case with intern may be found in the left subtree
-		} else if (this.compareTo(internToDelete) > 0) {
-			// Case with empty left subtree.
-			if (this.getLeftNodeIndex() == EMPTY_VALUE) {
-				return false;
-				// Case with a not empty left subtree .
-			} else {
-				Intern internChild = this.getInternInDBAtIndex(this.getLeftNodeIndex());
-				return this.searchInternToDeleteInChild(internChild, INTERN_DB_MASK[6], internToDelete);
-			}
+		} else if (this.compareNameTo(internToDelete) > 0) {
+			System.out.println("************Go left********************");
+			return this.searchInternToDeleteInAllChildren(internToDelete, this.getLeftNodeIndex(), INTERN_DB_MASK[6]);
+			// Error case.
 		} else {
+			System.out.println("Error in trying to delete " + internToDelete.getName() + ".");
 			return false;
 		}
 	}
@@ -300,7 +330,7 @@ public class Intern extends Person implements Comparable<Intern> {
 		if (fileLenght < INTERN_SIZE) {
 			this.writeInternInDB();
 		} else {
-			Intern.this.writeInternInDB();
+			this.writeInternInDB();
 			this.linkInternInDB(START_VALUE);
 		}
 	}
@@ -333,73 +363,6 @@ public class Intern extends Person implements Comparable<Intern> {
 
 //*********** GETTERS IN DB METHODS	
 	/**
-	 * Extract one intern from the interns directory file at the required position.
-	 * 
-	 * @param internPosition (:int)
-	 */
-	public Intern getInternInDBAtIndex(int internIndex) {
-		Intern internToReturn = new Intern();
-		String fileName = DB_URL + DIRECTORY_DB_FILE;
-		try {
-			RandomAccessFile rf = new RandomAccessFile(fileName, "r");
-			rf.seek(internIndex * INTERN_SIZE);
-			String internName = "";
-			for (int j = 0; j < NAME_SIZE; j++) {
-				String charRead = "";
-				charRead += rf.readChar();
-				if (!charRead.equals(FILLING_CHAR)) {
-					internName += charRead;
-				}
-			}
-			internToReturn.setName(internName);
-
-			String internForename = "";
-			for (int j = 0; j < FORENAME_SIZE; j++) {
-				String charRead = "";
-				charRead += rf.readChar();
-				if (!charRead.equals(FILLING_CHAR)) {
-					internForename += charRead;
-				}
-			}
-			internToReturn.setForename(internForename);
-
-			String internLocation = "";
-			for (int j = 0; j < LOCATION_SIZE; j++) {
-				String charRead = "";
-				charRead += rf.readChar();
-				if (!charRead.equals(FILLING_CHAR)) {
-					internLocation += charRead;
-				}
-			}
-			internToReturn.setLocation(internLocation);
-
-			String internPromotion = "";
-			for (int j = 0; j < PROMOTION_SIZE; j++) {
-				String charRead = "";
-				charRead += rf.readChar();
-				if (!charRead.equals(FILLING_CHAR)) {
-					internPromotion += charRead;
-				}
-			}
-			internToReturn.setPromotion(internPromotion);
-
-			int internPromotionYear = rf.readInt();
-			internToReturn.setPromotionYear(internPromotionYear);
-
-			int internRightNodeIndex = rf.readInt();
-			internToReturn.setRightNodeIndex(internRightNodeIndex);
-
-			int internLeftNodeIndex = rf.readInt();
-			internToReturn.setLeftNodeIndex(internLeftNodeIndex);
-			rf.close();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return internToReturn;
-	}
-
-	/**
 	 * Get from the interns directory file, the index of the wanted intern.
 	 * 
 	 * @return (:int)
@@ -430,16 +393,34 @@ public class Intern extends Person implements Comparable<Intern> {
 	 * @return (:Intern)
 	 */
 	public Intern getNearestInternChild() {
-		// Get the current intern frm intern directory DB file.
-		Intern currentNode = this.getInternInDBAtIndex(this.getRightNodeIndex());
+		// Get the current intern from intern directory DB file.
+		Intern currentNode = getInternInDBAtIndex(this.getRightNodeIndex());
+		
 		// go the the first right child if exist.
 		if (currentNode.getRightNodeIndex() != EMPTY_VALUE) {
 			// go to the leftest child of the first right child.
-			while (currentNode.getRightNodeIndex() != EMPTY_VALUE) {
+			while (currentNode.getLeftNodeIndex() != EMPTY_VALUE) {
 				currentNode = this.getInternInDBAtIndex(currentNode.getLeftNodeIndex());
 			}
 		}
 		return currentNode;
+	}
+
+	/**
+	 * Get all equal children of the equal subtree of an intern.
+	 * 
+	 * @param internListToReturn (:List<Intern>)
+	 * @return (:List<Intern>)
+	 */
+	public List<Intern> getInternAndEqualsInSubTree(List<Intern> internListToReturn) {
+		if (this.getEqualNodeIndex() == EMPTY_VALUE) {
+			internListToReturn.add(this);
+		} else {
+			Intern internEqualChild = getInternInDBAtIndex(this.getEqualNodeIndex());
+			internListToReturn = internEqualChild.getInternAndEqualsInSubTree(internListToReturn);
+			internListToReturn.add(this);
+		}
+		return internListToReturn;
 	}
 
 //*************************  PRIVATE METHODES  **************************************
@@ -468,8 +449,8 @@ public class Intern extends Person implements Comparable<Intern> {
 	 * @param internToDelete
 	 * @return
 	 */
-	private boolean searchInternToDeleteInChild(Intern internChild, int placeOfChild, Intern internToDelete) {
-		// Intern's child matches to internToDelete.
+	private boolean searchInternToDeleteInDownChild(Intern internChild, int placeOfChild, Intern internToDelete) {
+		// Intern's child is the intern to Delete.
 		if (internChild.compareTo(internToDelete) == 0) {
 			// Intern's child has no child
 			if (internChild.getRightNodeIndex() == EMPTY_VALUE && internChild.getLeftNodeIndex() == EMPTY_VALUE) {
@@ -489,13 +470,14 @@ public class Intern extends Person implements Comparable<Intern> {
 				this.modifyInternLinksInDB(this.searchInternIndexInDB(), placeOfChild, childIndexOfRightChild);
 				// Intern's child has two children.
 			} else {
-				this.deleteChildInternWithTwoChildren(internChild, placeOfChild);
+				deleteChildInternWithTwoChildren(internChild, placeOfChild);
 
 			}
+			System.out.println("Intern " + internToDelete.getName() + " has been deleted from DB.");
 			return true;
 			// Intern's child doesn't match to internToDelete.
 		} else {
-			return internChild.searchInternToDelete(internToDelete);
+			return internChild.searchInternToDeleteInSubTrees(internToDelete);
 		}
 
 	}
@@ -508,9 +490,9 @@ public class Intern extends Person implements Comparable<Intern> {
 	 */
 	private boolean deleteChildInternWithTwoChildren(Intern internToDelete, int placeOfChild) {
 		Intern nearestChildIntern = internToDelete.getNearestInternChild();
-		this.searchInternToDelete(nearestChildIntern);
-		System.out.println("*************** : " + this.getLeftNodeIndex());
+		this.searchInternToDeleteInSubTrees(nearestChildIntern);
 		int indexToWrite;
+		// Rewrite the correct right or left child of parent intern.
 		if (placeOfChild == INTERN_DB_MASK[5]) {
 			indexToWrite = this.getRightNodeIndex();
 		} else {
@@ -518,5 +500,59 @@ public class Intern extends Person implements Comparable<Intern> {
 		}
 		modifyInPlacePartOfIntern(indexToWrite, nearestChildIntern);
 		return true;
+	}
+
+	/**
+	 * Search intern to delete in right left and equal children of the parent
+	 * intern.
+	 * 
+	 * @param internToDelete   (:Intern)
+	 * @param internChildIndex (:int)
+	 * @param placeOfChild     (:int)
+	 * @return
+	 */
+	private boolean searchInternToDeleteInAllChildren(Intern internToDelete, int internChildIndex, int placeOfChild) {
+		// Intern child subtree doesn't exist .
+		if (internChildIndex == EMPTY_VALUE) {
+			System.out.println("Intern to delete " + internToDelete.getName() + " not found");
+			return false;
+			// Intern child subtree exist .
+		} else {
+			Intern internChild = getInternInDBAtIndex(internChildIndex);
+			// Intern child matches the intern to delete for the name.
+			if (internChild.compareNameTo(internToDelete) == 0) {
+				// Intern child is the intern to delete and ...
+				if (internChild.compareTo(internToDelete) == 0) {
+					// ...has no equal child.
+					if (internChild.getEqualNodeIndex() == EMPTY_VALUE) {
+						return this.searchInternToDeleteInDownChild(internChild, placeOfChild, internToDelete);
+						
+						// ...has one equal child.
+					} else {
+						Intern equalChildIntern = getInternInDBAtIndex(internChild.getEqualNodeIndex());
+						setInternDeletedInDB(equalChildIntern);
+						modifyInPlaceAllEqualIntern(this.searchInternIndexInDB(), equalChildIntern);
+						System.out.println("Intern " + internToDelete.getName() + " has been deleted from DB.");
+						return true;
+					}
+					// Intern child isn't the intern to delete and ...
+				} else {
+					// ...has no equal child.
+					if (internChild.getEqualNodeIndex() == EMPTY_VALUE) {
+						System.out.println("Intern to delete " + internToDelete.getName() + " not found");
+						return false;
+						// ...has one equal child.
+					} else {
+						return searchEqualInternToDelete(internToDelete, internChild);
+					}
+				}
+				// Intern child doesn't match the intern to delete for the name. Go on
+				// searching.
+			} else {
+				return internChild.searchInternToDeleteInSubTrees(internToDelete);
+			}
+
+		}
+
 	}
 }

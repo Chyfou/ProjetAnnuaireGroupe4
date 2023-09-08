@@ -1,4 +1,4 @@
-package fr.isika.cda26.project1.groupe4.frontpackage.views.classes;
+package fr.isika.cda26.project1.groupe4.frontpackage.views;
 
 public class SystemInfo {
 

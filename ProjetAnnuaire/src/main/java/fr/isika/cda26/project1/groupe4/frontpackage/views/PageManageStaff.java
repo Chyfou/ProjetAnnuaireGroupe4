@@ -1,6 +1,9 @@
-package fr.isika.cda26.project1.groupe4.frontpackage.views.classes;
+package fr.isika.cda26.project1.groupe4.frontpackage.views;
 
-import fr.isika.cda26.project1.groupe4.backpackage.person.Intern;
+import java.util.ArrayList;
+import java.util.List;
+
+import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.Intern;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -28,10 +31,11 @@ public class PageManageStaff extends BorderPane implements FrontConstants{
   		private Button removeButton= new Button(" Remove an account ");
   		private Button updateButton= new Button(" Update an account ");
   		private Button newFileButton= new Button(" Add new interns file ");
-	
- public PageManageStaff(){
-	
-	super();
+  		private List<Intern> internsList;
+
+  		public PageManageStaff(List<Intern> internsList) {
+  			super();
+  			this.internsList =  new ArrayList<Intern>(internsList);
 
 //******************I instanciate my BorderPane************************************
 	          BorderPane root=new BorderPane();
@@ -45,20 +49,20 @@ public class PageManageStaff extends BorderPane implements FrontConstants{
             vboxLeftPannel.getChildren().addAll(adminlabel,internDirectory,settings, signout);
       		leftPannel.getChildren().add(vboxLeftPannel);
 //*******************I add icons***************************************************
-      		HBox hbox1= new HBox(HBOX_ICON_SPACING);
-    		HBox hbox2= new HBox(HBOX_ICON_SPACING);
-    		HBox hbox3= new HBox(HBOX_ICON_SPACING);
-    		HBox hbox4= new HBox(HBOX_ICON_SPACING);
+      		HBox hbox1= new HBox(HBOX_SPACING);
+    		HBox hbox2= new HBox(HBOX_SPACING);
+    		HBox hbox3= new HBox(HBOX_SPACING);
+    		HBox hbox4= new HBox(HBOX_SPACING);
     	    hbox1.getChildren().add(adminlabel);
-    	    Image imageStaff = new Image("intern.png");
+    	    Image imageStaff = new Image("Intern_logo.png");
     		ImageView imageView1 = new ImageView();
     		imageView1.setImage(imageStaff);
     		hbox2.getChildren().addAll(imageView1,internDirectory);
-    		Image imageSettings = new Image("settings.png");
+    		Image imageSettings = new Image("Settings_logo.png");
     		ImageView imageView2 = new ImageView();
     		imageView2.setImage(imageSettings);
     		hbox3.getChildren().addAll(imageView2,settings);
-    		Image imageSignout = new Image("signout.jpg");
+    		Image imageSignout = new Image("Sign_out_logo.png");
     		ImageView imageView3 = new ImageView();
     		imageView3.setImage(imageSignout);
     		hbox4.getChildren().addAll(imageView3,signout);
@@ -66,6 +70,13 @@ public class PageManageStaff extends BorderPane implements FrontConstants{
     		hbox3.setAlignment(Pos.CENTER_RIGHT);
     		hbox4.setAlignment(Pos.CENTER_RIGHT);
     		vboxLeftPannel.getChildren().addAll(hbox1,hbox2,hbox3,hbox4);
+ 
+//********************I stylist buttons of my LeftPannel******************************
+    		internDirectory.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+			settings.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+			signout.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+
+			
 //********************I instanciate AnchorPane in my center****************************
       		AnchorPane anchorLeft = new AnchorPane();
 //****************I stylist AchorPane************************************************** 		
@@ -90,7 +101,7 @@ public class PageManageStaff extends BorderPane implements FrontConstants{
       		TableView<Intern> table = new TableView<Intern>();
       		vboxRightPannel.getChildren().addAll(labelStaffDirectory,table);
        		labelStaffDirectory.setStyle(FONT_TITLE_3);
-//   		vboxRightPannel.setAlignment(Pos.CENTER_LEFT);
+
       		
 //*******************I instanciate AnchorPane OF MY RightPannel******************************************
       		AnchorPane anchorRight = new AnchorPane();
@@ -120,7 +131,7 @@ public class PageManageStaff extends BorderPane implements FrontConstants{
 
 		    	@Override
 				public void handle(ActionEvent arg0) {
-					CreateAnAccount createAnAccount = new CreateAnAccount();
+					CreateAnAccount createAnAccount = new CreateAnAccount(PageManageStaff.this.internsList);
 					Scene scene = new Scene(createAnAccount);
 					Stage stage = (Stage) PageManageStaff.this.getScene().getWindow();
 
@@ -131,7 +142,7 @@ public class PageManageStaff extends BorderPane implements FrontConstants{
                 settings.setOnAction(new EventHandler<ActionEvent>() {
 
 		    	public void handle(ActionEvent arg0) {
-					Settings settings= new Settings();
+					Settings settings= new Settings(PageManageStaff.this.internsList);
 					Scene scene = new Scene(settings);
 					Stage stage = (Stage) PageManageStaff.this.getScene().getWindow();
 
@@ -141,7 +152,7 @@ public class PageManageStaff extends BorderPane implements FrontConstants{
                 signout.setOnAction(new EventHandler<ActionEvent>() {
 
     		    	public void handle(ActionEvent arg0) {
-    					CurrentUserAccount pageCurrentUser= new CurrentUserAccount();
+    					CurrentUserAccount pageCurrentUser= new CurrentUserAccount(PageManageStaff.this.internsList);
     					Scene scene = new Scene(pageCurrentUser);
     					Stage stage = (Stage) PageManageStaff.this.getScene().getWindow();
 
@@ -152,7 +163,7 @@ public class PageManageStaff extends BorderPane implements FrontConstants{
                 internDirectory.setOnAction(new EventHandler<ActionEvent>() {
 
     		    	public void handle(ActionEvent arg0) {
-    					AdminPage adminPage= new AdminPage();
+    					SuperAdminPage adminPage= new SuperAdminPage(PageManageStaff.this.internsList);
     					Scene scene = new Scene(adminPage);
     					Stage stage = (Stage) PageManageStaff.this.getScene().getWindow();
 
@@ -226,9 +237,7 @@ public Button getNewFileButton() {
 
 public void setNewFileButton(Button newFileButton) {
 	this.newFileButton = newFileButton;
-}  
-	
-					
-				
-	
+}
+
+
 	}
