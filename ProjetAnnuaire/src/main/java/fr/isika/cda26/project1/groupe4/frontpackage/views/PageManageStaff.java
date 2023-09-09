@@ -2,7 +2,6 @@ package fr.isika.cda26.project1.groupe4.frontpackage.views;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.Intern;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -21,223 +20,180 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class PageManageStaff extends BorderPane implements FrontConstants{
-	
-	    private Button internDirectory= new Button(" Intern directory ");
-		private Button settings= new Button(" Settings ");
-		private Button signout= new Button(" Sign out ");
-		private TextField search = new TextField(" search");
-  		private Button createButton= new Button(" Create an account ");
-  		private Button removeButton= new Button(" Remove an account ");
-  		private Button updateButton= new Button(" Update an account ");
-  		private Button newFileButton= new Button(" Add new interns file ");
-  		private List<Intern> internsList;
+/**
+ * Display staff managing view.
+ * 
+ * @author Sabrine SADEQ.
+ *
+ */
 
-  		public PageManageStaff(List<Intern> internsList) {
-  			super();
-  			this.internsList =  new ArrayList<Intern>(internsList);
+public class PageManageStaff extends BorderPane implements FrontConstants {
 
-//******************I instanciate my BorderPane************************************
-	          BorderPane root=new BorderPane();
- 
-//******************I instanciate my leftPannel************************************
-      		Pane leftPannel=new Pane();
-//******************** I instanciate vbox of my leftPannel****************************
-      		VBox vboxLeftPannel = new VBox(100);
-      		Label adminlabel = new Label(" Menu");
-      		adminlabel.setStyle(BUTTON_FONT_2);
-            vboxLeftPannel.getChildren().addAll(adminlabel,internDirectory,settings, signout);
-      		leftPannel.getChildren().add(vboxLeftPannel);
-//*******************I add icons***************************************************
-      		HBox hbox1= new HBox(HBOX_SPACING);
-    		HBox hbox2= new HBox(HBOX_SPACING);
-    		HBox hbox3= new HBox(HBOX_SPACING);
-    		HBox hbox4= new HBox(HBOX_SPACING);
-    	    hbox1.getChildren().add(adminlabel);
-    	    Image imageStaff = new Image("Intern_logo.png");
-    		ImageView imageView1 = new ImageView();
-    		imageView1.setImage(imageStaff);
-    		hbox2.getChildren().addAll(imageView1,internDirectory);
-    		Image imageSettings = new Image("Settings_logo.png");
-    		ImageView imageView2 = new ImageView();
-    		imageView2.setImage(imageSettings);
-    		hbox3.getChildren().addAll(imageView2,settings);
-    		Image imageSignout = new Image("Sign_out_logo.png");
-    		ImageView imageView3 = new ImageView();
-    		imageView3.setImage(imageSignout);
-    		hbox4.getChildren().addAll(imageView3,signout);
-    		hbox2.setAlignment(Pos.CENTER_RIGHT);
-    		hbox3.setAlignment(Pos.CENTER_RIGHT);
-    		hbox4.setAlignment(Pos.CENTER_RIGHT);
-    		vboxLeftPannel.getChildren().addAll(hbox1,hbox2,hbox3,hbox4);
- 
-//********************I stylist buttons of my LeftPannel******************************
-    		internDirectory.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-			settings.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-			signout.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+	// ********************ATTRIBUTES********************
+	private Button internDirectoryButton;
+	private Button settings;
+	private Button signout;
+	private TextField search;
+	private Button createAccountButton;
+	private Button removeAccountButton;
+	private Button updateAccountButton;
+	private Button newInternsFileButton;
+	private List<Intern> internsList;
 
-			
-//********************I instanciate AnchorPane in my center****************************
-      		AnchorPane anchorLeft = new AnchorPane();
-//****************I stylist AchorPane************************************************** 		
-    		anchorLeft.setStyle(LEFT_PANNEL_COLOR);
-//**************I position  components in AnchorPane***********************************	
-    		anchorLeft.getChildren().add(vboxLeftPannel);
-    		leftPannel.getChildren().add(anchorLeft);
-    		AnchorPane.setTopAnchor(vboxLeftPannel, 200.0);
-    		AnchorPane.setRightAnchor(vboxLeftPannel, 5.0);
-    		AnchorPane.setLeftAnchor(vboxLeftPannel, 5.0);
-    		
-//********I stylist my leftPannel and its components***********************************
-      		leftPannel.setStyle(LEFT_PANNEL_COLOR);
-      		leftPannel.setPrefSize(LEFT_PANNEL_WIDTH,LEFT_PANNEL_HEIGHT );
-      		vboxLeftPannel.setAlignment(Pos.CENTER_RIGHT);
-      		adminlabel.setStyle("-fx-font-weight: bold");
-      		adminlabel.setStyle(FONT_TITLE_1);
-//********* I instanciate my rightPannel**********************************************
-      		Pane rightPannel=new Pane();
-      		VBox vboxRightPannel=new VBox(50);
-      		Label labelStaffDirectory=new Label(" Staff directory ");
-      		TableView<Intern> table = new TableView<Intern>();
-      		vboxRightPannel.getChildren().addAll(labelStaffDirectory,table);
-       		labelStaffDirectory.setStyle(FONT_TITLE_3);
+	// ********************CONSTRUCTOR********************
+	/**
+	 * Initialized constructor to display view of staff managing.
+	 * 
+	 * @param internsList (:List<Intern>)
+	 */
+	public PageManageStaff(List<Intern> internsList) {
+		super();
+		this.internsList = new ArrayList<Intern>(internsList);
+		this.internDirectoryButton = new Button(INTERN_DIRECTORY_BUTTON);
+		this.settings = new Button(SETTINGS_BUTTON);
+		this.signout = new Button(SIGN_OUT_BUTTON);
+		this.search = new TextField(SEARCH_BUTTON);
+		this.createAccountButton = new Button(CREATE_ACCOUNT_BUTTON);
+		this.removeAccountButton = new Button(REMOVE_ACCOUNT_BUTTON);
+		this.updateAccountButton = new Button(UPDATE_ACCOUNT_BUTTON);
+		this.newInternsFileButton = new Button("Add new interns file");
 
-      		
-//*******************I instanciate AnchorPane OF MY RightPannel******************************************
-      		AnchorPane anchorRight = new AnchorPane();
-    		anchorRight.setStyle(BACKGROUND_COLOR);
-    		anchorRight.getChildren().add(vboxRightPannel);
-    		rightPannel.getChildren().add(anchorRight);
-            AnchorPane.setTopAnchor(vboxRightPannel, 200.0);
-    		AnchorPane.setRightAnchor(vboxRightPannel, 10.0);
-    		AnchorPane.setLeftAnchor(vboxRightPannel, 10.0);
-    		rightPannel.setPrefSize(RIGHT_PANNEL_WIDTH,STAGE_HEIGHT );
-//*********************I instanciate labels and buttons in the center*************************************
-      		VBox vboxCenter=new VBox(50);
-      		Label manageStaff= new Label(" Manage staff");
-      		manageStaff.setStyle(FONT_TITLE_3);
-      		vboxCenter.getChildren().addAll(manageStaff,search,createButton,removeButton,updateButton,newFileButton);
-      		vboxCenter.setAlignment(Pos.CENTER);
-      		vboxCenter.setPrefSize(200,200 );
-//**************I position my components in the BorderPane******************************
-		    setLeft(leftPannel);
-		    setRight(rightPannel);
-		    setCenter(vboxCenter);
-		    setStyle(BACKGROUND_COLOR);
-		    
-//***************************The Events************************************************
-		    
-		    createButton.setOnAction(new EventHandler<ActionEvent>() {
+		// Instanciate leftPannel.
+		Pane leftPannel = new Pane();
 
-		    	@Override
-				public void handle(ActionEvent arg0) {
-					CreateAnAccount createAnAccount = new CreateAnAccount(PageManageStaff.this.internsList);
-					Scene scene = new Scene(createAnAccount);
-					Stage stage = (Stage) PageManageStaff.this.getScene().getWindow();
+		// Instantiate VBox of leftPannel.
+		VBox vboxLeftPannel = new VBox(100);
+		Label adminlabel = new Label(" Menu");
+		adminlabel.setStyle(BUTTON_FONT_2);
+		vboxLeftPannel.getChildren().addAll(adminlabel, internDirectoryButton, settings, signout);
+		leftPannel.getChildren().add(vboxLeftPannel);
 
-					stage.setScene(scene);
-				}
-			});
-		
-                settings.setOnAction(new EventHandler<ActionEvent>() {
+		// Add icons.
+		HBox hbox1 = new HBox(HBOX_SPACING);
+		HBox hbox2 = new HBox(HBOX_SPACING);
+		HBox hbox3 = new HBox(HBOX_SPACING);
+		HBox hbox4 = new HBox(HBOX_SPACING);
+		hbox1.getChildren().add(adminlabel);
+		Image imageStaff = new Image(INTERN_LOGO);
+		ImageView imageView1 = new ImageView();
+		imageView1.setImage(imageStaff);
+		hbox2.getChildren().addAll(imageView1, internDirectoryButton);
+		Image imageSettings = new Image(SETTINGS_LOGO);
+		ImageView imageView2 = new ImageView();
+		imageView2.setImage(imageSettings);
+		hbox3.getChildren().addAll(imageView2, settings);
+		Image imageSignout = new Image(SIGN_OUT_LOGO);
+		ImageView imageView3 = new ImageView();
+		imageView3.setImage(imageSignout);
+		hbox4.getChildren().addAll(imageView3, signout);
+		hbox2.setAlignment(Pos.CENTER_RIGHT);
+		hbox3.setAlignment(Pos.CENTER_RIGHT);
+		hbox4.setAlignment(Pos.CENTER_RIGHT);
+		vboxLeftPannel.getChildren().addAll(hbox1, hbox2, hbox3, hbox4);
 
-		    	public void handle(ActionEvent arg0) {
-					Settings settings= new Settings(PageManageStaff.this.internsList);
-					Scene scene = new Scene(settings);
-					Stage stage = (Stage) PageManageStaff.this.getScene().getWindow();
+		// Stylized buttons of leftPannel.
+		internDirectoryButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+		settings.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+		signout.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 
-					stage.setScene(scene);
-				}
-			});
-                signout.setOnAction(new EventHandler<ActionEvent>() {
+		// Instantiate AnchorPane in center.
+		AnchorPane anchorLeft = new AnchorPane();
 
-    		    	public void handle(ActionEvent arg0) {
-    					CurrentUserAccount pageCurrentUser= new CurrentUserAccount(PageManageStaff.this.internsList);
-    					Scene scene = new Scene(pageCurrentUser);
-    					Stage stage = (Stage) PageManageStaff.this.getScene().getWindow();
+		// Stylized AchorPane.
+		anchorLeft.setStyle(LEFT_PANNEL_COLOR);
 
-    					stage.setScene(scene);
-    				}
-    			});
-                
-                internDirectory.setOnAction(new EventHandler<ActionEvent>() {
+		// Set components' position in AnchorPane.
+		anchorLeft.getChildren().add(vboxLeftPannel);
+		leftPannel.getChildren().add(anchorLeft);
+		AnchorPane.setTopAnchor(vboxLeftPannel, 200.0);
+		AnchorPane.setRightAnchor(vboxLeftPannel, 5.0);
+		AnchorPane.setLeftAnchor(vboxLeftPannel, 5.0);
 
-    		    	public void handle(ActionEvent arg0) {
-    					SuperAdminPage adminPage= new SuperAdminPage(PageManageStaff.this.internsList);
-    					Scene scene = new Scene(adminPage);
-    					Stage stage = (Stage) PageManageStaff.this.getScene().getWindow();
+		// Stylized my leftPannel and its components.
+		leftPannel.setStyle(LEFT_PANNEL_COLOR);
+		leftPannel.setPrefSize(LEFT_PANNEL_WIDTH, LEFT_PANNEL_HEIGHT);
+		vboxLeftPannel.setAlignment(Pos.CENTER_RIGHT);
+		adminlabel.setStyle("-fx-font-weight: bold");
+		adminlabel.setStyle(FONT_TITLE_1);
 
-    					stage.setScene(scene);
-    				}
-    			});
-                
-                
-  
- }
+		// Instantiate my rightPannel.
+		Pane rightPannel = new Pane();
+		VBox vboxRightPannel = new VBox(50);
+		Label labelStaffDirectory = new Label("Staff list");
+		TableView<Intern> table = new TableView<Intern>();
+		vboxRightPannel.getChildren().addAll(labelStaffDirectory, table);
+		labelStaffDirectory.setStyle(FONT_TITLE_3);
 
-public Button getInternDirectory() {
-	return internDirectory;
-}
+		// Instantiate AnchorPane OF MY RightPannel.
+		AnchorPane anchorRight = new AnchorPane();
+		anchorRight.setStyle(BACKGROUND_COLOR);
+		anchorRight.getChildren().add(vboxRightPannel);
+		rightPannel.getChildren().add(anchorRight);
+		AnchorPane.setTopAnchor(vboxRightPannel, 200.0);
+		AnchorPane.setRightAnchor(vboxRightPannel, 10.0);
+		AnchorPane.setLeftAnchor(vboxRightPannel, 10.0);
+		rightPannel.setPrefSize(RIGHT_PANNEL_WIDTH, STAGE_HEIGHT);
 
-public void setInternDirectory(Button internDirectory) {
-	this.internDirectory = internDirectory;
-}
+		// Instantiate labels and buttons in center.
+		VBox vboxCenter = new VBox(50);
+		Label manageStaff = new Label("Manage staff");
+		manageStaff.setStyle(FONT_TITLE_3);
+		vboxCenter.getChildren().addAll(manageStaff, search, createAccountButton, removeAccountButton,
+				updateAccountButton, newInternsFileButton);
+		vboxCenter.setAlignment(Pos.CENTER);
+		vboxCenter.setPrefSize(200, 200);
 
-public Button getSettings() {
-	return settings;
-}
+		// Set components' position in BorderPane.
+		setLeft(leftPannel);
+		setRight(rightPannel);
+		setCenter(vboxCenter);
+		setStyle(BACKGROUND_COLOR);
 
-public void setSettings(Button settings) {
-	this.settings = settings;
-}
+		// Action events on buttons.
+		createAccountButton.setOnAction(new EventHandler<ActionEvent>() {
 
-public Button getSignout() {
-	return signout;
-}
+			@Override
+			public void handle(ActionEvent arg0) {
+				CreateAnAccount createAnAccount = new CreateAnAccount(PageManageStaff.this.internsList);
+				Scene scene = new Scene(createAnAccount);
+				Stage stage = (Stage) PageManageStaff.this.getScene().getWindow();
 
-public void setSignout(Button signout) {
-	this.signout = signout;
-}
+				stage.setScene(scene);
+			}
+		});
 
-public TextField getSearch() {
-	return search;
-}
+		settings.setOnAction(new EventHandler<ActionEvent>() {
 
-public void setSearch(TextField search) {
-	this.search = search;
-}
+			public void handle(ActionEvent arg0) {
+				Settings settings = new Settings(PageManageStaff.this.internsList);
+				Scene scene = new Scene(settings);
+				Stage stage = (Stage) PageManageStaff.this.getScene().getWindow();
 
-public Button getCreateButton() {
-	return createButton;
-}
+				stage.setScene(scene);
+			}
+		});
+		signout.setOnAction(new EventHandler<ActionEvent>() {
 
-public void setCreateButton(Button createButton) {
-	this.createButton = createButton;
-}
+			public void handle(ActionEvent arg0) {
+				CurrentUserAccount pageCurrentUser = new CurrentUserAccount(PageManageStaff.this.internsList);
+				Scene scene = new Scene(pageCurrentUser);
+				Stage stage = (Stage) PageManageStaff.this.getScene().getWindow();
 
-public Button getRemoveButton() {
-	return removeButton;
-}
+				stage.setScene(scene);
+			}
+		});
 
-public void setRemoveButton(Button removeButton) {
-	this.removeButton = removeButton;
-}
+		internDirectoryButton.setOnAction(new EventHandler<ActionEvent>() {
 
-public Button getUpdateButton() {
-	return updateButton;
-}
+			public void handle(ActionEvent arg0) {
+				SuperAdminPage adminPage = new SuperAdminPage(PageManageStaff.this.internsList);
+				Scene scene = new Scene(adminPage);
+				Stage stage = (Stage) PageManageStaff.this.getScene().getWindow();
 
-public void setUpdateButton(Button updateButton) {
-	this.updateButton = updateButton;
-}
-
-public Button getNewFileButton() {
-	return newFileButton;
-}
-
-public void setNewFileButton(Button newFileButton) {
-	this.newFileButton = newFileButton;
-}
-
+				stage.setScene(scene);
+			}
+		});
 
 	}
+
+}

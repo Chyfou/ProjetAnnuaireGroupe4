@@ -13,15 +13,21 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+/**
+ * Launch application.
+ * 
+ * @author Sabrine SADEQ.
+ *
+ */
+
 public class App extends Application implements FrontConstants, BackConstants {
 
-//****************************** ATTRIBUTES *********************************************************
-
+	// ********************LAUNCHER********************
 	public static void main(String[] args) {
 		launch();
 	}
 
-// *************************  OVERRIDDEN METHODS *****************************************************
+	// ********************OVERRIDEN METHODS********************
 	@Override
 	public void init() {
 		System.out.println("DB connected");
@@ -39,7 +45,6 @@ public class App extends Application implements FrontConstants, BackConstants {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-
 		InternsDirectoryTree idt = new InternsDirectoryTree();
 		DBUsersManager dum = new DBUsersManager();
 		List<User> usersList = new ArrayList<User>();
@@ -52,13 +57,14 @@ public class App extends Application implements FrontConstants, BackConstants {
 		for (Intern intern : internsList) {
 			System.out.println(intern);
 		}
-// ****** ROOT***************************************************************************************
+
+//Main root.
 		CurrentUserAccount root = new CurrentUserAccount(internsList);
 
-// ****** SCENE**************************************************************************************
+//Initialized Scene
 		Scene scene = new Scene(root);
 
-// ****** STAGE**************************************************************************************
+//Initialized Stage.
 		stage.setScene(scene);
 		stage.setTitle("My Intern Directory Application");
 		stage.getIcons().add(new Image(("Mini_Isika_logo.png")));

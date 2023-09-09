@@ -22,110 +22,123 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * Display login view and redirect to authorized view.
+ * 
+ * @author Sabrine SADEQ & Yoann FRANCOIS.
+ *
+ */
+
 public class Login extends BorderPane implements FrontConstants, BackConstants {
 
-	private Button logInButton = new Button("Log in");
-	private Button backButton = new Button("Back home");
+	// ********************ATTRIBUTES********************
+	private Button loginButton;
+	private Button backButton;
 	private TextField textName;
 	private TextField textForename;
 	private PasswordField textPasseword;
 	private List<Intern> internsList;
 
+	// ********************CONSTRUCTOR********************
+	/**
+	 * Initialized constructor to display login view.
+	 * 
+	 * @param internsList (:List<Intern>)
+	 */
 	public Login(List<Intern> internsList) {
 		super();
-		this.internsList =  new ArrayList<Intern>(internsList);
+		this.internsList = new ArrayList<Intern>(internsList);
+		this.loginButton = new Button(LOGIN_BUTTON);
+		this.backButton = new Button(BACK_BUTTON);
 
-//******************I instanciate my BorderPane******************************************************
+		// instantiate BorderPane.
 		BorderPane root = new BorderPane();
 
-//*******************I instanciate VBox of my leftPannel**********************************************
+		// InstanTiate VBox of my leftPannel.
 		VBox vbox = new VBox(VBOX_SPACING);
 		HBox hbox1 = new HBox();
 		HBox hbox2 = new HBox(HBOX_SPACING);
 		vbox.getChildren().addAll(hbox1, hbox2);
-		Label wlc = new Label(" Welcome ");
+		Label wlc = new Label(WELCOME_LABEL);
 		hbox1.getChildren().add(wlc);
-//******************I stylist my leftpannel***********************************************************
+
+		// Stylized my leftPannel.
 		vbox.setStyle(LEFT_PANNEL_COLOR);
 		vbox.setPrefSize(LEFT_PANNEL_WIDTH, LEFT_PANNEL_HEIGHT);
 		vbox.setAlignment(Pos.CENTER);
 		hbox1.setAlignment(Pos.CENTER);
 		hbox2.setAlignment(Pos.CENTER);
 
-//**********************Stylish logInButton******************************************************************
-		logInButton.setStyle(FONT_TITLE_1);
-		logInButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+		// Stylized loginButton.
+		loginButton.setStyle(FONT_TITLE_1);
+		loginButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 
-//**********************Stylish backButton******************************************************************
+		// Stylized backButton.
 		backButton.setStyle(FONT_TITLE_1);
 		backButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-		
-//**********************Add image to backButton******************************************************************
-		Image image = new Image("Back_logo.png");
+
+		// Add image to backButton.
+		Image image = new Image(BACK_LOGO);
 		ImageView imageView = new ImageView();
 		imageView.setImage(image);
 		hbox2.getChildren().addAll(imageView, backButton);
 
-//*******************I stylist labels of my leftPannel**************************************
+		// Stylized labels of leftPannel.
 		wlc.setStyle(BUTTON_FONT_1);
 
-//***************** I instanciate labels and text fields of my VBox*****************
+		// Instantiate labels and text fields of VBox.
 		AnchorPane anchor = new AnchorPane();
 		GridPane grid = new GridPane();
-//login:
-		Label loglabel = new Label(" Please enter your credentials. ");
 
-//name:
-		Label name = new Label(" Name ");
+		// Instantiate ans stylized labels.
+		Label loglabel = new Label("Please, enter your credentials.");
+		Label name = new Label(NAME_LABEL);
 		this.textName = new TextField();
 		textName.setPrefSize(TEXT_FIELDS_WIDTH, TEXT_FIELDS_HEIGHT);
-//forename:
-		Label forename = new Label(" Forename ");
+		Label forename = new Label(FORENAME_LABEL);
 		this.textForename = new TextField();
 		textForename.setPrefSize(TEXT_FIELDS_WIDTH, TEXT_FIELDS_HEIGHT);
-//password
-		Label password = new Label(" Password ");
+		Label password = new Label(PASSWORD_LABEL);
 		this.textPasseword = new PasswordField();
 		textPasseword.setPrefSize(TEXT_FIELDS_WIDTH, TEXT_FIELDS_HEIGHT);
 
-//*******************I instanciate AnchorPane in my center***********************************************
-
+		// Instantiate AnchorPane in center.
 		anchor.setStyle(BACKGROUND_COLOR);
-		anchor.getChildren().addAll(loglabel, grid, logInButton);
+		anchor.getChildren().addAll(loglabel, grid, loginButton);
 		anchor.setTopAnchor(loglabel, 100.0);
 		anchor.setLeftAnchor(loglabel, 300.0);
 		anchor.setRightAnchor(loglabel, 300.0);
 		anchor.setTopAnchor(grid, 200.0);
 		anchor.setRightAnchor(grid, 300.0);
 		anchor.setLeftAnchor(grid, 300.0);
-		anchor.setTopAnchor(logInButton, 500.0);
-		anchor.setRightAnchor(logInButton, 600.0);
-		anchor.setLeftAnchor(logInButton, 360.0);
+		anchor.setTopAnchor(loginButton, 500.0);
+		anchor.setRightAnchor(loginButton, 600.0);
+		anchor.setLeftAnchor(loginButton, 360.0);
 
-//******************I stylist labels of my VBox**************************************
+		// Stylized labels of my VBox.
 		loglabel.setStyle(BUTTON_FONT_1);
 		name.setStyle(FONT_TITLE_1);
 		forename.setStyle(FONT_TITLE_1);
 		password.setStyle(FONT_TITLE_1);
-		logInButton.setStyle(LIGHT_BUTTONS_COLOR);
+		loginButton.setStyle(LIGHT_BUTTONS_COLOR);
 
-//****we add several child Nodes on the same row with the addRow() method************
+		// Add several child Nodes on the same row with the addRow() method.
 		grid.addRow(2, name, textName);
 		grid.addRow(4, forename, textForename);
 		grid.addRow(6, password, textPasseword);
 
-//********************add padding to my pannel***************************************
+		// Add padding to my pannel.
 		grid.setPadding(new Insets(PADDING_VALUE, PADDING_VALUE, PADDING_VALUE, PADDING_VALUE));
 		grid.setStyle(BACKGROUND_COLOR);
 		grid.setVgap(VGAP_VALUE);
 		grid.setHgap(HGAP_VALUE);
 
-//********************I position my components in root********************************
+//Set components' position in root.
 		setLeft(vbox);
 		setCenter(anchor);
 
-//****************************The Events****************************************
-		logInButton.setOnAction(new EventHandler<ActionEvent>() {
+		// Action events on buttons.
+		loginButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -139,8 +152,8 @@ public class Login extends BorderPane implements FrontConstants, BackConstants {
 					stage.setScene(scene);
 				} else if ((newLogIn.checkId(Login.this.textName.getText(), Login.this.textForename.getText(),
 						Login.this.textPasseword.getText())).equals(ADMIN_STATUS)) {
-					SuperAdminPage admin = new SuperAdminPage(Login.this.internsList);
-					Scene scene = new Scene(admin);
+					SuperAdminPage superAdmin = new SuperAdminPage(Login.this.internsList);
+					Scene scene = new Scene(superAdmin);
 					Stage stage = (Stage) Login.this.getScene().getWindow();
 					stage.setScene(scene);
 				} else {

@@ -20,13 +20,13 @@ import com.itextpdf.text.pdf.PdfWriter;
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.Intern;
 
 /**
- * Generate pdf.
+ * Generate pdf with current TableView.
  * 
- * @author Yoann François
+ * @author Yoann FRANCOIS.
  *
  */
 
-public class PDFGenerator {
+public class PDFGenerator implements FrontConstants {
 
 	// ********************************** ATTRIBUTS
 	// ************************************
@@ -54,14 +54,14 @@ public class PDFGenerator {
 
 	//********************PUBLIC METHOD********************
 	/**
-	 * Print a PDF in file downland of user's computer.
+	 * Print a PDF in file download of user's computer.
 	 * 
 	 * @return (:boolean)
 	 * @throws Exception
 	 */
 	public boolean generateDFWithTable() throws Exception {
 		String userHome = System.getProperty("user.home");
-		PdfWriter.getInstance(document, new FileOutputStream(userHome + "/Downloads/MyInternsDirectoryExtraction.pdf"));
+		PdfWriter.getInstance(document, new FileOutputStream(userHome + PRINT_INTERNS_DIRECTORY_PDF_URL));
 		document.open();
 		Image isikaLogo = Image.getInstance("src/main/java/Isika_logo.png".toString());
 		isikaLogo.scaleToFit(150, 150);
@@ -85,7 +85,7 @@ public class PDFGenerator {
 	 * @param table (:PdfPTable)
 	 */
 	private void addTableHeader(PdfPTable table) {
-		Stream.of("Name", "Forename", "Location", "Promotion", "PromotionYear").forEach(columnTitle -> {
+		Stream.of(NAME_LABEL, FORENAME_LABEL, LOCATION_LABEL, PROMOTION_LABEL, PROMOTION_YEAR_LABEL).forEach(columnTitle -> {
 			PdfPCell header = new PdfPCell();
 			header.setBackgroundColor(BaseColor.LIGHT_GRAY);
 			header.setHorizontalAlignment(Element.ALIGN_CENTER);

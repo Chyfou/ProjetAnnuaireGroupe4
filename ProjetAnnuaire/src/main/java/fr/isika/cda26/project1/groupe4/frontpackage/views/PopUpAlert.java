@@ -8,6 +8,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * Manage all pop up through application.
+ * 
+ * @author yoann
+ *
+ */
+
 public class PopUpAlert implements FrontConstants {
 	
 	//********************ATTRIBUTES********************
@@ -18,11 +25,14 @@ public class PopUpAlert implements FrontConstants {
 	private VBox popUpVbox;
 		
 	//********************CONSTRUCTOR********************
+	/**
+	 * Empty constructor.
+	 */
 	public PopUpAlert() {
 		super();
 	}
 	
-	//********************PUBLIC METHODS********************
+	//********************PUBLICS METHODS********************
 	/**
 	 * Generate popup when id is false for login.
 	 */
@@ -39,7 +49,7 @@ public class PopUpAlert implements FrontConstants {
 		popUpVbox.setAlignment(Pos.CENTER);
 		popUpWindow.setTitle("Oups !");
 		popUpLabel.setText("Wrong id, try again.");
-		popUpButton.setText("Close");
+		popUpButton.setText(CLOSE_BUTTON);
 		popUpScene = new Scene(popUpVbox);
 		popUpWindow.setScene(popUpScene);
 		popUpWindow.showAndWait();
@@ -61,7 +71,7 @@ public class PopUpAlert implements FrontConstants {
 			popUpVbox.setAlignment(Pos.CENTER);
 			popUpWindow.setTitle("PDF Downlander");
 			popUpLabel.setText("Your extraction is done, you will find the PDF inside your Downland Folder !");
-			popUpButton.setText("Close");
+			popUpButton.setText(CLOSE_BUTTON);
 			popUpScene = new Scene(popUpVbox);
 			popUpWindow.setScene(popUpScene);
 			popUpWindow.showAndWait();

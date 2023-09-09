@@ -4,10 +4,14 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 
-public class ShowUseDoc {
+/**
+ * Open on user's computer screen application's use documentation.
+ * 
+ * @author Yoann FRANCOIS.
+ *
+ */
 
-	// ********************ATTRIBUTE********************
-
+public class ShowUseDoc implements FrontConstants{
 	// ********************CONSTRUCTOR********************
 	/**
 	 * Empty constructor.
@@ -15,16 +19,16 @@ public class ShowUseDoc {
 	public ShowUseDoc() {
 		super();
 	}
-	
+
 	// ********************PUBLIC METHOD********************
 	public void openUseDoc() {
 		if (Desktop.isDesktopSupported()) {
-		    try {
-		        File myFile = new File("src/main/java/files/Directory_app_use_doc.pdf");
-		        Desktop.getDesktop().open(myFile);
-		    } catch (IOException ex) {
-		        System.out.println("Error when reading use documentation pdf.");
-		    }
+			try {
+				File myFile = new File(DISPLAY_USE_DOC_LABEL);
+				Desktop.getDesktop().open(myFile);
+			} catch (IOException ex) {
+				System.out.println("Error when reading use documentation pdf.");
+			}
 		}
 	}
 }

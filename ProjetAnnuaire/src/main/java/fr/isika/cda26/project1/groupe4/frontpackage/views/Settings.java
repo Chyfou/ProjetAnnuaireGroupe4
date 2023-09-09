@@ -16,41 +16,59 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * Display settings view to manage staff.
+ * 
+ * @author Sabrine SADEQ
+ *
+ */
+
 public class Settings extends BorderPane implements FrontConstants {
 
-	private Button signout = new Button(" Sign out ");
-	private Button changeName = new Button(" change your name ");
-	private Button changeForename = new Button(" change your forename ");
-	private Button changeEmail = new Button(" change your email ");
-	private Button changePassword = new Button(" change your password ");
-	private Button staffDirectory = new Button(" Staff directory ");
-	private Button internDirectory = new Button(" Intern directory ");
+	// ********************ATTRIBUTES********************
+	private Button signout;
+	private Button changeName;
+	private Button changeForename;
+	private Button changeEmail;
+	private Button changePassword;
+	private Button staffDirectory;
+	private Button internDirectory;
 	private List<Intern> internsList;
 
+	// ********************CONSTRUCTOR********************
+	/**
+	 * Initialized constructor to display settings view and manage staff.
+	 * 
+	 * @param internsList(:List<Intern>);
+	 */
 	public Settings(List<Intern> internsList) {
 		super();
 		this.internsList = new ArrayList<Intern>(internsList);
-
+		this.signout = new Button(SIGN_OUT_BUTTON);
+		this.changeName = new Button(CHANGE_NAME_BUTTON);
+		this.changeForename = new Button(CHANGE_FORENAME_BUTTON);
+		this.changeEmail = new Button(CHANGE_EMAIL_BUTTON);
+		this.changePassword = new Button(CHANGE_PASSWORD_BUTTON);
+		this.staffDirectory = new Button(STAFF_LIST_BUTTON);
+		this.internDirectory = new Button(INTERN_DIRECTORY_BUTTON);
 		TableView<Intern> table = new TableView<Intern>();
 
-//***************I instanciate my BorderPane*****************************************
+		// Instantiate BorderPane.
 		BorderPane root = new BorderPane();
 
-//****************I instanciate vbox of  leftPannel**********************************
+		// Instantiate VBox of leftPannel.
 		VBox vboxLeftPannel = new VBox(VBOX_SPACING);
 		HBox hbox1 = new HBox(HBOX_SPACING);
 		HBox hbox2 = new HBox(HBOX_SPACING);
 		HBox hbox3 = new HBox(HBOX_SPACING);
 
-//**********I add our components to the LeftPannel Children's Name list**************
+		// Add components to the LeftPannel children's Name list.
 		vboxLeftPannel.getChildren().addAll(hbox1, hbox2, hbox3);
 
-// **************I stylist my leftPannel and its VBox********************************
-
+		// Stylized leftPannel and its VBox.
 		vboxLeftPannel.setAlignment(Pos.CENTER);
 		hbox1.setAlignment(Pos.CENTER);
 		hbox2.setAlignment(Pos.CENTER);
@@ -58,44 +76,41 @@ public class Settings extends BorderPane implements FrontConstants {
 		vboxLeftPannel.setStyle(LEFT_PANNEL_COLOR);
 		vboxLeftPannel.setPrefSize(LEFT_PANNEL_WIDTH, LEFT_PANNEL_HEIGHT);
 
-//*************************I stylist buttons of my LeftPannel ************************
-
+		// Stylized buttons of leftPannel.
 		internDirectory.setStyle(FONT_TITLE_1);
 		staffDirectory.setStyle(FONT_TITLE_1);
 		signout.setStyle(FONT_TITLE_1);
 		internDirectory.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 		staffDirectory.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 		signout.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-//**************************I instanciate my images*********************************
 
-		Image image1 = new Image("Intern_logo.png");
+		// Instantiate images.
+		Image image1 = new Image(INTERN_LOGO);
 		ImageView imageView1 = new ImageView();
 		imageView1.setImage(image1);
 		hbox1.getChildren().addAll(imageView1, internDirectory);
-
-		Image image2 = new Image("Staff_logo.png");
+		Image image2 = new Image(STAFF_LOGO);
 		ImageView imageView2 = new ImageView();
 		imageView2.setImage(image2);
 		hbox2.getChildren().addAll(imageView2, staffDirectory);
-
-		Image image3 = new Image("Sign_out_logo.png");
+		Image image3 = new Image(SIGN_OUT_LOGO);
 		ImageView imageView3 = new ImageView();
 		imageView3.setImage(image3);
 		hbox3.getChildren().addAll(imageView3, signout);
 
-//**************************I instanciate VBox of my center**********************************************
+		// Instantiate VBox in center.
 		AnchorPane anchor = new AnchorPane();
 		VBox vbox2 = new VBox(70);
-		Label labelsettings = new Label("Settings");
+		Label labelsettings = new Label(SETTINGS_LABEL);
 
-//***********************I add our components to the VBox Children's Name list************************************
+		// Add our components to the VBox Children's Name list.
 		anchor.getChildren().add(vbox2);
 		vbox2.getChildren().addAll(labelsettings, changeName, changeForename, changeEmail, changePassword);
 		anchor.setTopAnchor(vbox2, 100.0);
 		anchor.setLeftAnchor(vbox2, 400.0);
 		anchor.setRightAnchor(vbox2, 80.0);
 
-//********************I stylist Buttons and labels******************************************************************
+		// Stylized buttons and label.
 		changeName.setStyle(BUTTON_FONT_1);
 		changeForename.setStyle(BUTTON_FONT_1);
 		changeEmail.setStyle(BUTTON_FONT_1);
@@ -109,13 +124,13 @@ public class Settings extends BorderPane implements FrontConstants {
 		changeForename.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 		changeEmail.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 		changePassword.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-//**************************I position my components in the BorderPane*****************************************
+
+		// Set components' position in the BorderPane.
 		setLeft(vboxLeftPannel);
 		setCenter(anchor);
 		setStyle(BACKGROUND_COLOR);
 
-//**********************************The Events ****************************************************************
-
+		// Action events on buttons.
 		signout.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -155,54 +170,6 @@ public class Settings extends BorderPane implements FrontConstants {
 
 			}
 		});
-	}
-
-	public Button getSignout() {
-		return signout;
-	}
-
-	public void setSignout(Button signout) {
-		this.signout = signout;
-	}
-
-	public Button getChangeName() {
-		return changeName;
-	}
-
-	public void setChangeName(Button changeName) {
-		this.changeName = changeName;
-	}
-
-	public Button getChangeForename() {
-		return changeForename;
-	}
-
-	public void setChangeForename(Button changeForename) {
-		this.changeForename = changeForename;
-	}
-
-	public Button getChangeEmail() {
-		return changeEmail;
-	}
-
-	public void setChangeEmail(Button changeEmail) {
-		this.changeEmail = changeEmail;
-	}
-
-	public Button getChangePassword() {
-		return changePassword;
-	}
-
-	public void setChangePassword(Button changePassword) {
-		this.changePassword = changePassword;
-	}
-
-	public Button getStaffDirectory() {
-		return staffDirectory;
-	}
-
-	public void setStaffDirectory(Button staffDirectory) {
-		this.staffDirectory = staffDirectory;
 	}
 
 }

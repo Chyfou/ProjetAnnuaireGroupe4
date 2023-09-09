@@ -8,6 +8,13 @@ import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.InternsDirector
 import fr.isika.cda26.project1.groupe4.backpackage.person.DBUsersManager;
 import fr.isika.cda26.project1.groupe4.backpackage.person.User;
 
+/**
+ * Display login view.
+ * 
+ * @author Yoann FRANCOIS.
+ *
+ */
+
 public class AdminAccountLogin implements BackConstants {
 
 	// ******************ATTRIBUTES******************
@@ -15,6 +22,9 @@ public class AdminAccountLogin implements BackConstants {
 	List<Intern> internsList;
 
 	// ******************CONSTRUCTOR******************
+	/**
+	 * Initialized constructor do link admin connection do authorized view.
+	 */
 	public AdminAccountLogin() {
 		super();
 		InternsDirectoryTree idt = new InternsDirectoryTree();
