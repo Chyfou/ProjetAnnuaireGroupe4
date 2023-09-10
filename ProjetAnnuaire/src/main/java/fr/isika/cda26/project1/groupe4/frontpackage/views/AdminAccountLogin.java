@@ -5,8 +5,8 @@ import java.util.List;
 import fr.isika.cda26.project1.groupe4.backpackage.constants.BackConstants;
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.Intern;
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.InternsDirectoryTree;
-import fr.isika.cda26.project1.groupe4.backpackage.person.DBUsersManager;
 import fr.isika.cda26.project1.groupe4.backpackage.person.User;
+import fr.isika.cda26.project1.groupe4.backpackage.person.UsersTree;
 
 /**
  * Display login view.
@@ -28,17 +28,11 @@ public class AdminAccountLogin implements BackConstants {
 	public AdminAccountLogin() {
 		super();
 		InternsDirectoryTree idt = new InternsDirectoryTree();
-		DBUsersManager dum = new DBUsersManager();
+		UsersTree dum = new UsersTree();
 		this.employees = new ArrayList<User>();
 		dum.getAllUsersInDB(employees);
-		for (User user : employees) {
-		System.out.println(user);
-		}
 		this.internsList = new ArrayList<Intern>();
 		idt.getAllInternInDB(internsList, START_VALUE);
-		for (Intern intern : internsList) {
-		System.out.println(intern);
-		}
 	}
 
 	// ******************METHODE PUBLIC******************

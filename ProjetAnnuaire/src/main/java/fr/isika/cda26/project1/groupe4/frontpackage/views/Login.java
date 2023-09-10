@@ -71,7 +71,7 @@ public class Login extends BorderPane implements FrontConstants, BackConstants {
 
 		// Stylized loginButton.
 		loginButton.setStyle(FONT_TITLE_1);
-		loginButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+		loginButton.setMinSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 
 		// Stylized backButton.
 		backButton.setStyle(FONT_TITLE_1);
@@ -152,7 +152,7 @@ public class Login extends BorderPane implements FrontConstants, BackConstants {
 					stage.setScene(scene);
 				} else if ((newLogIn.checkId(Login.this.textName.getText(), Login.this.textForename.getText(),
 						Login.this.textPasseword.getText())).equals(ADMIN_STATUS)) {
-					SuperAdminPage superAdmin = new SuperAdminPage(Login.this.internsList);
+					SuperAdminView superAdmin = new SuperAdminView(Login.this.internsList);
 					Scene scene = new Scene(superAdmin);
 					Stage stage = (Stage) Login.this.getScene().getWindow();
 					stage.setScene(scene);

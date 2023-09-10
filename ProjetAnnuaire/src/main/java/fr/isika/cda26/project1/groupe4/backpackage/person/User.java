@@ -54,7 +54,7 @@ public class User extends DBFileManager implements BackConstants, Comparable<Use
 		STATUS = null;
 		ID = EMPTY_VALUE;
 	}
-	
+
 	/**
 	 * Empty constructor.
 	 */
@@ -66,7 +66,7 @@ public class User extends DBFileManager implements BackConstants, Comparable<Use
 		STATUS = null;
 		ID = EMPTY_VALUE;
 	}
-	
+
 	/**
 	 * Empty constructor with at least Status value.
 	 */
@@ -78,7 +78,20 @@ public class User extends DBFileManager implements BackConstants, Comparable<Use
 		STATUS = status;
 		ID = EMPTY_VALUE;
 	}
-	
+
+	/**
+	 * Copy constructor.
+	 */
+	public User(User userToCopie) {
+		super();
+		this.name = userToCopie.getName();
+		this.forename = userToCopie.getForename();
+		this.email = userToCopie.getEmail();
+		this.password = userToCopie.getPassword();
+		this.STATUS = userToCopie.getSTATUS();
+		this.ID = userToCopie.getID();
+	}
+
 //*************************  GETTERS/SETTERS  **********************************
 	public String getEmail() {
 		return email;
@@ -120,7 +133,6 @@ public class User extends DBFileManager implements BackConstants, Comparable<Use
 		return ID;
 	}
 
-	
 // ************************* OVERRIDEN METHODES **********************************
 	/**
 	 * Overridden method Compare two users using all their attributes except their
@@ -173,6 +185,7 @@ public class User extends DBFileManager implements BackConstants, Comparable<Use
 
 	/**
 	 * Write Intern in the InternDirectory binary DB file.
+	 * 
 	 * @return (: boolean)
 	 */
 	public boolean writeUserInDB() {
@@ -189,7 +202,7 @@ public class User extends DBFileManager implements BackConstants, Comparable<Use
 			raf.writeChars(this.getEmail());
 			raf.writeChars(this.getPassword());
 			raf.writeChars(this.getSTATUS());
-			raf.writeInt((int) lengthOfUserDBFile()/USER_SIZE);
+			raf.writeInt((int) lengthOfUserDBFile() / USER_SIZE);
 			System.out.println("New user " + this.getName() + " added in user DB file.");
 			raf.close();
 			return true;
@@ -198,7 +211,7 @@ public class User extends DBFileManager implements BackConstants, Comparable<Use
 			System.out.println("Error while adding user " + this.getName() + " in user DB file.");
 			return false;
 		}
-		
+
 	}
-	
+
 }

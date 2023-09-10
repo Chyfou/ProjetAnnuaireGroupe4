@@ -52,6 +52,7 @@ public class CurrentUserAccount extends BorderPane implements FrontConstants, Ba
 	 */
 	public CurrentUserAccount(List<Intern> internsList) {
 		super();
+		this.userTableView = new InternDirectoryTableDisplay();
 		this.internsList = new ArrayList<Intern>(internsList);
 		this.loginButton = new Button(LOGIN_BUTTON);
 		this.help = new Button(HELP_BUTTON);
@@ -63,7 +64,7 @@ public class CurrentUserAccount extends BorderPane implements FrontConstants, Ba
 		this.searchPromotion = new TextField();
 		this.searchLocation = new TextField();
 		this.searchPromotionYear = new TextField();
-		this.userTableView = new InternDirectoryTableDisplay();
+
 
 		// Instantiate BorderPane.
 		BorderPane root = new BorderPane();
@@ -192,17 +193,19 @@ public class CurrentUserAccount extends BorderPane implements FrontConstants, Ba
 						valuesArray);
 				CurrentUserAccount.this.userTableView.getInternsDirectoryTable()
 						.setItems(FXCollections.observableArrayList(CurrentUserAccount.this.internsList));
+				CurrentUserAccount.this.userTableView.getInternsDirectoryTable().getSelectionModel().selectFirst();
 			}
 		});
+		
 		tableRefreshButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				InternsDirectoryTree idt = new InternsDirectoryTree();
-				FXCollections.observableArrayList(CurrentUserAccount.this.internsList).clear();
-				CurrentUserAccount.this.internsList = idt.getAllInternInDB(CurrentUserAccount.this.internsList,
-						START_VALUE);
+				CurrentUserAccount.this.internsList = new ArrayList<Intern>();
+				CurrentUserAccount.this.internsList = idt.getAllInternInDB(CurrentUserAccount.this.internsList, START_VALUE);
 				CurrentUserAccount.this.userTableView.getInternsDirectoryTable()
-						.setItems(FXCollections.observableArrayList(CurrentUserAccount.this.internsList));
+						.setItems(FXCollections.observableArrayList(CurrentUserAccount.this.internsList));			
+				CurrentUserAccount.this.userTableView.getInternsDirectoryTable().getSelectionModel().selectFirst();
 			}
 		});
 	}

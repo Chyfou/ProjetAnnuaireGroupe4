@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Intern of the intern's directory.
  * 
- * @author Thibault SALGUES
+ * @author Thibault SALGUES / Yoann FRANCOIS
  *
  */
 public class Intern extends InternsDirectoryTree implements Comparable<Intern> {
@@ -301,18 +301,15 @@ public class Intern extends InternsDirectoryTree implements Comparable<Intern> {
 	 * @return (:boolean)
 	 */
 	public boolean searchInternToDeleteInSubTrees(Intern internToDelete) {
-		System.out.println("******************* " + this.getName() + "  " + this.getForename());
 		// Case with intern not found in the tree
 		if (this.getRightNodeIndex() == EMPTY_VALUE && this.getLeftNodeIndex() == EMPTY_VALUE) {
 			System.out.println("Intern to delete " + internToDelete.getName() + " not found");
 			return false;
 			// Case with intern may be found in the right subtree
 		} else if (this.compareNameTo(internToDelete) < 0) {
-			System.out.println("************Go right********************");
 			return this.searchInternToDeleteInAllChildren(internToDelete, this.getRightNodeIndex(), INTERN_DB_MASK[5]);
 			// Case with intern may be found in the left subtree
 		} else if (this.compareNameTo(internToDelete) > 0) {
-			System.out.println("************Go left********************");
 			return this.searchInternToDeleteInAllChildren(internToDelete, this.getLeftNodeIndex(), INTERN_DB_MASK[6]);
 			// Error case.
 		} else {

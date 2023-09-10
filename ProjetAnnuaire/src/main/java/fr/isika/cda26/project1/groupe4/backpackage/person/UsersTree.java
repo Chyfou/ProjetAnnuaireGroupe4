@@ -5,17 +5,23 @@ import java.io.RandomAccessFile;
 import java.util.List;
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.DBFileManager;
 
-public class DBUsersManager extends DBFileManager {
-	
+/**
+ * Manager of all User DB file's methods for the frontend .
+ * 
+ * @author Yoann François / Thibault SALGUES
+ *
+ */
+public class UsersTree extends DBFileManager {
+
 //*************************  CONSTRUCTORS  ***************************************	
 	/**
 	 * Empty constructor
 	 */
-	public DBUsersManager () {
+	public UsersTree() {
 		super();
 	}
 //*************************  PUBLIC METHODES  ************************************
-	
+
 	/**
 	 * Get by order all users in the interns directory DB file.
 	 * 
@@ -26,13 +32,13 @@ public class DBUsersManager extends DBFileManager {
 	public List<User> getAllUsersInDB(List<User> usersList) {
 		int fileLenght = lengthOfUserDBFile();
 		if (fileLenght != 0) {
-			for (int i=0; i < fileLenght/USER_SIZE; i++ ) {
+			for (int i = 0; i < fileLenght / USER_SIZE; i++) {
 				usersList.add(getUserInDBAtIndex(i));
 			}
 		}
 		return usersList;
 	}
-	
+
 	/**
 	 * Extract one user from the user's DB file at the required position.
 	 * 
@@ -89,7 +95,7 @@ public class DBUsersManager extends DBFileManager {
 					userSTATUS += charRead;
 				}
 			}
-			
+
 			int userID = rf.readInt();
 			userToReturn = new User(userName, userForename, userEmail, userPassword, userSTATUS, userID);
 

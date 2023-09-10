@@ -8,9 +8,9 @@ import java.io.IOException;
 import javafx.stage.Stage;
 
 /**
- * Initializer of the DB files of the application.
+ * Initializer of the Interns directory DB files of the application.
  * 
- * @author Yoann François / Thibault SALGUES
+ * @author Thibault SALGUES / Yoann François
  *
  */
 public class DBInit extends DBFileManager {

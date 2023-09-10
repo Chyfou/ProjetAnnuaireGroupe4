@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.isika.cda26.project1.groupe4.backpackage.constants.BackConstants;
+import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.DBInit;
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.Intern;
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.InternsDirectoryTree;
-import fr.isika.cda26.project1.groupe4.backpackage.person.DBUsersManager;
+import fr.isika.cda26.project1.groupe4.backpackage.person.DBInitUser;
 import fr.isika.cda26.project1.groupe4.backpackage.person.User;
+import fr.isika.cda26.project1.groupe4.backpackage.person.UsersTree;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -22,15 +24,15 @@ import javafx.stage.Stage;
 
 public class App extends Application implements FrontConstants, BackConstants {
 
-	// ********************LAUNCHER********************
+// ********************LAUNCHER********************
 	public static void main(String[] args) {
 		launch();
 	}
 
-	// ********************OVERRIDEN METHODS********************
+// ********************OVERRIDEN METHODS********************
 	@Override
 	public void init() {
-		System.out.println("DB connected");
+		System.out.println("Application start.");
 		var javafxVersion = SystemInfo.javafxVersion();
 		var javaVersion = SystemInfo.javaVersion();
 		System.out.println("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
@@ -39,32 +41,29 @@ public class App extends Application implements FrontConstants, BackConstants {
 
 	@Override
 	public void stop() {
-		System.out.println("DB disconnected");
+		System.out.println("Application stop.");
 
 	}
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		InternsDirectoryTree idt = new InternsDirectoryTree();
-		DBUsersManager dum = new DBUsersManager();
-		List<User> usersList = new ArrayList<User>();
-		dum.getAllUsersInDB(usersList);
-		for (User user : usersList) {
-			System.out.println(user);
-		}
-		List<Intern> internsList = new ArrayList<Intern>();
-		idt.getAllInternInDB(internsList, START_VALUE);
-		for (Intern intern : internsList) {
-			System.out.println(intern);
-		}
+//***************************** INIT WITH STAGE 
+		 DBInit dii = new DBInit(stage);
+		 DBInitUser diu = new DBInitUser(stage);
+		 
+//***************************** LEAVES 		 
+		 InternsDirectoryTree idt = new InternsDirectoryTree();
 
-//Main root.
+		List<Intern> internsList = new ArrayList<Intern>();
+		internsList = idt.getAllInternInDB(internsList, START_VALUE);
+
+//***************************** ROOT 
 		CurrentUserAccount root = new CurrentUserAccount(internsList);
 
-//Initialized Scene
+//***************************** SCENE 
 		Scene scene = new Scene(root);
 
-//Initialized Stage.
+//***************************** STAGE 
 		stage.setScene(scene);
 		stage.setTitle("My Intern Directory Application");
 		stage.getIcons().add(new Image(("Mini_Isika_logo.png")));

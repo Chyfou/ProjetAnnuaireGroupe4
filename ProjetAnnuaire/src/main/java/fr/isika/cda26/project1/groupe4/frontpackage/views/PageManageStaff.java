@@ -30,6 +30,7 @@ import javafx.stage.Stage;
 public class PageManageStaff extends BorderPane implements FrontConstants {
 
 	// ********************ATTRIBUTES********************
+	private UserTableDisplay userTable;
 	private Button internDirectoryButton;
 	private Button settings;
 	private Button signout;
@@ -48,6 +49,7 @@ public class PageManageStaff extends BorderPane implements FrontConstants {
 	 */
 	public PageManageStaff(List<Intern> internsList) {
 		super();
+		this.userTable = new UserTableDisplay();
 		this.internsList = new ArrayList<Intern>(internsList);
 		this.internDirectoryButton = new Button(INTERN_DIRECTORY_BUTTON);
 		this.settings = new Button(SETTINGS_BUTTON);
@@ -120,8 +122,7 @@ public class PageManageStaff extends BorderPane implements FrontConstants {
 		Pane rightPannel = new Pane();
 		VBox vboxRightPannel = new VBox(50);
 		Label labelStaffDirectory = new Label("Staff list");
-		TableView<Intern> table = new TableView<Intern>();
-		vboxRightPannel.getChildren().addAll(labelStaffDirectory, table);
+		vboxRightPannel.getChildren().addAll(labelStaffDirectory, userTable.getUsersTable());
 		labelStaffDirectory.setStyle(FONT_TITLE_3);
 
 		// Instantiate AnchorPane OF MY RightPannel.
@@ -186,7 +187,7 @@ public class PageManageStaff extends BorderPane implements FrontConstants {
 		internDirectoryButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			public void handle(ActionEvent arg0) {
-				SuperAdminPage adminPage = new SuperAdminPage(PageManageStaff.this.internsList);
+				SuperAdminView adminPage = new SuperAdminView(PageManageStaff.this.internsList);
 				Scene scene = new Scene(adminPage);
 				Stage stage = (Stage) PageManageStaff.this.getScene().getWindow();
 

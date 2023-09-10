@@ -8,11 +8,18 @@ import fr.isika.cda26.project1.groupe4.backpackage.constants.BackConstants;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+/**
+ * Manage basics methods for all DB files.
+ * 
+ * @author Thibault SALGUES et Yoann FRANCOIS
+ *
+ */
 public class DBFileManager implements BackConstants {
 
-private Stage stage;
+	private Stage stage;
 
-	//*************************  CONSTRUCTORS  **********************************************	
+	// ************************* CONSTRUCTORS
+	// **********************************************
 	public DBFileManager() {
 
 	}
@@ -49,30 +56,30 @@ private Stage stage;
 	 * Create the interns' directory DB file if it not exist.
 	 */
 	public void createInternsDBFiles() {
-			File myNewFile = new File(DB_URL + DIRECTORY_DB_FILE);
-			try {
-				myNewFile.createNewFile();
-				System.out.println("Creation of Interns DB file in directory : " + DB_URL + " .");
-			} catch (IOException e) {
-				e.printStackTrace();
-				System.out.println("Error with creation of Interns DB file in directory : " + DB_URL + " .");
-				myNewFile = null;
-			}
+		File myNewFile = new File(DB_URL + DIRECTORY_DB_FILE);
+		try {
+			myNewFile.createNewFile();
+			System.out.println("Creation of Interns DB file in directory : " + DB_URL + " .");
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Error with creation of Interns DB file in directory : " + DB_URL + " .");
+			myNewFile = null;
+		}
 	}
-	
+
 	/**
 	 * Create the user's DB file if it not exist.
 	 */
 	public void createUsersDBFiles() {
-			File myNewFile = new File(DB_URL + USER_DB_FILE);
-			try {
-				myNewFile.createNewFile();
-				System.out.println("Creation of Users DB file in directory : " + DB_URL + USER_DB_FILE + " .");
-			} catch (IOException e) {
-				e.printStackTrace();
-				System.out.println("Error with creation of Users DB file in directory : " + DB_URL + " .");
-				myNewFile = null;
-			}
+		File myNewFile = new File(DB_URL + USER_DB_FILE);
+		try {
+			myNewFile.createNewFile();
+			System.out.println("Creation of Users DB file in directory : " + DB_URL + USER_DB_FILE + " .");
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Error with creation of Users DB file in directory : " + DB_URL + " .");
+			myNewFile = null;
+		}
 	}
 
 	/**
@@ -108,7 +115,7 @@ private Stage stage;
 			return 0;
 		}
 	}
-	
+
 	/**
 	 * Calculate the size in bytes of the users DB file.
 	 * 
@@ -197,7 +204,8 @@ private Stage stage;
 	}
 
 	/**
-	 * Rewrite the attributes of an intern in place in the intern directory except right and left nodes index.
+	 * Rewrite the attributes of an intern in place in the intern directory except
+	 * right and left nodes index.
 	 * 
 	 * @param newInternIndex (:int)
 	 * @param internToWrite  (:Intern)
@@ -215,6 +223,8 @@ private Stage stage;
 			raf.writeChars(internToWrite.getLocation());
 			raf.writeChars(internToWrite.getPromotion());
 			raf.writeInt(internToWrite.getPromotionYear());
+			raf.readInt();
+			raf.readInt();
 			raf.writeInt(internToWrite.getEqualNodeIndex());
 			System.out.println("New intern " + internToWrite.getName() + " rewrite in interns directory file at index "
 					+ newInternIndex);
@@ -272,7 +282,7 @@ private Stage stage;
 		if (parentIntern.getEqualNodeIndex() == EMPTY_VALUE) {
 			parentIntern.modifyInternLinksInDB(parentIndex, INTERN_DB_MASK[7], internToLink.searchInternIndexInDB());
 			parentIntern = parentIntern.getInternInDBAtIndex(parentIndex);
-		// There is already an intern in the equal subtree.
+			// There is already an intern in the equal subtree.
 		} else {
 			Intern newParentIntern = parentIntern.getInternInDBAtIndex(parentIntern.getEqualNodeIndex());
 			linkEqualInternsInDB(newParentIntern, internToLink, newParentIntern.searchInternIndexInDB());

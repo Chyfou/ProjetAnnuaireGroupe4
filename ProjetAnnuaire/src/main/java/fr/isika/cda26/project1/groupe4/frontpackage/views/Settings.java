@@ -149,7 +149,7 @@ public class Settings extends BorderPane implements FrontConstants {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				SuperAdminPage adminPage = new SuperAdminPage(Settings.this.internsList);
+				SuperAdminView adminPage = new SuperAdminView(Settings.this.internsList);
 				Scene scene = new Scene(adminPage);
 				Stage stage = (Stage) Settings.this.getScene().getWindow();
 

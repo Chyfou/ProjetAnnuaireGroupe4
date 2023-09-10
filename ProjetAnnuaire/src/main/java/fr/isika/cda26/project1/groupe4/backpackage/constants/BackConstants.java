@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Yoann François / Thibault SALGUES
+ * Constant for all backend of the application;
  * 
- * @author PC
+ * @author Thibault SALGUES / Yoann François
  *
  */
 public interface BackConstants {

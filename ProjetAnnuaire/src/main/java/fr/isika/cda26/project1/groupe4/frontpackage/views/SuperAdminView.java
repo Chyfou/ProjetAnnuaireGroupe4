@@ -22,19 +22,20 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
- * Display administrator view and manage intern directory.
+ * Display super administrator view and manage intern directory and staff.
  * 
  * @author Sabrine SADEQ & Yoann FRANCOIS & Thibault SALGUES.
  *
  */
 
-public class Admin extends BorderPane implements FrontConstants, BackConstants {
+public class SuperAdminView extends BorderPane implements FrontConstants, BackConstants {
 
 	// ********************ATTRIBUTES********************
 	private Button settingsButton;
 	private Button signOutButton;
 	private Button helpButton;
 	private Button downloadButton;
+	private Button manageStaff;
 	private List<Intern> internsList;
 	private TextField searchName;
 	private TextField searchForename;
@@ -69,10 +70,11 @@ public class Admin extends BorderPane implements FrontConstants, BackConstants {
 	 * @param internsList (:List<Intern>)
 	 * @throws FileNotFoundException
 	 */
-	public Admin(List<Intern> internsList) {
+	public SuperAdminView(List<Intern> internsList) {
 		super();
 		this.userTableView = new InternDirectoryTableDisplay();
 		this.internsList = new ArrayList<Intern>(internsList);
+		this.manageStaff = new Button(MANAGE_STAFF_BUTTON);
 		this.settingsButton = new Button(SETTINGS_BUTTON);
 		this.signOutButton = new Button(SIGN_OUT_BUTTON);
 		this.helpButton = new Button(HELP_BUTTON);
@@ -118,7 +120,7 @@ public class Admin extends BorderPane implements FrontConstants, BackConstants {
 
 		// Instantiate TopPanel.
 		HBox topHbox = new HBox();
-		Label superAdmin = new Label("Admin Account");
+		Label superAdmin = new Label("Super Admin Account");
 
 		// Stylized topPannel and its HBox.
 		topHbox.setStyle(TOP_HBOX_COLOR);
@@ -136,6 +138,7 @@ public class Admin extends BorderPane implements FrontConstants, BackConstants {
 		HBox hbox2 = new HBox(HBOX_SPACING);
 		HBox hbox3 = new HBox(HBOX_SPACING);
 		HBox hbox4 = new HBox(HBOX_SPACING);
+		HBox hbox5 = new HBox(HBOX_SPACING);
 
 		// Stylized buttons of LeftPannel.
 		helpButton.setStyle(FONT_TITLE_1);
@@ -156,15 +159,19 @@ public class Admin extends BorderPane implements FrontConstants, BackConstants {
 		ImageView imageView2 = new ImageView();
 		imageView2.setImage(image2);
 		hbox2.getChildren().addAll(imageView2, downloadButton);
-		Image image3 = new Image(SETTINGS_LOGO);
+		Image image3 = new Image(STAFF_LOGO);
 		ImageView imageView3 = new ImageView();
 		imageView3.setImage(image3);
-		hbox3.getChildren().addAll(imageView3, settingsButton);
-		Image image4 = new Image(SIGN_OUT_LOGO);
+		hbox3.getChildren().addAll(imageView3, manageStaff);
+		Image image4 = new Image(SETTINGS_LOGO);
 		ImageView imageView4 = new ImageView();
 		imageView4.setImage(image4);
-		hbox4.getChildren().addAll(imageView4, signOutButton);
-		vbox.getChildren().addAll(hbox1, hbox2, hbox3, hbox4);
+		hbox4.getChildren().addAll(imageView4, settingsButton);
+		Image image5 = new Image(SIGN_OUT_LOGO);
+		ImageView imageView5 = new ImageView();
+		imageView5.setImage(image5);
+		hbox5.getChildren().addAll(imageView5, signOutButton);
+		vbox.getChildren().addAll(hbox1, hbox2, hbox3, hbox4, hbox5);
 
 		// Stylized leftPannel and its VBox.
 		vbox.setStyle(LEFT_PANNEL_COLOR);
@@ -211,36 +218,47 @@ public class Admin extends BorderPane implements FrontConstants, BackConstants {
 		settingsButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				Settings settings = new Settings(Admin.this.internsList);
+				Settings settings = new Settings(SuperAdminView.this.internsList);
 				Scene scene = new Scene(settings);
-				Stage stage = (Stage) Admin.this.getScene().getWindow();
+				Stage stage = (Stage) SuperAdminView.this.getScene().getWindow();
 				stage.setScene(scene);
 			}
 		});
 		signOutButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				CurrentUserAccount signout = new CurrentUserAccount(Admin.this.internsList);
+				CurrentUserAccount signout = new CurrentUserAccount(SuperAdminView.this.internsList);
 				Scene scene = new Scene(signout);
-				Stage stage = (Stage) Admin.this.getScene().getWindow();
+				Stage stage = (Stage) SuperAdminView.this.getScene().getWindow();
 				stage.setScene(scene);
 			}
 		});
+		
+		manageStaff.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				PageManageStaff pageManageStaff = new PageManageStaff(SuperAdminView.this.internsList);
+				Scene scene = new Scene(pageManageStaff);
+				Stage stage = (Stage) SuperAdminView.this.getScene().getWindow();
+				stage.setScene(scene);
+			}
+		});
+		
 		searchButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				String[] valuesArray = new String[5];
 				InternsDirectoryTree idt = new InternsDirectoryTree();
-				valuesArray[0] = Admin.this.searchName.getText();
+				valuesArray[0] = SuperAdminView.this.searchName.getText();
 				System.out.println(valuesArray[0]);
-				valuesArray[1] = Admin.this.searchForename.getText();
-				valuesArray[2] = Admin.this.searchLocation.getText();
-				valuesArray[3] = Admin.this.searchPromotion.getText();
-				valuesArray[4] = Admin.this.searchPromotionYear.getText();
-				Admin.this.internsList = idt.getInTreeAllInternsWith(Admin.this.internsList, valuesArray);
-				Admin.this.userTableView.getInternsDirectoryTable()
-						.setItems(FXCollections.observableArrayList(Admin.this.internsList));
-				Admin.this.userTableView.getInternsDirectoryTable().getSelectionModel().selectFirst();
+				valuesArray[1] = SuperAdminView.this.searchForename.getText();
+				valuesArray[2] = SuperAdminView.this.searchLocation.getText();
+				valuesArray[3] = SuperAdminView.this.searchPromotion.getText();
+				valuesArray[4] = SuperAdminView.this.searchPromotionYear.getText();
+				SuperAdminView.this.internsList = idt.getInTreeAllInternsWith(SuperAdminView.this.internsList, valuesArray);
+				SuperAdminView.this.userTableView.getInternsDirectoryTable()
+						.setItems(FXCollections.observableArrayList(SuperAdminView.this.internsList));
+				SuperAdminView.this.userTableView.getInternsDirectoryTable().getSelectionModel().selectFirst();
 			}
 		});
 
@@ -248,11 +266,11 @@ public class Admin extends BorderPane implements FrontConstants, BackConstants {
 			@Override
 			public void handle(ActionEvent arg0) {
 				InternsDirectoryTree idt = new InternsDirectoryTree();
-				Admin.this.internsList = new ArrayList<Intern>();
-				Admin.this.internsList = idt.getAllInternInDB(Admin.this.internsList, START_VALUE);
-				Admin.this.userTableView.getInternsDirectoryTable()
-						.setItems(FXCollections.observableArrayList(Admin.this.internsList));			
-				Admin.this.userTableView.getInternsDirectoryTable().getSelectionModel().selectFirst();
+				SuperAdminView.this.internsList = new ArrayList<Intern>();
+				SuperAdminView.this.internsList = idt.getAllInternInDB(SuperAdminView.this.internsList, START_VALUE);
+				SuperAdminView.this.userTableView.getInternsDirectoryTable()
+						.setItems(FXCollections.observableArrayList(SuperAdminView.this.internsList));			
+				SuperAdminView.this.userTableView.getInternsDirectoryTable().getSelectionModel().selectFirst();
 			}
 		});
 		
@@ -260,13 +278,13 @@ public class Admin extends BorderPane implements FrontConstants, BackConstants {
 			@Override
 			public void handle(ActionEvent arg0) {
 				InternsDirectoryTree idt = new InternsDirectoryTree();
-				Intern internToDelete = new Intern(Admin.this.userTableView.getSelectedIntern());
+				Intern internToDelete = new Intern(SuperAdminView.this.userTableView.getSelectedIntern());
 				idt.deleteInternInDB(internToDelete);
-				Admin.this.internsList = new ArrayList<Intern>();
-				Admin.this.internsList = idt.getAllInternInDB(Admin.this.internsList, START_VALUE);
-				Admin.this.userTableView.getInternsDirectoryTable()
-						.setItems(FXCollections.observableArrayList(Admin.this.internsList));
-				Admin.this.userTableView.getInternsDirectoryTable().getSelectionModel().selectFirst();
+				SuperAdminView.this.internsList = new ArrayList<Intern>();
+				SuperAdminView.this.internsList = idt.getAllInternInDB(SuperAdminView.this.internsList, START_VALUE);
+				SuperAdminView.this.userTableView.getInternsDirectoryTable()
+						.setItems(FXCollections.observableArrayList(SuperAdminView.this.internsList));
+				SuperAdminView.this.userTableView.getInternsDirectoryTable().getSelectionModel().selectFirst();
 			}
 		});
 
@@ -275,17 +293,17 @@ public class Admin extends BorderPane implements FrontConstants, BackConstants {
 			public void handle(ActionEvent arg0) {
 				InternsDirectoryTree idt = new InternsDirectoryTree();
 				Intern internToAdd = new Intern();
-				internToAdd.setName(Admin.this.addName.getText());
-				internToAdd.setForename(Admin.this.addforename.getText());
-				internToAdd.setPromotion(Admin.this.addpromotion.getText());
-				internToAdd.setLocation(Admin.this.addlocation.getText());
-				internToAdd.setPromotionYear(Integer.valueOf(Admin.this.addpromotionYear.getText()));
+				internToAdd.setName(SuperAdminView.this.addName.getText());
+				internToAdd.setForename(SuperAdminView.this.addforename.getText());
+				internToAdd.setPromotion(SuperAdminView.this.addpromotion.getText());
+				internToAdd.setLocation(SuperAdminView.this.addlocation.getText());
+				internToAdd.setPromotionYear(Integer.valueOf(SuperAdminView.this.addpromotionYear.getText()));
 				internToAdd.addInternInDB();
-				Admin.this.internsList = new ArrayList<Intern>();
-				Admin.this.internsList = idt.getAllInternInDB(Admin.this.internsList, START_VALUE);
-				Admin.this.userTableView.getInternsDirectoryTable()
-						.setItems(FXCollections.observableArrayList(Admin.this.internsList));
-				Admin.this.userTableView.getInternsDirectoryTable().getSelectionModel().selectFirst();
+				SuperAdminView.this.internsList = new ArrayList<Intern>();
+				SuperAdminView.this.internsList = idt.getAllInternInDB(SuperAdminView.this.internsList, START_VALUE);
+				SuperAdminView.this.userTableView.getInternsDirectoryTable()
+						.setItems(FXCollections.observableArrayList(SuperAdminView.this.internsList));
+				SuperAdminView.this.userTableView.getInternsDirectoryTable().getSelectionModel().selectFirst();
 			}
 		});
 		
@@ -294,18 +312,18 @@ public class Admin extends BorderPane implements FrontConstants, BackConstants {
 			public void handle(ActionEvent arg0) {
 				String[] valuesArray = new String[5];
 				InternsDirectoryTree idt = new InternsDirectoryTree();
-				Intern internToModify = new Intern(Admin.this.userTableView.getSelectedIntern());
-				valuesArray[0] = Admin.this.modifyName.getText();
-				valuesArray[1] = Admin.this.modifyforename.getText();
-				valuesArray[2] = Admin.this.modifylocation.getText();
-				valuesArray[3] = Admin.this.modifypromotion.getText();
-				valuesArray[4] = Admin.this.modifypromotionYear.getText();
+				Intern internToModify = new Intern(SuperAdminView.this.userTableView.getSelectedIntern());
+				valuesArray[0] = SuperAdminView.this.modifyName.getText();
+				valuesArray[1] = SuperAdminView.this.modifyforename.getText();
+				valuesArray[2] = SuperAdminView.this.modifylocation.getText();
+				valuesArray[3] = SuperAdminView.this.modifypromotion.getText();
+				valuesArray[4] = SuperAdminView.this.modifypromotionYear.getText();
 				idt.modifyInternGlobal(internToModify, valuesArray);
-				Admin.this.internsList = new ArrayList<Intern>();
-				Admin.this.internsList = idt.getAllInternInDB(Admin.this.internsList, START_VALUE);
-				Admin.this.userTableView.getInternsDirectoryTable()
-						.setItems(FXCollections.observableArrayList(Admin.this.internsList));
-				Admin.this.userTableView.getInternsDirectoryTable().getSelectionModel().selectFirst();
+				SuperAdminView.this.internsList = new ArrayList<Intern>();
+				SuperAdminView.this.internsList = idt.getAllInternInDB(SuperAdminView.this.internsList, START_VALUE);
+				SuperAdminView.this.userTableView.getInternsDirectoryTable()
+						.setItems(FXCollections.observableArrayList(SuperAdminView.this.internsList));
+				SuperAdminView.this.userTableView.getInternsDirectoryTable().getSelectionModel().selectFirst();
 				
 			}
 		});

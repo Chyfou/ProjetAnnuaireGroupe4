@@ -7,6 +7,12 @@ import java.io.IOException;
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.DBFileManager;
 import javafx.stage.Stage;
 
+/**
+ * Initializer of the Users' DB files of the application.
+ * 
+ * @author Thibault SALGUES
+ *
+ */
 public class DBInitUser extends DBFileManager {
 
 //*************************  CONSTRUCTORS  ***************************************		
@@ -16,7 +22,6 @@ public class DBInitUser extends DBFileManager {
 	public DBInitUser(Stage stage) {
 		super();
 		int lengthDBfile = lengthOfUserDBFile();
-		System.out.println("******************TAILLLLLLO**"+ lengthDBfile );
 		if (lengthDBfile == 0) {
 			createUsersDBFiles();
 			System.out.println("Ask Admin for User's DON files.");

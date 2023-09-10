@@ -151,7 +151,7 @@ public class CreateAnAccount extends AnchorPane implements FrontConstants {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				SuperAdminPage superAdmin = new SuperAdminPage(CreateAnAccount.this.internsList);
+				SuperAdminView superAdmin = new SuperAdminView(CreateAnAccount.this.internsList);
 				Scene scene = new Scene(superAdmin);
 				Stage stage = (Stage) CreateAnAccount.this.getScene().getWindow();
 				stage.setScene(scene);

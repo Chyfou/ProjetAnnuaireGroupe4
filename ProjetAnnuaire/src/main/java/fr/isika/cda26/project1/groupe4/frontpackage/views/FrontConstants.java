@@ -30,6 +30,7 @@ public interface FrontConstants {
 	int COLUMN_WIDTH= (STAGE_WIDTH-LEFT_PANNEL_WIDTH)/6;
 	int VBOX_CENTER_WIDTH= STAGE_WIDTH*1/2;
 	int HBOX_SPACING=7;
+	int HBOX_SPACING_DOUBLE = HBOX_SPACING * 2;
 	int HBOX_WIDTH=200;
 	int HBOX_HEIGHT=100;
 	int BUTTON_WIDTH=150;
@@ -57,6 +58,7 @@ public interface FrontConstants {
 	
 	//*******************BUTTONS********************
 	String SETTINGS_BUTTON = "Settings";
+	String MODIFY_BUTTON = "Modify Intern";
 	String SIGN_OUT_BUTTON = "Sign out";
 	String HELP_BUTTON = "Help";
 	String DOWNLOAD_BUTTON = "Export";

@@ -5,10 +5,12 @@ import java.util.List;
 import fr.isika.cda26.project1.groupe4.backpackage.constants.BackConstants;
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.Intern;
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.InternsDirectoryTree;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
@@ -20,36 +22,93 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 public class InternDirectoryTableDisplay implements FrontConstants, BackConstants {
 
-	// *******************ATTRIBUTES *******************
+// ********************ATTRIBUTES********************
 	private TableView<Intern> internsDirectoryTable;
 	private List<Intern> internsList;
+	private Intern selectedIntern;
+	private TextField textFielddName;
+	private TextField textFieldForename;
+	private TextField textFieldPromotion;
+	private TextField textFieldLocation;
+	private TextField textFieldPromotionYear;
 
-	// *******************CONSTRUCTOR*******************
+// ********************GETTERS & SETTERS********************
+	public List<Intern> getInternsList() {
+		return internsList;
+	}
+
+	public void setInternsList(List<Intern> internsList) {
+		this.internsList = internsList;
+	}
+
+	public Intern getSelectedIntern() {
+		return selectedIntern;
+	}
+
+	public void setSelectedIntern(Intern selectedIntern) {
+		this.selectedIntern = selectedIntern;
+	}
+
+	public TextField getTextFieldName() {
+		return textFielddName;
+	}
+
+	public void setTextFieldName(TextField textFieldName) {
+		this.textFielddName = textFieldName;
+	}
+
+	public TextField getTextFieldForename() {
+		return textFieldForename;
+	}
+
+	public void setTextFieldForename(TextField textFielforename) {
+		this.textFieldForename = textFielforename;
+	}
+
+	public TextField getTextFieldPromotion() {
+		return textFieldPromotion;
+	}
+
+	public void setTextFieldPromotion(TextField textFielpromotion) {
+		this.textFieldPromotion = textFielpromotion;
+	}
+
+	public TextField getTextFieldLocation() {
+		return textFieldLocation;
+	}
+
+	public void setTextFieldLocation(TextField textFiellocation) {
+		this.textFieldLocation = textFiellocation;
+	}
+
+	public TextField getTextFieldPromotionYear() {
+		return textFieldPromotionYear;
+	}
+
+	public void setTextFieldPromotionYear(TextField textFielpromotionYear) {
+		this.textFieldPromotionYear = textFielpromotionYear;
+	}
+
+	// *******************CONSTRUCTOR**************************************
 	/**
 	 * Initialized constructor to generate and fill TableView.
 	 */
 	public InternDirectoryTableDisplay() {
 		this.internsDirectoryTable = new TableView<Intern>();
 		this.internsList = new ArrayList<Intern>();
+		this.textFielddName = new TextField();
+		this.textFieldForename = new TextField();
+		this.textFieldPromotion = new TextField();
+		this.textFieldLocation = new TextField();
+		this.textFieldPromotionYear = new TextField();
+
 		InternsDirectoryTree frontTree = new InternsDirectoryTree();
 		internsList = frontTree.getAllInternInDB(internsList, 0);
 		internsDirectoryTable.setEditable(true);
 		TableColumn<Intern, String> colonneName = new TableColumn<Intern, String>(NAME_LABEL);
 		colonneName.setMinWidth(100);
 		colonneName.setCellValueFactory(new PropertyValueFactory<Intern, String>("name"));
-		internsDirectoryTable.getColumns().add(colonneName);
-
-//	colonneName.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Intern, String>>() {
-//		@Override
-//		public void handle(CellEditEvent<Intern, String> event) {
-//		//Je récupère l'objet qui correspond à la ligne modifiée
-//			((Intern)internsDirectoryTable.getItems().get((event.getTablePosition().getRow())))
-//				.setName(event.getNewValue());//On récupère la nouvelle valeur dans l'event
-//		}
-//	});
-//	colonneName.setCellFactory(TextFieldTableCell.forTableColumn()); //On autorise à transformer la case en textfield.
-//	colonneName.setEditable(true);//On autorise la modification des colonnes.
-//	
+		internsDirectoryTable.getColumns().add(colonneName);	
 
 		TableColumn<Intern, String> colonneForename = new TableColumn<Intern, String>(FORENAME_LABEL);
 		colonneForename.setMinWidth(100);
@@ -69,16 +128,21 @@ public class InternDirectoryTableDisplay implements FrontConstants, BackConstant
 		internsDirectoryTable.getColumns().add(colonnePromotionYear);
 		internsDirectoryTable.setItems(FXCollections.observableList(internsList));
 
-	}
+		this.internsDirectoryTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Intern>() {
+			@Override
+			public void changed(ObservableValue<? extends Intern> observableValue, Intern oldValue, Intern newValue) {
+				// On affiche les attributs du personnage sélectionné dans le label:
+				InternDirectoryTableDisplay.this.selectedIntern = new Intern(newValue);
+				textFielddName.setText(selectedIntern.getName());
+				textFieldForename.setText(selectedIntern.getForename());
+				textFieldPromotion.setText(selectedIntern.getPromotion());
+				textFieldLocation.setText(selectedIntern.getLocation());
+				textFieldPromotionYear.setText(selectedIntern.getPromotionYear().toString());
+			}
+		});
 
-	// *******************PUBLIC METHOD*******************
-	public void deleteSelectedRow() {
-		ObservableList<Intern> selectedPersons = internsDirectoryTable.getSelectionModel().getSelectedItems();
-		(FXCollections.observableList(internsList)).removeAll(selectedPersons);
-		InternsDirectoryTree idt = new InternsDirectoryTree();
-		this.internsList = idt.getAllInternInDB(this.internsList, START_VALUE);
-		this.getInternsDirectoryTable()
-				.setItems(FXCollections.observableArrayList(InternDirectoryTableDisplay.this.internsList));
+		internsDirectoryTable.getSelectionModel().selectFirst();
+
 	}
 
 	// *******************GETTERS & SETTERS*******************
