@@ -7,6 +7,7 @@ import java.util.List;
 import fr.isika.cda26.project1.groupe4.backpackage.constants.BackConstants;
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.Intern;
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.InternsDirectoryTree;
+import fr.isika.cda26.project1.groupe4.frontpackage.hboxButtons.HBoxAdd;
 import fr.isika.cda26.project1.groupe4.frontpackage.methods.PDFGenerator;
 import fr.isika.cda26.project1.groupe4.frontpackage.methods.PopUpAlert;
 import fr.isika.cda26.project1.groupe4.frontpackage.methods.ShowUseDoc;
@@ -48,6 +49,7 @@ public class CurrentUserAccount extends BorderPane implements FrontConstants, Ba
 	private TextField searchLocation;
 	private TextField searchPromotionYear;
 	private InternDirectoryTableDisplay userTableView;
+	private HBoxAdd hBoxAdd;
 
 	// ********************CONSTRUCTOR********************
 	/**
@@ -59,6 +61,7 @@ public class CurrentUserAccount extends BorderPane implements FrontConstants, Ba
 		super();
 		this.userTableView = new InternDirectoryTableDisplay();
 		this.internsList = new ArrayList<Intern>(internsList);
+		this.hBoxAdd =  new HBoxAdd(userTableView);
 		this.help = new Button(HELP_BUTTON);
 		this.help.setStyle(FONT_TITLE_1 + TOP_HBOX_COLOR);
 		this.help.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);	
@@ -145,6 +148,7 @@ public class CurrentUserAccount extends BorderPane implements FrontConstants, Ba
 		searchTableBorderPane.setPadding(new Insets(PADDING_VALUE, PADDING_VALUE, PADDING_VALUE, PADDING_VALUE));
 		searchTableBorderPane.setTop(hboxSearch);
 		searchTableBorderPane.setCenter(userTableView.getInternsDirectoryTable());
+		searchTableBorderPane.setBottom(hBoxAdd);
 
 		// Stylized HBox.
 		hboxSearch.setPrefSize(HBOX_WIDTH, HBOX_HEIGHT);

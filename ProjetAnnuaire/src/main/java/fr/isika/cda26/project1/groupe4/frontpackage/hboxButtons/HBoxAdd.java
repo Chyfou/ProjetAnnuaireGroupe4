@@ -30,23 +30,29 @@ public class HBoxAdd extends HBox implements FrontConstants, BackConstants {
 		super();
 		this.userTableView = userTableView;
 		this.addName = new TextField();
-		this.addName.setPromptText(NAME_LABEL);
 		this.addName.setMinSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.addName.setMaxSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.addName.setPromptText(NAME_LABEL);
 		this.addforename = new TextField();
-		this.addforename.setPromptText(FORENAME_LABEL);
 		this.addforename.setMinSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
-		this.addpromotion = new TextField();
-		this.addpromotion.setPromptText(PROMOTION_LABEL);
-		this.addpromotion.setMinSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.addforename.setMaxSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.addforename.setPromptText(FORENAME_LABEL);
 		this.addlocation = new TextField();
-		this.addlocation.setPromptText(LOCATION_LABEL);
 		this.addlocation.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.addlocation.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.addlocation.setPromptText(LOCATION_LABEL);
+		this.addpromotion = new TextField();
+		this.addpromotion.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.addpromotion.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.addpromotion.setPromptText(PROMOTION_LABEL);
 		this.addpromotionYear = new TextField();
-		this.addpromotionYear.setPromptText(PROMOTION_YEAR_LABEL);
 		this.addpromotionYear.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.addpromotionYear.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.addpromotionYear.setPromptText(PROMOTION_YEAR_LABEL);
 		this.addInternButton = new Button(ADD_BUTTON);
+		this.addInternButton.setStyle(LEFT_PANNEL_COLOR);
 		this.setSpacing(HBOX_SPACING);
-		this.getChildren().addAll(addName, addforename, addpromotion, addlocation, addpromotionYear,
+		this.getChildren().addAll(addName, addforename, addlocation, addpromotion, addpromotionYear,
 				addInternButton);
 		this.setAlignment(Pos.TOP_LEFT);
 		
