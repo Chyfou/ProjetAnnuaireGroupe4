@@ -10,6 +10,8 @@ import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.InternsDirector
 import fr.isika.cda26.project1.groupe4.backpackage.person.DBInitUser;
 import fr.isika.cda26.project1.groupe4.backpackage.person.User;
 import fr.isika.cda26.project1.groupe4.backpackage.person.UsersTree;
+import fr.isika.cda26.project1.groupe4.frontpackage.methods.SystemInfo;
+import fri.isika.cda26.project1.groupe4.frontpackage.constants.FrontConstants;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -18,7 +20,7 @@ import javafx.stage.Stage;
 /**
  * Launch application.
  * 
- * @author Sabrine SADEQ.
+ * @author Sabrine SADEQ, Thibault SALGUS & Sabrine SADEQ.
  *
  */
 
@@ -66,7 +68,8 @@ public class App extends Application implements FrontConstants, BackConstants {
 //***************************** STAGE 
 		stage.setScene(scene);
 		stage.setTitle("My Intern Directory Application");
-		stage.getIcons().add(new Image(("Mini_Isika_logo.png")));
+		stage.getIcons().add(new Image(MINI_ISIKA_LOGO));
+		stage.setResizable(false);
 		stage.setHeight(STAGE_HEIGHT);
 		stage.setWidth(STAGE_WIDTH);
 		stage.show();

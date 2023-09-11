@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Constant for all backend of the application;
  * 
- * @author Thibault SALGUES / Yoann François
+ * @author Thibault SALGUES & Yoann FRANCOIS.
  *
  */
 public interface BackConstants {

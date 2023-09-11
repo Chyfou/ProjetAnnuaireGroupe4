@@ -2,18 +2,18 @@ package fr.isika.cda26.project1.groupe4.frontpackage.views;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.Intern;
+import fri.isika.cda26.project1.groupe4.frontpackage.constants.FrontConstants;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -22,20 +22,20 @@ import javafx.stage.Stage;
 /**
  * Display settings view to manage staff.
  * 
- * @author Sabrine SADEQ
+ * @author Sabrine SADEQ & Thibault SALGUES & Yoann FRANCOIS.
  *
  */
 
 public class Settings extends BorderPane implements FrontConstants {
 
 	// ********************ATTRIBUTES********************
-	private Button signout;
-	private Button changeName;
-	private Button changeForename;
-	private Button changeEmail;
-	private Button changePassword;
-	private Button staffDirectory;
 	private Button internDirectory;
+	private Button signout;
+	private TextField changeName;
+	private TextField changeForename;
+	private TextField changeEmail;
+	private PasswordField changePassword;
+	private Button updateAccountButton;
 	private List<Intern> internsList;
 
 	// ********************CONSTRUCTOR********************
@@ -46,15 +46,34 @@ public class Settings extends BorderPane implements FrontConstants {
 	 */
 	public Settings(List<Intern> internsList) {
 		super();
-		this.internsList = new ArrayList<Intern>(internsList);
-		this.signout = new Button(SIGN_OUT_BUTTON);
-		this.changeName = new Button(CHANGE_NAME_BUTTON);
-		this.changeForename = new Button(CHANGE_FORENAME_BUTTON);
-		this.changeEmail = new Button(CHANGE_EMAIL_BUTTON);
-		this.changePassword = new Button(CHANGE_PASSWORD_BUTTON);
-		this.staffDirectory = new Button(STAFF_LIST_BUTTON);
+
+		// Stylized buttons of leftPannel.
+		this.internsList = new ArrayList<Intern>();
+		this.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 		this.internDirectory = new Button(INTERN_DIRECTORY_BUTTON);
-		TableView<Intern> table = new TableView<Intern>();
+		this.internDirectory.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+		this.internDirectory.setStyle(FONT_TITLE_1 + TOP_HBOX_COLOR);
+		this.signout = new Button(SIGN_OUT_BUTTON);
+		this.signout.setStyle(FONT_TITLE_1 + TOP_HBOX_COLOR);
+		this.signout.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+		this.changeName = new TextField();
+		this.changeName.setPromptText(CHANGE_NAME_LABEL);
+		this.changeName.setMinSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.changeName.setMaxSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.changeForename = new TextField();
+		this.changeForename.setPromptText(CHANGE_FORENAME_LABEL);
+		this.changeForename.setMinSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.changeForename.setMaxSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.changeEmail = new TextField();
+		this.changeEmail.setPromptText(CHANGE_EMAIL_LABEL);
+		this.changeEmail.setMinSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.changeEmail.setMaxSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.changePassword = new PasswordField();
+		this.changePassword.setPromptText(CHANGE_PASSWORD_LABEL);
+		this.changePassword.setMinSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.changePassword.setMaxSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.updateAccountButton = new Button(UPDATE_ACCOUNT_BUTTON);
+		this.updateAccountButton.setStyle(FONT_TITLE_1 + LEFT_PANNEL_COLOR);
 
 		// Instantiate BorderPane.
 		BorderPane root = new BorderPane();
@@ -63,71 +82,43 @@ public class Settings extends BorderPane implements FrontConstants {
 		VBox vboxLeftPannel = new VBox(VBOX_SPACING);
 		HBox hbox1 = new HBox(HBOX_SPACING);
 		HBox hbox2 = new HBox(HBOX_SPACING);
-		HBox hbox3 = new HBox(HBOX_SPACING);
 
 		// Add components to the LeftPannel children's Name list.
-		vboxLeftPannel.getChildren().addAll(hbox1, hbox2, hbox3);
+		vboxLeftPannel.getChildren().addAll(hbox1, hbox2);
 
 		// Stylized leftPannel and its VBox.
 		vboxLeftPannel.setAlignment(Pos.CENTER);
 		hbox1.setAlignment(Pos.CENTER);
 		hbox2.setAlignment(Pos.CENTER);
-		hbox3.setAlignment(Pos.CENTER);
 		vboxLeftPannel.setStyle(LEFT_PANNEL_COLOR);
 		vboxLeftPannel.setPrefSize(LEFT_PANNEL_WIDTH, LEFT_PANNEL_HEIGHT);
-
-		// Stylized buttons of leftPannel.
-		internDirectory.setStyle(FONT_TITLE_1);
-		staffDirectory.setStyle(FONT_TITLE_1);
-		signout.setStyle(FONT_TITLE_1);
-		internDirectory.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-		staffDirectory.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-		signout.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 
 		// Instantiate images.
 		Image image1 = new Image(INTERN_LOGO);
 		ImageView imageView1 = new ImageView();
 		imageView1.setImage(image1);
 		hbox1.getChildren().addAll(imageView1, internDirectory);
-		Image image2 = new Image(STAFF_LOGO);
+		Image image2 = new Image(SIGN_OUT_LOGO);
 		ImageView imageView2 = new ImageView();
 		imageView2.setImage(image2);
-		hbox2.getChildren().addAll(imageView2, staffDirectory);
-		Image image3 = new Image(SIGN_OUT_LOGO);
-		ImageView imageView3 = new ImageView();
-		imageView3.setImage(image3);
-		hbox3.getChildren().addAll(imageView3, signout);
+		hbox2.getChildren().addAll(imageView2, signout);
 
 		// Instantiate VBox in center.
-		AnchorPane anchor = new AnchorPane();
-		VBox vbox2 = new VBox(70);
+		VBox vBoxCenter = new VBox(50);
 		Label labelsettings = new Label(SETTINGS_LABEL);
 
 		// Add our components to the VBox Children's Name list.
-		anchor.getChildren().add(vbox2);
-		vbox2.getChildren().addAll(labelsettings, changeName, changeForename, changeEmail, changePassword);
-		anchor.setTopAnchor(vbox2, 100.0);
-		anchor.setLeftAnchor(vbox2, 400.0);
-		anchor.setRightAnchor(vbox2, 80.0);
+		vBoxCenter.getChildren().addAll(labelsettings, changeName, changeForename, changeEmail, changePassword,
+				updateAccountButton);
 
-		// Stylized buttons and label.
-		changeName.setStyle(BUTTON_FONT_1);
-		changeForename.setStyle(BUTTON_FONT_1);
-		changeEmail.setStyle(BUTTON_FONT_1);
-		changePassword.setStyle(BUTTON_FONT_1);
-		changeName.setStyle(LIGHT_BUTTONS_COLOR);
-		changeForename.setStyle(LIGHT_BUTTONS_COLOR);
-		changeEmail.setStyle(LIGHT_BUTTONS_COLOR);
-		changePassword.setStyle(LIGHT_BUTTONS_COLOR);
-		labelsettings.setStyle(FONT_TITLE_3);
-		changeName.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-		changeForename.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-		changeEmail.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-		changePassword.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+		// Stylized main label.
+		labelsettings.setStyle(FONT_TITLE_3);		
+		labelsettings.setAlignment(Pos.CENTER);
 
 		// Set components' position in the BorderPane.
 		setLeft(vboxLeftPannel);
-		setCenter(anchor);
+		vBoxCenter.setAlignment(Pos.CENTER);
+		setCenter(vBoxCenter);
 		setStyle(BACKGROUND_COLOR);
 
 		// Action events on buttons.
@@ -136,7 +127,6 @@ public class Settings extends BorderPane implements FrontConstants {
 			@Override
 			public void handle(ActionEvent arg0) {
 				CurrentUserAccount currentuseraccount = new CurrentUserAccount(Settings.this.internsList);
-
 				Scene scene = new Scene(currentuseraccount);
 				Stage stage = (Stage) Settings.this.getScene().getWindow();
 
@@ -149,21 +139,8 @@ public class Settings extends BorderPane implements FrontConstants {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				SuperAdminView adminPage = new SuperAdminView(Settings.this.internsList);
+				Admin adminPage = new Admin(Settings.this.internsList);
 				Scene scene = new Scene(adminPage);
-				Stage stage = (Stage) Settings.this.getScene().getWindow();
-
-				stage.setScene(scene);
-
-			}
-		});
-
-		staffDirectory.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent arg0) {
-				PageManageStaff pageManageStaff = new PageManageStaff(Settings.this.internsList);
-				Scene scene = new Scene(pageManageStaff);
 				Stage stage = (Stage) Settings.this.getScene().getWindow();
 
 				stage.setScene(scene);

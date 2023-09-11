@@ -1,8 +1,10 @@
-package fr.isika.cda26.project1.groupe4.frontpackage.views;
+package fr.isika.cda26.project1.groupe4.frontpackage.methods;
 
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+
+import fri.isika.cda26.project1.groupe4.frontpackage.constants.FrontConstants;
 
 /**
  * Open on user's computer screen application's use documentation.

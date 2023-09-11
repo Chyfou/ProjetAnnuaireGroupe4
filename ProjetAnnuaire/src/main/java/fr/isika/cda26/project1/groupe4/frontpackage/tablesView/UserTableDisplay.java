@@ -1,4 +1,4 @@
-package fr.isika.cda26.project1.groupe4.frontpackage.views;
+package fr.isika.cda26.project1.groupe4.frontpackage.tablesView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,7 @@ import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.Intern;
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.InternsDirectoryTree;
 import fr.isika.cda26.project1.groupe4.backpackage.person.User;
 import fr.isika.cda26.project1.groupe4.backpackage.person.UsersTree;
+import fri.isika.cda26.project1.groupe4.frontpackage.constants.FrontConstants;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,7 +19,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 /**
  * Generate and fill TableView of interns for all concerned views.
  * 
- * @author Yoann FRANCOIS.
+ * @author Thibault SALGUES & Yoann FRANCOIS.
  *
  */
 
@@ -34,7 +35,7 @@ public class UserTableDisplay implements FrontConstants, BackConstants {
 	private TextField textFieldSTATUS;
 
 // ********************GETTERS & SETTERS********************
-	public TextField getTextFielddName() {
+	public TextField getTextFieldName() {
 		return textFielddName;
 	}
 
@@ -106,20 +107,20 @@ public class UserTableDisplay implements FrontConstants, BackConstants {
 		usersList = frontTree.getAllUsersInDB(usersList);
 		usersTable.setEditable(true);
 		TableColumn<User, String> colonneName = new TableColumn<User, String>(NAME_LABEL);
-		colonneName.setMinWidth(100);
+		colonneName.setMinWidth(COLUMN_USER_WIDTH);
 		colonneName.setCellValueFactory(new PropertyValueFactory<User, String>("name"));
 		usersTable.getColumns().add(colonneName);
 
 		TableColumn<User, String> colonneForename = new TableColumn<User, String>(FORENAME_LABEL);
-		colonneForename.setMinWidth(100);
+		colonneForename.setMinWidth(COLUMN_USER_WIDTH);
 		colonneForename.setCellValueFactory(new PropertyValueFactory<User, String>("forename"));
 		usersTable.getColumns().add(colonneForename);
 		TableColumn<User, String> colonneMail = new TableColumn<User, String>(EMAIL_LABEL);
-		colonneMail.setMinWidth(100);
+		colonneMail.setMinWidth(COLUMN_USER_WIDTH);
 		colonneMail.setCellValueFactory(new PropertyValueFactory<User, String>("email"));
 		usersTable.getColumns().add(colonneMail);
 		TableColumn<User, String> colonneStatus = new TableColumn<User, String>(STATUS_LABEL);
-		colonneStatus.setMinWidth(100);
+		colonneStatus.setMinWidth(COLUMN_USER_WIDTH);
 		colonneStatus.setCellValueFactory(new PropertyValueFactory<User, String>("STATUS"));
 		usersTable.getColumns().add(colonneStatus);
 		usersTable.setItems(FXCollections.observableList(usersList));
@@ -138,15 +139,6 @@ public class UserTableDisplay implements FrontConstants, BackConstants {
 
 		usersTable.getSelectionModel().selectFirst();
 
-	}
-
-	// *******************GETTERS & SETTERS*******************
-	public TableView<User> getInternsDirectoryTable() {
-		return usersTable;
-	}
-
-	public void setInternsDirectoryTable(TableView<Intern> internsDirectoryTable) {
-		this.usersTable = usersTable;
 	}
 
 }

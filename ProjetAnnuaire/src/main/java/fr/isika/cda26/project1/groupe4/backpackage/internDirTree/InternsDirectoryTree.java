@@ -39,7 +39,7 @@ public class InternsDirectoryTree extends DBFileManager {
 		List<Intern> internsCollectorList = new ArrayList<Intern>();
 		if (valuesArray[0] != null) {
 			for (Intern intern : internsList) {
-				if (intern.getName().contains(valuesArray[0])) {
+				if (intern.getName().toLowerCase().contains(valuesArray[0].toLowerCase())) {
 					internsCollectorList.add(intern);
 				}
 			}
@@ -48,7 +48,7 @@ public class InternsDirectoryTree extends DBFileManager {
 		}
 		if (valuesArray[1] != null) {
 			for (Intern intern : internsList) {
-				if (intern.getForename().contains(valuesArray[1])) {
+				if (intern.getForename().toLowerCase().contains(valuesArray[1].toLowerCase())) {
 					internsCollectorList.add(intern);
 				}
 			}
@@ -66,7 +66,7 @@ public class InternsDirectoryTree extends DBFileManager {
 		}
 		if (valuesArray[3] != null) {
 			for (Intern intern : internsList) {
-				if (intern.getPromotion().contains(valuesArray[3])) {
+				if (intern.getPromotion().toLowerCase().contains(valuesArray[3].toLowerCase())) {
 					internsCollectorList.add(intern);
 				}
 			}
@@ -84,8 +84,6 @@ public class InternsDirectoryTree extends DBFileManager {
 		}
 		return internsList;
 	}
-
-	
 
 	/**
 	 * Get by order all interns in the interns directory DB file.
@@ -256,7 +254,7 @@ public class InternsDirectoryTree extends DBFileManager {
 		} else {
 			modifiedIntern.setLocation(previousIntern.getLocation());
 		}
-		if (valuesArray[3] != null && valuesArray[4].length() == 2) {
+		if (valuesArray[3] != null) {
 			modifiedIntern.setPromotion(valuesArray[3]);
 		} else {
 			modifiedIntern.setPromotion(previousIntern.getPromotion());

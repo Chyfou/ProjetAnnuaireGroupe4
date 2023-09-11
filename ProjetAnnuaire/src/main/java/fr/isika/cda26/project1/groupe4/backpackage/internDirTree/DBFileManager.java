@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 /**
  * Manage basics methods for all DB files.
  * 
- * @author Thibault SALGUES et Yoann FRANCOIS
+ * @author Thibault SALGUES & Yoann FRANCOIS.
  *
  */
 public class DBFileManager implements BackConstants {
@@ -145,14 +145,15 @@ public class DBFileManager implements BackConstants {
 	public String prepareAttributeToBeWrite(int size, String attribute) {
 		String attributePrepared = "";
 		attribute = attribute.trim();
-		if (attribute.length() <= size) {
-			attributePrepared = attribute;
-			for (int i = attribute.length(); i < size; i++) {
-				attributePrepared += FILLING_CHAR;
+			if (attribute.length() <= size) {
+				attributePrepared = attribute.toString();
+				for (int i = attribute.length(); i < size; i++) {
+					attributePrepared += FILLING_CHAR;
+				}
+				System.out.println(attributePrepared);
+			} else {
+				attributePrepared = attribute.substring(0, size);
 			}
-		} else {
-			attributePrepared = attribute.substring(0, size);
-		}
 		return attributePrepared;
 	}
 
@@ -181,6 +182,8 @@ public class DBFileManager implements BackConstants {
 		internToWrite.setName(prepareAttributeToBeWrite(NAME_SIZE, internToWrite.getName()));
 		internToWrite.setForename(prepareAttributeToBeWrite(FORENAME_SIZE, internToWrite.getForename()));
 		internToWrite.setPromotion(prepareAttributeToBeWrite(PROMOTION_SIZE, internToWrite.getPromotion()));
+		internToWrite.setLocation(prepareAttributeToBeWrite(LOCATION_SIZE, internToWrite.getLocation()));
+		System.out.println("+++++++++++++++" + internToWrite.getLocation());
 		try {
 			RandomAccessFile raf = new RandomAccessFile(DB_URL + DIRECTORY_DB_FILE, "rw");
 			raf.seek(newInternIndex * INTERN_SIZE);
@@ -248,6 +251,7 @@ public class DBFileManager implements BackConstants {
 	public boolean modifyInPlacePartOfIntern(int newInternIndex, Intern internToWrite) {
 		internToWrite.setName(prepareAttributeToBeWrite(NAME_SIZE, internToWrite.getName()));
 		internToWrite.setForename(prepareAttributeToBeWrite(FORENAME_SIZE, internToWrite.getForename()));
+		internToWrite.setLocation(prepareAttributeToBeWrite(LOCATION_SIZE, internToWrite.getLocation()));
 		internToWrite.setPromotion(prepareAttributeToBeWrite(PROMOTION_SIZE, internToWrite.getPromotion()));
 		try {
 			RandomAccessFile raf = new RandomAccessFile(DB_URL + DIRECTORY_DB_FILE, "rw");

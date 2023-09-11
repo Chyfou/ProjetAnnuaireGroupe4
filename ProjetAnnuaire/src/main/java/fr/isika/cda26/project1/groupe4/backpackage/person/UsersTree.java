@@ -8,7 +8,7 @@ import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.DBFileManager;
 /**
  * Manager of all User DB file's methods for the frontend .
  * 
- * @author Yoann François / Thibault SALGUES
+ * @author Thibault SALGUES & Yoann FRANCOIS.
  *
  */
 public class UsersTree extends DBFileManager {

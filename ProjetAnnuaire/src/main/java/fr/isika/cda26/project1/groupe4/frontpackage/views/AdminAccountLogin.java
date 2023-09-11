@@ -11,7 +11,7 @@ import fr.isika.cda26.project1.groupe4.backpackage.person.UsersTree;
 /**
  * Display login view.
  * 
- * @author Yoann FRANCOIS.
+ * @author Thibault SALGUES & Yoann FRANCOIS.
  *
  */
 

@@ -9,7 +9,7 @@ import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.DBFileManager;
 /**
  * Connected user off the App.
  * 
- * @author Thibault SALGUES
+ * @author Thibault SALGUES.
  *
  */
 public class User extends DBFileManager implements BackConstants, Comparable<User> {

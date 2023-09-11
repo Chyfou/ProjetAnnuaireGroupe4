@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Intern of the intern's directory.
  * 
- * @author Thibault SALGUES / Yoann FRANCOIS
+ * @author Thibault SALGUES & Yoann FRANCOIS.
  *
  */
 public class Intern extends InternsDirectoryTree implements Comparable<Intern> {
@@ -36,8 +36,8 @@ public class Intern extends InternsDirectoryTree implements Comparable<Intern> {
 	public Intern(String name, String forename, String promotion, String location, Integer promotionYear,
 			int rightNodeIndex, int leftNodeIndex, int equalNodeIndex) {
 		super();
+		this.name = name;
 		this.forename = forename;
-		this.promotion = promotion;
 		this.promotion = promotion;
 		this.location = location;
 		this.promotionYear = promotionYear;
@@ -339,6 +339,7 @@ public class Intern extends InternsDirectoryTree implements Comparable<Intern> {
 		this.setName(prepareAttributeToBeWrite(NAME_SIZE, this.getName()));
 		this.setForename(prepareAttributeToBeWrite(FORENAME_SIZE, this.getForename()));
 		this.setPromotion(prepareAttributeToBeWrite(PROMOTION_SIZE, this.getPromotion()));
+		this.setLocation(prepareAttributeToBeWrite(LOCATION_SIZE, this.getLocation()));
 		try {
 			RandomAccessFile raf = new RandomAccessFile(DB_URL + DIRECTORY_DB_FILE, "rw");
 			raf.seek(raf.length());

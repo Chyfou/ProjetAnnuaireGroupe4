@@ -6,9 +6,15 @@ import java.util.List;
 import fr.isika.cda26.project1.groupe4.backpackage.constants.BackConstants;
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.Intern;
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.InternsDirectoryTree;
+import fr.isika.cda26.project1.groupe4.frontpackage.methods.PDFGenerator;
+import fr.isika.cda26.project1.groupe4.frontpackage.methods.PopUpAlert;
+import fr.isika.cda26.project1.groupe4.frontpackage.methods.ShowUseDoc;
+import fr.isika.cda26.project1.groupe4.frontpackage.tablesView.InternDirectoryTableDisplay;
+import fri.isika.cda26.project1.groupe4.frontpackage.constants.FrontConstants;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -31,7 +37,6 @@ import javafx.stage.Stage;
 public class SuperAdminView extends BorderPane implements FrontConstants, BackConstants {
 
 	// ********************ATTRIBUTES********************
-	private Button settingsButton;
 	private Button signOutButton;
 	private Button helpButton;
 	private Button downloadButton;
@@ -71,48 +76,99 @@ public class SuperAdminView extends BorderPane implements FrontConstants, BackCo
 	 * @throws FileNotFoundException
 	 */
 	public SuperAdminView(List<Intern> internsList) {
-		super();
+		super();	
 		this.userTableView = new InternDirectoryTableDisplay();
 		this.internsList = new ArrayList<Intern>(internsList);
 		this.manageStaff = new Button(MANAGE_STAFF_BUTTON);
-		this.settingsButton = new Button(SETTINGS_BUTTON);
+		this.manageStaff.setStyle(FONT_TITLE_1 + TOP_HBOX_COLOR);
+		this.manageStaff.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 		this.signOutButton = new Button(SIGN_OUT_BUTTON);
+		this.signOutButton.setStyle(FONT_TITLE_1 + TOP_HBOX_COLOR);
+		this.signOutButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 		this.helpButton = new Button(HELP_BUTTON);
+		this.helpButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+		this.helpButton.setStyle(FONT_TITLE_1 + TOP_HBOX_COLOR);
 		this.downloadButton = new Button(DOWNLOAD_BUTTON);
-		this.searchName = new TextField();
-		this.searchForename = new TextField();
-		this.searchPromotion = new TextField();
-		this.searchLocation = new TextField();
-		this.searchPromotionYear = new TextField();
+		this.downloadButton.setStyle(FONT_TITLE_1 + TOP_HBOX_COLOR);
+		this.downloadButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 		this.searchButton = new Button(SEARCH_BUTTON);
+		this.searchButton.setStyle(LEFT_PANNEL_COLOR);
 		this.tableRefreshButton = new Button(REFRESH_BUTTON);
+		this.tableRefreshButton.setStyle(LEFT_PANNEL_COLOR);
 		this.deleteInternButton = new Button(DELETE_INTERN_BUTTON);
+		this.deleteInternButton.setStyle(LEFT_PANNEL_COLOR);
+		
 		// ***************** ADD BUTTON INITIALIZATION
 		this.addName = new TextField();
+		this.addName.setMinSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.addName.setMaxSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
 		this.addName.setPromptText(NAME_LABEL);
 		this.addforename = new TextField();
+		this.addforename.setMinSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.addforename.setMaxSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
 		this.addforename.setPromptText(FORENAME_LABEL);
-		this.addpromotion = new TextField();
-		this.addpromotion.setPromptText(PROMOTION_LABEL);
 		this.addlocation = new TextField();
+		this.addlocation.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.addlocation.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
 		this.addlocation.setPromptText(LOCATION_LABEL);
+		this.addpromotion = new TextField();
+		this.addpromotion.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.addpromotion.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.addpromotion.setPromptText(PROMOTION_LABEL);
 		this.addpromotionYear = new TextField();
+		this.addpromotionYear.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.addpromotionYear.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
 		this.addpromotionYear.setPromptText(PROMOTION_YEAR_LABEL);
 		this.addInternButton = new Button(ADD_BUTTON);
-		this.addNewIntern = new HBox(HBOX_SPACING_DOUBLE);
-		this.addNewIntern.getChildren().addAll(addName, addforename, addpromotion, addlocation, addpromotionYear,
-				addInternButton, deleteInternButton);
+		this.addInternButton.setStyle(LEFT_PANNEL_COLOR);
+		this.addNewIntern = new HBox(HBOX_SPACING);
+		this.addNewIntern.getChildren().addAll(addName, addforename, addlocation, addpromotion, addpromotionYear,
+				addInternButton);
 		this.addNewIntern.setAlignment(Pos.TOP_LEFT);
+
+		// ***************** SEARCH BUTTON INITIALIZATION
+		this.searchName = new TextField();
+		this.searchName.setMinSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.searchName.setMaxSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.searchName.setPromptText(NAME_LABEL);
+		this.searchForename = new TextField();
+		this.searchForename.setMinSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.searchForename.setMaxSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.searchForename.setPromptText(FORENAME_LABEL);
+		this.searchLocation = new TextField();
+		this.searchLocation.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.searchLocation.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.searchLocation.setPromptText(LOCATION_LABEL);
+		this.searchPromotion = new TextField();
+		this.searchPromotion.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.searchPromotion.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.searchPromotion.setPromptText(PROMOTION_LABEL);
+		this.searchPromotionYear = new TextField();
+		this.searchPromotionYear.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.searchPromotionYear.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.searchPromotionYear.setPromptText(PROMOTION_YEAR_LABEL);
+
 		// ***************** MODIFY BUTTON INITIALIZATION
 		this.modifyName = this.userTableView.getTextFieldName();
+		this.modifyName.setMinSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.modifyName.setMaxSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
 		this.modifyforename = this.userTableView.getTextFieldForename();
-		this.modifypromotion = this.userTableView.getTextFieldPromotion();
+		this.modifyforename.setMinSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.modifyforename.setMaxSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
 		this.modifylocation = this.userTableView.getTextFieldLocation();
+		this.modifylocation.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.modifylocation.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.modifypromotion = this.userTableView.getTextFieldPromotion();
+		this.modifypromotion.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.modifypromotion.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
 		this.modifypromotionYear = this.userTableView.getTextFieldPromotionYear();
+		this.modifypromotionYear.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.modifypromotionYear.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
 		this.modifyInternButton = new Button(MODIFY_BUTTON);
-		this.modifySelecetedIntern = new HBox(HBOX_SPACING_DOUBLE);
-		this.modifySelecetedIntern.getChildren().addAll(modifyName, modifyforename, modifypromotion, modifylocation,
-				modifypromotionYear, modifyInternButton);
+		this.modifyInternButton.setStyle(LEFT_PANNEL_COLOR);
+		this.modifySelecetedIntern = new HBox(HBOX_SPACING);
+		this.modifySelecetedIntern.getChildren().addAll(modifyName, modifyforename, modifylocation, modifypromotion,
+				modifypromotionYear, modifyInternButton, deleteInternButton);
 		this.modifySelecetedIntern.setAlignment(Pos.TOP_LEFT);
 
 		// Instantiate BorderPane.s
@@ -120,7 +176,7 @@ public class SuperAdminView extends BorderPane implements FrontConstants, BackCo
 
 		// Instantiate TopPanel.
 		HBox topHbox = new HBox();
-		Label superAdmin = new Label("Super Admin Account");
+		Label superAdmin = new Label("Manager Account");
 
 		// Stylized topPannel and its HBox.
 		topHbox.setStyle(TOP_HBOX_COLOR);
@@ -138,17 +194,6 @@ public class SuperAdminView extends BorderPane implements FrontConstants, BackCo
 		HBox hbox2 = new HBox(HBOX_SPACING);
 		HBox hbox3 = new HBox(HBOX_SPACING);
 		HBox hbox4 = new HBox(HBOX_SPACING);
-		HBox hbox5 = new HBox(HBOX_SPACING);
-
-		// Stylized buttons of LeftPannel.
-		helpButton.setStyle(FONT_TITLE_1);
-		downloadButton.setStyle(FONT_TITLE_1);
-		settingsButton.setStyle(FONT_TITLE_1);
-		signOutButton.setStyle(FONT_TITLE_1);
-		helpButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-		downloadButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-		settingsButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-		signOutButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 
 		// Image view.
 		Image image1 = new Image(HELP_LOGO);
@@ -163,31 +208,28 @@ public class SuperAdminView extends BorderPane implements FrontConstants, BackCo
 		ImageView imageView3 = new ImageView();
 		imageView3.setImage(image3);
 		hbox3.getChildren().addAll(imageView3, manageStaff);
-		Image image4 = new Image(SETTINGS_LOGO);
+		Image image4 = new Image(SIGN_OUT_LOGO);
 		ImageView imageView4 = new ImageView();
 		imageView4.setImage(image4);
-		hbox4.getChildren().addAll(imageView4, settingsButton);
-		Image image5 = new Image(SIGN_OUT_LOGO);
-		ImageView imageView5 = new ImageView();
-		imageView5.setImage(image5);
-		hbox5.getChildren().addAll(imageView5, signOutButton);
-		vbox.getChildren().addAll(hbox1, hbox2, hbox3, hbox4, hbox5);
+		hbox4.getChildren().addAll(imageView4, signOutButton);
+		vbox.getChildren().addAll(hbox1, hbox2, hbox3, hbox4);
 
 		// Stylized leftPannel and its VBox.
 		vbox.setStyle(LEFT_PANNEL_COLOR);
 		vbox.setPrefSize(LEFT_PANNEL_WIDTH, LEFT_PANNEL_HEIGHT);
-		vbox.setAlignment(Pos.CENTER);
-		hbox1.setAlignment(Pos.CENTER);
-		hbox2.setAlignment(Pos.CENTER);
-		hbox3.setAlignment(Pos.CENTER);
-		hbox4.setAlignment(Pos.CENTER);
+		vbox.setAlignment(Pos.CENTER_LEFT);
+		hbox1.setAlignment(Pos.CENTER_LEFT);
+		hbox2.setAlignment(Pos.CENTER_LEFT);
+		hbox3.setAlignment(Pos.CENTER_LEFT);
+		hbox4.setAlignment(Pos.CENTER_LEFT);
 
 		// Instantiate and stylized VBox.
 		VBox searchTableAdd = new VBox(VBOX_SPACING);
+		searchTableAdd.setPadding(new Insets(PADDING_VALUE, PADDING_VALUE, PADDING_VALUE, PADDING_VALUE));
 		searchTableAdd.setStyle(BACKGROUND_COLOR);
 
 		// Instantiate and stylized HBox.
-		HBox hboxSearch = new HBox(HBOX_SPACING_DOUBLE);
+		HBox hboxSearch = new HBox(HBOX_SPACING);
 		hboxSearch.setPrefSize(HBOX_WIDTH, HBOX_HEIGHT);
 
 		// Stylized TextField.
@@ -201,8 +243,6 @@ public class SuperAdminView extends BorderPane implements FrontConstants, BackCo
 		hboxSearch.getChildren().addAll(searchName, searchForename, searchPromotion, searchLocation,
 				searchPromotionYear, searchButton, tableRefreshButton);
 
-		
-
 		searchTableAdd.getChildren().addAll(hboxSearch, userTableView.getInternsDirectoryTable(), modifySelecetedIntern,
 				addNewIntern);
 
@@ -214,16 +254,6 @@ public class SuperAdminView extends BorderPane implements FrontConstants, BackCo
 		this.setLeft(vbox);
 		this.setCenter(searchTableAdd);
 
-		// Action events on buttons.
-		settingsButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				Settings settings = new Settings(SuperAdminView.this.internsList);
-				Scene scene = new Scene(settings);
-				Stage stage = (Stage) SuperAdminView.this.getScene().getWindow();
-				stage.setScene(scene);
-			}
-		});
 		signOutButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -233,17 +263,17 @@ public class SuperAdminView extends BorderPane implements FrontConstants, BackCo
 				stage.setScene(scene);
 			}
 		});
-		
+
 		manageStaff.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				PageManageStaff pageManageStaff = new PageManageStaff(SuperAdminView.this.internsList);
-				Scene scene = new Scene(pageManageStaff);
+				ManageStaffView manageStaffView = new ManageStaffView(SuperAdminView.this.internsList);
+				Scene scene = new Scene(manageStaffView);
 				Stage stage = (Stage) SuperAdminView.this.getScene().getWindow();
 				stage.setScene(scene);
 			}
 		});
-		
+
 		searchButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -255,7 +285,8 @@ public class SuperAdminView extends BorderPane implements FrontConstants, BackCo
 				valuesArray[2] = SuperAdminView.this.searchLocation.getText();
 				valuesArray[3] = SuperAdminView.this.searchPromotion.getText();
 				valuesArray[4] = SuperAdminView.this.searchPromotionYear.getText();
-				SuperAdminView.this.internsList = idt.getInTreeAllInternsWith(SuperAdminView.this.internsList, valuesArray);
+				SuperAdminView.this.internsList = idt.getInTreeAllInternsWith(SuperAdminView.this.internsList,
+						valuesArray);
 				SuperAdminView.this.userTableView.getInternsDirectoryTable()
 						.setItems(FXCollections.observableArrayList(SuperAdminView.this.internsList));
 				SuperAdminView.this.userTableView.getInternsDirectoryTable().getSelectionModel().selectFirst();
@@ -269,11 +300,11 @@ public class SuperAdminView extends BorderPane implements FrontConstants, BackCo
 				SuperAdminView.this.internsList = new ArrayList<Intern>();
 				SuperAdminView.this.internsList = idt.getAllInternInDB(SuperAdminView.this.internsList, START_VALUE);
 				SuperAdminView.this.userTableView.getInternsDirectoryTable()
-						.setItems(FXCollections.observableArrayList(SuperAdminView.this.internsList));			
+						.setItems(FXCollections.observableArrayList(SuperAdminView.this.internsList));
 				SuperAdminView.this.userTableView.getInternsDirectoryTable().getSelectionModel().selectFirst();
 			}
 		});
-		
+
 		deleteInternButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -306,7 +337,7 @@ public class SuperAdminView extends BorderPane implements FrontConstants, BackCo
 				SuperAdminView.this.userTableView.getInternsDirectoryTable().getSelectionModel().selectFirst();
 			}
 		});
-		
+
 		modifyInternButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -324,8 +355,34 @@ public class SuperAdminView extends BorderPane implements FrontConstants, BackCo
 				SuperAdminView.this.userTableView.getInternsDirectoryTable()
 						.setItems(FXCollections.observableArrayList(SuperAdminView.this.internsList));
 				SuperAdminView.this.userTableView.getInternsDirectoryTable().getSelectionModel().selectFirst();
-				
+
 			}
 		});
+		
+		downloadButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				PDFGenerator createPDF = new PDFGenerator(SuperAdminView.this.internsList);
+				try {
+					createPDF.generateDFWithTable();
+				} catch (Exception e) {
+					System.out.println("Error when generating pdf.");
+					e.printStackTrace();
+				}
+				PopUpAlert myPopup = new PopUpAlert();
+				myPopup.downLandingPDF();
 			}
+		});
+		
+		helpButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				ShowUseDoc openView = new ShowUseDoc();
+				openView.openUseDoc();
+
+			}
+		});
+	}
 }

@@ -1,5 +1,6 @@
-package fr.isika.cda26.project1.groupe4.frontpackage.views;
+package fr.isika.cda26.project1.groupe4.frontpackage.methods;
 
+import fri.isika.cda26.project1.groupe4.frontpackage.constants.FrontConstants;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,7 +12,7 @@ import javafx.stage.Stage;
 /**
  * Manage all pop up through application.
  * 
- * @author yoann
+ * @author Yoann FRANCOIS.
  *
  */
 
@@ -42,6 +43,7 @@ public class PopUpAlert implements FrontConstants {
 		popUpLabel = new Label();
 		popUpButton = new Button();
 		popUpButton.setOnAction(e -> popUpWindow.close());
+		popUpButton.setStyle(TOP_HBOX_COLOR);
 		popUpVbox = new VBox(20);
 		popUpVbox.setPrefSize(250, 100);
 		popUpVbox.setStyle(LEFT_PANNEL_COLOR);
@@ -64,6 +66,7 @@ public class PopUpAlert implements FrontConstants {
 			popUpLabel = new Label();
 			popUpButton = new Button();
 			popUpButton.setOnAction(e -> popUpWindow.close());
+			popUpButton.setStyle(LEFT_PANNEL_COLOR);
 			popUpVbox = new VBox(20);
 			popUpVbox.setPrefSize(500, 100);
 			popUpVbox.setStyle(TOP_HBOX_COLOR);

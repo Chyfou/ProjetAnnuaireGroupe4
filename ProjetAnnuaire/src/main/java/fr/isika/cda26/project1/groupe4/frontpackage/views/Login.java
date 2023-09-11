@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import fr.isika.cda26.project1.groupe4.backpackage.constants.BackConstants;
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.Intern;
+import fr.isika.cda26.project1.groupe4.frontpackage.methods.PopUpAlert;
+import fri.isika.cda26.project1.groupe4.frontpackage.constants.FrontConstants;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -25,7 +27,7 @@ import javafx.stage.Stage;
 /**
  * Display login view and redirect to authorized view.
  * 
- * @author Sabrine SADEQ & Yoann FRANCOIS.
+ * @author Sabrine SADEQ & Thibault SALGUES & Yoann FRANCOIS.
  *
  */
 
@@ -49,7 +51,11 @@ public class Login extends BorderPane implements FrontConstants, BackConstants {
 		super();
 		this.internsList = new ArrayList<Intern>(internsList);
 		this.loginButton = new Button(LOGIN_BUTTON);
+		this.loginButton.setStyle(FONT_TITLE_1 + LEFT_PANNEL_COLOR);
+		this.loginButton.setMinSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 		this.backButton = new Button(BACK_BUTTON);
+		this.backButton.setStyle(FONT_TITLE_1 + TOP_HBOX_COLOR);
+		this.backButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 
 		// instantiate BorderPane.
 		BorderPane root = new BorderPane();
@@ -69,14 +75,6 @@ public class Login extends BorderPane implements FrontConstants, BackConstants {
 		hbox1.setAlignment(Pos.CENTER);
 		hbox2.setAlignment(Pos.CENTER);
 
-		// Stylized loginButton.
-		loginButton.setStyle(FONT_TITLE_1);
-		loginButton.setMinSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-
-		// Stylized backButton.
-		backButton.setStyle(FONT_TITLE_1);
-		backButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-
 		// Add image to backButton.
 		Image image = new Image(BACK_LOGO);
 		ImageView imageView = new ImageView();
@@ -91,16 +89,16 @@ public class Login extends BorderPane implements FrontConstants, BackConstants {
 		GridPane grid = new GridPane();
 
 		// Instantiate ans stylized labels.
-		Label loglabel = new Label("Please, enter your credentials.");
+		Label loglabel = new Label("Please, enter your credentials");
 		Label name = new Label(NAME_LABEL);
-		this.textName = new TextField();
-		textName.setPrefSize(TEXT_FIELDS_WIDTH, TEXT_FIELDS_HEIGHT);
+		this.textName = new TextField("SALGUES");
+		textName.setPrefSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
 		Label forename = new Label(FORENAME_LABEL);
-		this.textForename = new TextField();
-		textForename.setPrefSize(TEXT_FIELDS_WIDTH, TEXT_FIELDS_HEIGHT);
+		this.textForename = new TextField("Thibault");
+		textForename.setPrefSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
 		Label password = new Label(PASSWORD_LABEL);
 		this.textPasseword = new PasswordField();
-		textPasseword.setPrefSize(TEXT_FIELDS_WIDTH, TEXT_FIELDS_HEIGHT);
+		textPasseword.setPrefSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
 
 		// Instantiate AnchorPane in center.
 		anchor.setStyle(BACKGROUND_COLOR);
@@ -120,7 +118,6 @@ public class Login extends BorderPane implements FrontConstants, BackConstants {
 		name.setStyle(FONT_TITLE_1);
 		forename.setStyle(FONT_TITLE_1);
 		password.setStyle(FONT_TITLE_1);
-		loginButton.setStyle(LIGHT_BUTTONS_COLOR);
 
 		// Add several child Nodes on the same row with the addRow() method.
 		grid.addRow(2, name, textName);

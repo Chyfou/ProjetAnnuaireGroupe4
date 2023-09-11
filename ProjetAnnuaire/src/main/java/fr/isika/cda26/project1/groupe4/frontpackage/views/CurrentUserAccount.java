@@ -7,10 +7,15 @@ import java.util.List;
 import fr.isika.cda26.project1.groupe4.backpackage.constants.BackConstants;
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.Intern;
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.InternsDirectoryTree;
+import fr.isika.cda26.project1.groupe4.frontpackage.methods.PDFGenerator;
+import fr.isika.cda26.project1.groupe4.frontpackage.methods.PopUpAlert;
+import fr.isika.cda26.project1.groupe4.frontpackage.methods.ShowUseDoc;
+import fr.isika.cda26.project1.groupe4.frontpackage.tablesView.InternDirectoryTableDisplay;
+import fri.isika.cda26.project1.groupe4.frontpackage.constants.FrontConstants;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -22,9 +27,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
 /**
- * Display home page.
+ * Display home page with intern directory table.
  * 
- * @author Sabrine SADEQ & Yoann FRANCOIS.
+ * @author Sabrine SADEQ & Thibault SALGUES & Yoann FRANCOIS.
  *
  */
 
@@ -54,20 +59,40 @@ public class CurrentUserAccount extends BorderPane implements FrontConstants, Ba
 		super();
 		this.userTableView = new InternDirectoryTableDisplay();
 		this.internsList = new ArrayList<Intern>(internsList);
-		this.loginButton = new Button(LOGIN_BUTTON);
 		this.help = new Button(HELP_BUTTON);
+		this.help.setStyle(FONT_TITLE_1 + TOP_HBOX_COLOR);
+		this.help.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);	
 		this.download = new Button(DOWNLOAD_BUTTON);
+		this.download.setStyle(FONT_TITLE_1 + TOP_HBOX_COLOR);
+		this.download.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+		this.loginButton = new Button(LOGIN_BUTTON);
+		this.loginButton.setStyle(FONT_TITLE_1 + TOP_HBOX_COLOR);
+		this.loginButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 		this.searchButton = new Button(SEARCH_BUTTON);
+		this.searchButton.setStyle(LEFT_PANNEL_COLOR);
 		this.tableRefreshButton = new Button(REFRESH_BUTTON);
+		this.tableRefreshButton.setStyle(LEFT_PANNEL_COLOR);
+		
 		this.searchName = new TextField();
+		this.searchName.setMinSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.searchName.setMaxSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.searchName.setPromptText(NAME_LABEL);
 		this.searchForename = new TextField();
-		this.searchPromotion = new TextField();
+		this.searchForename.setMinSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.searchForename.setMaxSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.searchForename.setPromptText(FORENAME_LABEL);
 		this.searchLocation = new TextField();
+		this.searchLocation.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.searchLocation.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.searchLocation.setPromptText(LOCATION_LABEL);
+		this.searchPromotion = new TextField();
+		this.searchPromotion.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.searchPromotion.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.searchPromotion.setPromptText(PROMOTION_LABEL);
 		this.searchPromotionYear = new TextField();
-
-
-		// Instantiate BorderPane.
-		BorderPane root = new BorderPane();
+		this.searchPromotionYear.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.searchPromotionYear.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.searchPromotionYear.setPromptText(PROMOTION_YEAR_LABEL);
 
 		// Instantiate TopPannel.
 		HBox topHbox = new HBox();
@@ -88,13 +113,6 @@ public class CurrentUserAccount extends BorderPane implements FrontConstants, Ba
 		HBox hbox1 = new HBox(HBOX_SPACING);
 		HBox hbox2 = new HBox(HBOX_SPACING);
 		HBox hbox3 = new HBox(HBOX_SPACING);
-
-		// Stylized buttons of my LeftPannel.
-		help.setStyle(FONT_TITLE_1);
-		download.setStyle(FONT_TITLE_1);
-		loginButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-		help.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-		download.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 
 		// ImageView setting.
 		Image image1 = new Image(HELP_LOGO);
@@ -118,13 +136,13 @@ public class CurrentUserAccount extends BorderPane implements FrontConstants, Ba
 		hbox1.setAlignment(Pos.CENTER);
 		hbox2.setAlignment(Pos.CENTER);
 		hbox3.setAlignment(Pos.CENTER);
-		loginButton.setStyle(FONT_TITLE_1);
 
 		// Instantiate second BorderPane in center.
 		BorderPane searchTableBorderPane = new BorderPane();
-		HBox hboxSearch = new HBox(4);
+		HBox hboxSearch = new HBox(HBOX_SPACING);
 		hboxSearch.getChildren().addAll(searchName, searchForename, searchPromotion, searchLocation,
 				searchPromotionYear, searchButton, tableRefreshButton);
+		searchTableBorderPane.setPadding(new Insets(PADDING_VALUE, PADDING_VALUE, PADDING_VALUE, PADDING_VALUE));
 		searchTableBorderPane.setTop(hboxSearch);
 		searchTableBorderPane.setCenter(userTableView.getInternsDirectoryTable());
 
@@ -196,15 +214,16 @@ public class CurrentUserAccount extends BorderPane implements FrontConstants, Ba
 				CurrentUserAccount.this.userTableView.getInternsDirectoryTable().getSelectionModel().selectFirst();
 			}
 		});
-		
+
 		tableRefreshButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				InternsDirectoryTree idt = new InternsDirectoryTree();
 				CurrentUserAccount.this.internsList = new ArrayList<Intern>();
-				CurrentUserAccount.this.internsList = idt.getAllInternInDB(CurrentUserAccount.this.internsList, START_VALUE);
+				CurrentUserAccount.this.internsList = idt.getAllInternInDB(CurrentUserAccount.this.internsList,
+						START_VALUE);
 				CurrentUserAccount.this.userTableView.getInternsDirectoryTable()
-						.setItems(FXCollections.observableArrayList(CurrentUserAccount.this.internsList));			
+						.setItems(FXCollections.observableArrayList(CurrentUserAccount.this.internsList));
 				CurrentUserAccount.this.userTableView.getInternsDirectoryTable().getSelectionModel().selectFirst();
 			}
 		});

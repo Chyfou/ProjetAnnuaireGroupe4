@@ -6,9 +6,15 @@ import java.util.List;
 import fr.isika.cda26.project1.groupe4.backpackage.constants.BackConstants;
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.Intern;
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.InternsDirectoryTree;
+import fr.isika.cda26.project1.groupe4.frontpackage.methods.PDFGenerator;
+import fr.isika.cda26.project1.groupe4.frontpackage.methods.PopUpAlert;
+import fr.isika.cda26.project1.groupe4.frontpackage.methods.ShowUseDoc;
+import fr.isika.cda26.project1.groupe4.frontpackage.tablesView.InternDirectoryTableDisplay;
+import fri.isika.cda26.project1.groupe4.frontpackage.constants.FrontConstants;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -74,44 +80,101 @@ public class Admin extends BorderPane implements FrontConstants, BackConstants {
 		this.userTableView = new InternDirectoryTableDisplay();
 		this.internsList = new ArrayList<Intern>(internsList);
 		this.settingsButton = new Button(SETTINGS_BUTTON);
+		this.settingsButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+		this.settingsButton.setStyle(FONT_TITLE_1 + TOP_HBOX_COLOR);
 		this.signOutButton = new Button(SIGN_OUT_BUTTON);
+		this.signOutButton.setStyle(FONT_TITLE_1 + TOP_HBOX_COLOR);
+		this.signOutButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 		this.helpButton = new Button(HELP_BUTTON);
+		this.helpButton.setStyle(FONT_TITLE_1 + TOP_HBOX_COLOR);
+		this.helpButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 		this.downloadButton = new Button(DOWNLOAD_BUTTON);
-		this.searchName = new TextField();
-		this.searchForename = new TextField();
-		this.searchPromotion = new TextField();
-		this.searchLocation = new TextField();
-		this.searchPromotionYear = new TextField();
+		this.downloadButton.setStyle(FONT_TITLE_1 + TOP_HBOX_COLOR);
+		this.downloadButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 		this.searchButton = new Button(SEARCH_BUTTON);
+		this.searchButton.setStyle(LEFT_PANNEL_COLOR);
 		this.tableRefreshButton = new Button(REFRESH_BUTTON);
+		this.tableRefreshButton.setStyle(LEFT_PANNEL_COLOR);
 		this.deleteInternButton = new Button(DELETE_INTERN_BUTTON);
+		this.deleteInternButton.setStyle(LEFT_PANNEL_COLOR);
+
 		// ***************** ADD BUTTON INITIALIZATION
 		this.addName = new TextField();
+		this.addName.setMinSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.addName.setMaxSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
 		this.addName.setPromptText(NAME_LABEL);
 		this.addforename = new TextField();
+		this.addforename.setMinSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.addforename.setMaxSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
 		this.addforename.setPromptText(FORENAME_LABEL);
-		this.addpromotion = new TextField();
-		this.addpromotion.setPromptText(PROMOTION_LABEL);
 		this.addlocation = new TextField();
+		this.addlocation.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.addlocation.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
 		this.addlocation.setPromptText(LOCATION_LABEL);
+		this.addpromotion = new TextField();
+		this.addpromotion.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.addpromotion.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.addpromotion.setPromptText(PROMOTION_LABEL);
 		this.addpromotionYear = new TextField();
+		this.addpromotionYear.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.addpromotionYear.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
 		this.addpromotionYear.setPromptText(PROMOTION_YEAR_LABEL);
 		this.addInternButton = new Button(ADD_BUTTON);
-		this.addNewIntern = new HBox(HBOX_SPACING_DOUBLE);
-		this.addNewIntern.getChildren().addAll(addName, addforename, addpromotion, addlocation, addpromotionYear,
-				addInternButton, deleteInternButton);
+		this.addInternButton.setStyle(LEFT_PANNEL_COLOR);
+		this.addNewIntern = new HBox(HBOX_SPACING);
+		this.addNewIntern.getChildren().addAll(addName, addforename, addlocation, addpromotion, addpromotionYear,
+				addInternButton);
 		this.addNewIntern.setAlignment(Pos.TOP_LEFT);
+
 		// ***************** MODIFY BUTTON INITIALIZATION
 		this.modifyName = this.userTableView.getTextFieldName();
+		this.modifyName.setMinSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.modifyName.setMaxSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
 		this.modifyforename = this.userTableView.getTextFieldForename();
-		this.modifypromotion = this.userTableView.getTextFieldPromotion();
+		this.modifyforename.setMinSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.modifyforename.setMaxSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
 		this.modifylocation = this.userTableView.getTextFieldLocation();
+		this.modifylocation.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.modifylocation.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);		
+		
+		this.modifypromotion = this.userTableView.getTextFieldPromotion();
+		this.modifypromotion.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.modifypromotion.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
 		this.modifypromotionYear = this.userTableView.getTextFieldPromotionYear();
+		this.modifypromotionYear.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.modifypromotionYear.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
 		this.modifyInternButton = new Button(MODIFY_BUTTON);
-		this.modifySelecetedIntern = new HBox(HBOX_SPACING_DOUBLE);
-		this.modifySelecetedIntern.getChildren().addAll(modifyName, modifyforename, modifypromotion, modifylocation,
-				modifypromotionYear, modifyInternButton);
+		this.modifyInternButton.setStyle(LEFT_PANNEL_COLOR);
+		this.modifySelecetedIntern = new HBox(HBOX_SPACING);
+		this.modifySelecetedIntern.getChildren().addAll(modifyName, modifyforename, modifylocation, modifypromotion,
+				modifypromotionYear, modifyInternButton, deleteInternButton);
 		this.modifySelecetedIntern.setAlignment(Pos.TOP_LEFT);
+
+		// ***************** SEARCH BUTTON INITIALIZATION
+		this.searchName = new TextField();
+		this.searchName.setMinSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.searchName.setMaxSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.searchName.setPromptText(NAME_LABEL);
+		this.searchForename = new TextField();
+		this.searchForename.setMinSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.searchForename.setMaxSize(TEXT_FIELDS_WIDTH_LARGE, TEXT_FIELDS_HEIGHT);
+		this.searchForename.setPromptText(FORENAME_LABEL);
+		this.searchLocation = new TextField();
+		this.searchLocation.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.searchLocation.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.searchLocation.setPromptText(LOCATION_LABEL);
+		this.searchPromotion = new TextField();
+		this.searchPromotion.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.searchPromotion.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.searchPromotion.setPromptText(PROMOTION_LABEL);
+		this.searchPromotionYear = new TextField();
+		this.searchPromotionYear.setMinSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.searchPromotionYear.setMaxSize(TEXT_FIELDS_WIDTH_MINI, TEXT_FIELDS_HEIGHT);
+		this.searchPromotionYear.setPromptText(PROMOTION_YEAR_LABEL);
+
+		HBox hboxSearch = new HBox(HBOX_SPACING);
+		hboxSearch.getChildren().addAll(searchName, searchForename, searchLocation, searchPromotion,
+				searchPromotionYear, searchButton, tableRefreshButton);
 
 		// Instantiate BorderPane.s
 		BorderPane root = new BorderPane();
@@ -136,16 +199,6 @@ public class Admin extends BorderPane implements FrontConstants, BackConstants {
 		HBox hbox2 = new HBox(HBOX_SPACING);
 		HBox hbox3 = new HBox(HBOX_SPACING);
 		HBox hbox4 = new HBox(HBOX_SPACING);
-
-		// Stylized buttons of LeftPannel.
-		helpButton.setStyle(FONT_TITLE_1);
-		downloadButton.setStyle(FONT_TITLE_1);
-		settingsButton.setStyle(FONT_TITLE_1);
-		signOutButton.setStyle(FONT_TITLE_1);
-		helpButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-		downloadButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-		settingsButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-		signOutButton.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 
 		// Image view.
 		Image image1 = new Image(HELP_LOGO);
@@ -177,24 +230,8 @@ public class Admin extends BorderPane implements FrontConstants, BackConstants {
 
 		// Instantiate and stylized VBox.
 		VBox searchTableAdd = new VBox(VBOX_SPACING);
+		searchTableAdd.setPadding(new Insets(PADDING_VALUE, PADDING_VALUE, PADDING_VALUE, PADDING_VALUE));
 		searchTableAdd.setStyle(BACKGROUND_COLOR);
-
-		// Instantiate and stylized HBox.
-		HBox hboxSearch = new HBox(HBOX_SPACING_DOUBLE);
-		hboxSearch.setPrefSize(HBOX_WIDTH, HBOX_HEIGHT);
-
-		// Stylized TextField.
-		searchName.setPromptText(NAME_LABEL);
-		searchForename.setPromptText(FORENAME_LABEL);
-		searchLocation.setPromptText(LOCATION_LABEL);
-		searchPromotion.setPromptText(PROMOTION_LABEL);
-		searchPromotionYear.setPromptText(PROMOTION_YEAR_LABEL);
-
-		// Fill hboxSearch.
-		hboxSearch.getChildren().addAll(searchName, searchForename, searchPromotion, searchLocation,
-				searchPromotionYear, searchButton, tableRefreshButton);
-
-		
 
 		searchTableAdd.getChildren().addAll(hboxSearch, userTableView.getInternsDirectoryTable(), modifySelecetedIntern,
 				addNewIntern);
@@ -251,11 +288,11 @@ public class Admin extends BorderPane implements FrontConstants, BackConstants {
 				Admin.this.internsList = new ArrayList<Intern>();
 				Admin.this.internsList = idt.getAllInternInDB(Admin.this.internsList, START_VALUE);
 				Admin.this.userTableView.getInternsDirectoryTable()
-						.setItems(FXCollections.observableArrayList(Admin.this.internsList));			
+						.setItems(FXCollections.observableArrayList(Admin.this.internsList));
 				Admin.this.userTableView.getInternsDirectoryTable().getSelectionModel().selectFirst();
 			}
 		});
-		
+
 		deleteInternButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -288,7 +325,7 @@ public class Admin extends BorderPane implements FrontConstants, BackConstants {
 				Admin.this.userTableView.getInternsDirectoryTable().getSelectionModel().selectFirst();
 			}
 		});
-		
+
 		modifyInternButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -306,8 +343,33 @@ public class Admin extends BorderPane implements FrontConstants, BackConstants {
 				Admin.this.userTableView.getInternsDirectoryTable()
 						.setItems(FXCollections.observableArrayList(Admin.this.internsList));
 				Admin.this.userTableView.getInternsDirectoryTable().getSelectionModel().selectFirst();
-				
+
 			}
 		});
+
+		helpButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				ShowUseDoc openView = new ShowUseDoc();
+				openView.openUseDoc();
+
 			}
+		});
+		downloadButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				PDFGenerator createPDF = new PDFGenerator(Admin.this.internsList);
+				try {
+					createPDF.generateDFWithTable();
+				} catch (Exception e) {
+					System.out.println("Error when generating pdf.");
+					e.printStackTrace();
+				}
+				PopUpAlert myPopup = new PopUpAlert();
+				myPopup.downLandingPDF();
+			}
+		});
+	}
 }

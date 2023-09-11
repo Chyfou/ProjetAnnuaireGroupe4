@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 /**
  * Initializer of the Interns directory DB files of the application.
  * 
- * @author Thibault SALGUES / Yoann François
+ * @author Thibault SALGUES & Yoann FRANCOIS.
  *
  */
 public class DBInit extends DBFileManager {

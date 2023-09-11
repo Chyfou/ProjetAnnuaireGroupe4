@@ -1,4 +1,4 @@
-package fr.isika.cda26.project1.groupe4.frontpackage.views;
+package fr.isika.cda26.project1.groupe4.frontpackage.methods;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -18,6 +18,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.Intern;
+import fri.isika.cda26.project1.groupe4.frontpackage.constants.FrontConstants;
 
 /**
  * Generate pdf with current TableView.

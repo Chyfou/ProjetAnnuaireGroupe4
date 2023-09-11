@@ -3,6 +3,7 @@ package fr.isika.cda26.project1.groupe4.frontpackage.views;
 import java.util.ArrayList;
 import java.util.List;
 import fr.isika.cda26.project1.groupe4.backpackage.internDirTree.Intern;
+import fri.isika.cda26.project1.groupe4.frontpackage.constants.FrontConstants;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -21,7 +22,7 @@ import javafx.stage.Stage;
 /**
  * Display account creation view.
  * 
- * @author Sabrine SADEQ.
+ * @author Sabrine SADEQ, Thibault SALGUES & Yoann FRANCOIS.
  *
  */
 
@@ -127,7 +128,7 @@ public class CreateAnAccount extends AnchorPane implements FrontConstants {
 			// Action events on buttons.
 			@Override
 			public void handle(ActionEvent arg0) {
-				PageManageStaff manageStaff = new PageManageStaff(CreateAnAccount.this.internsList);
+				ManageStaffView manageStaff = new ManageStaffView(CreateAnAccount.this.internsList);
 				Scene scene = new Scene(manageStaff);
 				Stage stage = (Stage) CreateAnAccount.this.getScene().getWindow();
 				stage.setScene(scene);

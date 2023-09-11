@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 /**
  * Initializer of the Users' DB files of the application.
  * 
- * @author Thibault SALGUES
+ * @author Thibault SALGUES.
  *
  */
 public class DBInitUser extends DBFileManager {
